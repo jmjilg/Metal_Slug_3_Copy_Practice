@@ -13,6 +13,9 @@ HINSTANCE hInst;                                // 현재 인스턴스입니다.
 HWND    g_hWnd; //메인윈도우 핸들
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+HWND hMDlg;		// 모달리스 대화상자
+HWND hList_AnimFile_Name1, hList_AnimFile_Name2, hList_Frame_Info1, hList_Frame_Info2, hList_PlayList;
+HWND hEdit_StartX, hEdit_StartY, hEdit_EndX, hEdit_EndY, hEdit_OffsetX, hEdit_OffsetY, hEdit_Duration, hEdit_PlayTime, hEdit_PlayScale, hEdit_Frame_Count;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -76,8 +79,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
+				if (!IsWindow(hMDlg) || !IsDialogMessage(hMDlg, &msg))
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
 			}
 		}
 
@@ -162,6 +168,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 
 INT_PTR CALLBACK TileCountProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK AnimationToolProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -185,7 +192,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			}
 		}
-			break;
+		break;
+		case ID_MENU_ANIMATION_TOOL:
+		{
+			if (!IsWindow(hMDlg))
+			{
+				hMDlg = CreateDialog(hInst, MAKEINTRESOURCE(IDD_ANIMATION_TOOL), hWnd, AnimationToolProc);
+				hList_AnimFile_Name1 = GetDlgItem(hMDlg, IDC_LIST_AnimFile_Name1);
+				hList_AnimFile_Name2 = GetDlgItem(hMDlg, IDC_LIST_AnimFile_Name2);
+				hList_Frame_Info1 = GetDlgItem(hMDlg, IDC_LIST_Frame_Info1);
+				hList_Frame_Info2 = GetDlgItem(hMDlg, IDC_LIST_Frame_Info2);
+				hList_PlayList = GetDlgItem(hMDlg, IDC_LIST_PlayList);
+				hEdit_StartX = GetDlgItem(hMDlg, IDC_EDIT_StartX);
+				hEdit_StartY = GetDlgItem(hMDlg, IDC_EDIT_StartY);
+				hEdit_EndX = GetDlgItem(hMDlg, IDC_EDIT_EndX);
+				hEdit_EndY = GetDlgItem(hMDlg, IDC_EDIT_EndY);
+				hEdit_OffsetX = GetDlgItem(hMDlg, IDC_EDIT_OffsetX);
+				hEdit_OffsetY = GetDlgItem(hMDlg, IDC_EDIT_OffsetY);
+				hEdit_PlayTime = GetDlgItem(hMDlg, IDC_EDIT_PlayTime);
+				hEdit_PlayScale = GetDlgItem(hMDlg, IDC_EDIT_PlayScale);
+				hEdit_Duration = GetDlgItem(hMDlg, IDC_EDIT_Duration);
+				hEdit_Frame_Count = GetDlgItem(hMDlg, IDC_EDIT_Frame_Count);
+				// SendMessage(hList_AnimFile_Name1, LB_ADDSTRING, 0, (LPARAM)str);
+				ShowWindow(hMDlg, SW_SHOW);
+			}
+			else
+				SetFocus(hMDlg);
+		}
+		break;
 		case IDM_EXIT:
 			DestroyWindow(hWnd);
 			break;
@@ -247,6 +281,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
+
 			EndDialog(hDlg, LOWORD(wParam));
 			return (INT_PTR)TRUE;
 		}
@@ -254,6 +289,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return (INT_PTR)FALSE;
 }
+
 
 
 // 1. 플레이어 미사일 종류 추가

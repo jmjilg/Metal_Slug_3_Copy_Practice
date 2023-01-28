@@ -8,12 +8,16 @@
 
 #include "CCore.h"
 #include "CCamera.h"
+#include "CAnimator.h"
+#include "CTestAnim.h"
 
 CScene::CScene()
 	: m_iTileX(0)
 	, m_iTileY(0)
 	, m_pPlayer(nullptr)
+	, m_pMonster(nullptr)
 {
+	
 }
 
 CScene::~CScene()
@@ -51,6 +55,8 @@ void CScene::update()
 			}
 		}
 	}
+	
+	
 }
 
 void CScene::finalupdate()
@@ -66,7 +72,6 @@ void CScene::finalupdate()
 
 void CScene::render(HDC _dc)
 {
-
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		if ((UINT)GROUP_TYPE::TILE == i)
@@ -192,4 +197,5 @@ void CScene::LoadTile(const wstring& _strRelativePath)
 
 	fclose(pFile);
 }
+
 

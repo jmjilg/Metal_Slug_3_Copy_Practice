@@ -41,6 +41,7 @@ enum class GROUP_TYPE
 	PLAYER, 
 	PROJ_PLAYER, 
 	PROJ_MONSTER, 
+	TEST_ANIM,
 
 
 	UI = 31,

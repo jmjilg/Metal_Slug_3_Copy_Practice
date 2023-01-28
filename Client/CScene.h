@@ -17,6 +17,7 @@ private:
 	UINT			 m_iTileY;	// 타일 세로 개수
 
 	CObject*		 m_pPlayer; // Player
+	CObject* m_pMonster;
 
 public:
 	void SetName(const wstring& _strName){m_strName = _strName;}

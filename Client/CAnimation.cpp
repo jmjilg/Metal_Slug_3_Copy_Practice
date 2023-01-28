@@ -17,6 +17,7 @@ CAnimation::CAnimation()
 	, m_iCurFrm(0)
 	, m_fAccTime(0.f)
 	, m_bFinish(false)
+	, m_bStop(false)
 {
 }
 
@@ -26,6 +27,9 @@ CAnimation::~CAnimation()
 
 void CAnimation::update()
 {
+	if (m_bStop)
+		return;
+
 	if (m_bFinish)
 		return;
 

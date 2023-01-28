@@ -4,10 +4,12 @@
 #include "CAnimation.h"
 
 CAnimator::CAnimator()
-	: m_pCurAnim(nullptr)
-	, m_pCurAnim2(nullptr)
+	: m_pCurAnimL(nullptr)
+	, m_pCurAnimU(nullptr)
 	, m_pOwner(nullptr)
-	, m_bRepeat(false)
+	, m_bRepeatL(false)
+	, m_bRepeatU(false)
+	, m_bStop(false)
 {
 }
 
@@ -23,36 +25,45 @@ void CAnimator::update()
 
 void CAnimator::finalupdate()
 {
-	if (nullptr != m_pCurAnim)
+	if (nullptr != m_pCurAnimL)
 	{
-		m_pCurAnim->update();
+		m_pCurAnimL->update();
 
-		if (m_bRepeat && m_pCurAnim->IsFinish())
+		if (m_bRepeatL && m_pCurAnimL->IsFinish())
 		{
-			m_pCurAnim->SetFrame(0);
+			m_pCurAnimL->SetFrame(0);
 		}
-	}
-	if (nullptr != m_pCurAnim2)
-	{
-		m_pCurAnim2->update();
 
-		if (m_bRepeat && m_pCurAnim2->IsFinish())
+	}
+	if (nullptr != m_pCurAnimU)
+	{
+		m_pCurAnimU->update();
+
+		if (m_bRepeatU && m_pCurAnimU->IsFinish())
 		{
-			m_pCurAnim2->SetFrame(0);
+			m_pCurAnimU->SetFrame(0);
 		}
 	}
 }
 
 void CAnimator::render(HDC _dc)
 {
-	if (nullptr != m_pCurAnim)
+	if (nullptr != m_pCurAnimL)
 	{
-		m_pCurAnim->render(_dc);
+		m_pCurAnimL->render(_dc);
 	}
-	if (nullptr != m_pCurAnim2)
+	if (nullptr != m_pCurAnimU)
 	{
-		m_pCurAnim2->render(_dc);
+		m_pCurAnimU->render(_dc);
 	}
+}
+
+void CAnimator::StopAnimation(bool _bStop)
+{
+	if(m_pCurAnimL != nullptr)
+		m_pCurAnimL->SetStop(_bStop);
+	if(m_pCurAnimU != nullptr)
+		m_pCurAnimU->SetStop(_bStop);
 }
 
 void CAnimator::CreateAnimation(const wstring& _strName, CTexture* _pTex, Vec2 _vLT
@@ -91,15 +102,22 @@ CAnimation* CAnimator::FindAnimation(const wstring& _strName)
 	return iter->second;
 }
 
-void CAnimator::Play(const wstring& _strName, bool _bRepeat)
+void CAnimator::PlayL(const wstring& _strName, bool _bRepeat)
 {
-	m_pCurAnim = FindAnimation(_strName);
-	m_bRepeat = _bRepeat;
+	m_pCurAnimL = FindAnimation(_strName);
+	m_bRepeatL = _bRepeat;
+}
+
+void CAnimator::PlayU(const wstring& _strName, bool _bRepeat)
+{
+	m_pCurAnimU = FindAnimation(_strName);
+	m_bRepeatU = _bRepeat;
 }
 
 void CAnimator::Play(const wstring& _strName, const wstring& _strName2, bool _bRepeat)
 {
-	m_pCurAnim = FindAnimation(_strName);
-	m_pCurAnim2 = FindAnimation(_strName2);
-	m_bRepeat = _bRepeat;
+	m_pCurAnimL = FindAnimation(_strName);
+	m_pCurAnimU = FindAnimation(_strName2);
+	m_bRepeatL = _bRepeat;
+	m_bRepeatU = _bRepeat;
 }

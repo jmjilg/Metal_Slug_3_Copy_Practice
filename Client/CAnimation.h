@@ -25,6 +25,7 @@ private:
 	float				m_fAccTime;		// 시간 누적
 
 	bool				m_bFinish;		// 재생 끝에 도달여부
+	bool				m_bStop;		// 일시정지 여부
 
 public:
 	const wstring& GetName() { return m_strName; }
@@ -35,8 +36,9 @@ public:
 		m_iCurFrm = _iFrameIdx;
 		m_fAccTime = 0.f;
 	}
+	void SetStop(bool _bStop) { m_bStop = _bStop; }
 
-	tAnimFrm& GetFrame(int _iIdx) { return m_vecFrm[_iIdx]; }
+	tAnimFrm& GetFrame(int _iIdx) { return m_vecFrm[_iIdx]; }	
 	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
 
 private:

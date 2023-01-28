@@ -19,10 +19,15 @@
 #include "CGravity.h"
 
 CPlayer::CPlayer()
-	: m_eCurState(PLAYER_STATE::IDLE)
-	, m_ePrevState(PLAYER_STATE::WALK)
+	: m_eCurStateUpper(PLAYER_STATE::IDLE)
+	, m_eCurStateLower(PLAYER_STATE::IDLE)
+	, m_ePrevStateUpper(PLAYER_STATE::IDLE)
+	, m_ePrevStateLower(PLAYER_STATE::IDLE)
+	, m_eMoveState(PLAYER_STATE::IDLE)
+	, m_eAttackState(PLAYER_STATE::IDLE)
 	, m_iDir(1)
 	, m_iPrevDir(1)
+	, m_bAttack(false)
 {
 	// Texture 로딩하기
 	//m_pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Player.bmp");
@@ -40,26 +45,62 @@ CPlayer::CPlayer()
 
 	CreateAnimator();	
 
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOWER_PART_IDLE_LEFT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_UPPER_PART_IDLE_LEFT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOWER_PART_IDLE_RIGHT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_UPPER_PART_IDLE_RIGHT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOWER_PART_WALK_LEFT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_UPPER_PART_WALK_LEFT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOWER_PART_WALK_RIGHT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_UPPER_PART_WALK_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_GRENADE_THROW_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_GRENADE_THROW_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_JUMP_LOWER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_JUMP_LOWER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_JUMP_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_JUMP_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_LOWER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_LOWER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_GRENADE_THROW_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_GRENADE_THROW_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_MELEE_ATTACK_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_MELEE_ATTACK_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_MOTION_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_MOTION_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_SHOOT_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_SHOOT_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_WALK_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_SIT_DOWN_WALK_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_UPPER_PART_UP.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOOK_DOWN_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOOK_DOWN_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOOK_UP_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_LOOK_UP_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_MELEE_ATTACK_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_MELEE_ATTACK_UPPER_PART_LEFT2.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT2.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_SHOOT_UP_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_SHOOT_UP_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_SHOOT_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_SHOOT_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_JUMP_LOWER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_JUMP_LOWER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_JUMP_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_JUMP_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_LOWER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_LOWER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_UPPER_PART_RIGHT.anim");
 
-	//GetAnimator()->LoadAnimation(L"animation\\player_walk_right.anim");
-	//GetAnimator()->LoadAnimation(L"animation\\player_jump_left.anim");
-	//GetAnimator()->LoadAnimation(L"animation\\player_jump_right.anim");
 
-	//GetAnimator()->CreateAnimation(L"PLAYER_LOWER_PART_IDLE_LEFT", pLeftTex, Vec2(1647.f, 275.f), Vec2(23.f, 18.f), Vec2(0.f, 0.f), Vec2(5.f, 15.f), 0.1f, 1);
-	//GetAnimator()->CreateAnimation(L"PLAYER_LOWER_PART_IDLE_RIGHT", pRightTex, Vec2(148.f, 275.f), Vec2(23.f, 18.f), Vec2(0.f, 0.f), Vec2(-5.f, 15.f), 0.1f, 1);
+
+
+
+
+	//GetAnimator()->CreateAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT", pLeftTex, Vec2(1758.f, 1047.f), Vec2(52.f, 25.f), Vec2(-34.f, 0.f), Vec2(3.f, -5.f), 0.1f, 10);
+	//GetAnimator()->CreateAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT", pRightTex, Vec2(9.f, 1047.f), Vec2(52.f, 25.f), Vec2(34.f, 0.f), Vec2(-7.f, -5.f), 0.1f, 10);
 
 
 	// Animation 저장해보기
-	//GetAnimator()->FindAnimation(L"PLAYER_LOWER_PART_IDLE_LEFT")->Save(L"animation\\PLAYER_LOWER_PART_IDLE_LEFT.anim");
-	//GetAnimator()->FindAnimation(L"PLAYER_LOWER_PART_IDLE_RIGHT")->Save(L"animation\\PLAYER_LOWER_PART_IDLE_RIGHT.anim"); 
+	//GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT")->Save(L"animation\\PLAYER_SHOOT_UPPER_PART_LEFT.anim");
+	//GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT")->Save(L"animation\\PLAYER_SHOOT_UPPER_PART_RIGHT.anim"); 
 
 
 	CreateGravity();
@@ -85,7 +126,8 @@ void CPlayer::update()
 
 	GetAnimator()->update();
 
-	m_ePrevState = m_eCurState;
+	m_ePrevStateLower = m_eCurStateLower;
+	m_ePrevStateUpper = m_ePrevStateUpper;
 	m_iPrevDir = m_iDir;
 }
 
@@ -158,35 +200,88 @@ void CPlayer::CreateMissile()
 
 void CPlayer::update_state()
 {
+
 	if (KEY_HOLD(KEY::A))
 	{
 		m_iDir = -1;
-		if (PLAYER_STATE::JUMP != m_eCurState)
-			m_eCurState = PLAYER_STATE::WALK;		
+
+		if (PLAYER_STATE::JUMP != m_eCurStateLower)
+		{			
+			m_eMoveState = PLAYER_STATE::WALK;
+			m_eCurStateUpper = PLAYER_STATE::WALK;
+			m_eCurStateLower = PLAYER_STATE::WALK;
+		}
 	}
 
 	if (KEY_HOLD(KEY::D))
 	{
 		m_iDir = 1;
-		if (PLAYER_STATE::JUMP != m_eCurState)
-			m_eCurState = PLAYER_STATE::WALK;
+		if (PLAYER_STATE::JUMP != m_eCurStateLower)
+		{
+			m_eMoveState = PLAYER_STATE::WALK;
+			m_eCurStateUpper = PLAYER_STATE::WALK;
+			m_eCurStateLower = PLAYER_STATE::WALK;
+		}
 	}
 
-	if (0.f == GetRigidBody()->GetSpeed() && PLAYER_STATE::JUMP != m_eCurState)
+	if (0.f == GetRigidBody()->GetSpeed() && PLAYER_STATE::JUMP != m_eCurStateLower)
 	{
-		m_eCurState = PLAYER_STATE::IDLE;
+		m_eMoveState = PLAYER_STATE::IDLE;
+		m_eCurStateUpper = PLAYER_STATE::IDLE;
+		m_eCurStateLower = PLAYER_STATE::IDLE;
 	}
 
 	if (KEY_TAP(KEY::SPACE))
 	{
 		//CreateMissile();
-		m_eCurState = PLAYER_STATE::JUMP;
-
+		m_eMoveState = PLAYER_STATE::JUMP;
+		m_eCurStateUpper = PLAYER_STATE::JUMP;
+		m_eCurStateLower = PLAYER_STATE::JUMP;
 		if (GetRigidBody())
 		{			
-			GetRigidBody()->SetVelocity(Vec2(GetRigidBody()->GetVelocity().x, -300.f));
+			GetRigidBody()->SetVelocity(Vec2(GetRigidBody()->GetVelocity().x, -350.f));
 		}
 	}
+
+	if (KEY_TAP(KEY::J))
+	{
+		m_eAttackState = PLAYER_STATE::ATTACK;
+		m_eCurStateUpper = PLAYER_STATE::ATTACK;
+		SetIsAttack(true);
+		// 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
+		if (m_iDir == -1)
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT")->SetFrame(0);
+
+	}
+
+
+	if (IsAttack())
+	{
+		m_eCurStateUpper = m_eAttackState;
+		if (GetAnimator()->GetCurAnimU()->IsFinish())
+		{
+			SetIsAttack(false);
+			m_eCurStateUpper = m_eMoveState;
+		}
+	}
+
+
+	//if (KEY_HOLD(KEY::K))
+	//{
+	//	m_iDir = 1;
+	//	if (PLAYER_STATE::JUMP != m_eCurState)
+	//		m_eCurState = PLAYER_STATE::WALK;
+	//}
+
+	//if (KEY_HOLD(KEY::L))
+	//{
+	//	m_iDir = 1;
+	//	if (PLAYER_STATE::JUMP != m_eCurState)
+	//		m_eCurState = PLAYER_STATE::WALK;
+	//}
+
 }
 
 void CPlayer::update_move()
@@ -195,12 +290,12 @@ void CPlayer::update_move()
 
 	if (KEY_HOLD(KEY::A))
 	{
-		pRigid->AddForce(Vec2(-200.f, 0.f));
+		pRigid->AddForce(Vec2(-300.f, 0.f));
 	}
 
 	if (KEY_HOLD(KEY::D))
 	{
-		pRigid->AddForce(Vec2(200.f, 0.f));
+		pRigid->AddForce(Vec2(300.f, 0.f));
 	}
 
 	if (KEY_TAP(KEY::A))
@@ -215,50 +310,93 @@ void CPlayer::update_move()
 }
 
 void CPlayer::update_animation()
-{
-	if (m_ePrevState == m_eCurState && m_iPrevDir == m_iDir)
-		return;
+{	
 
-
-	switch (m_eCurState)
+	switch (m_eCurStateLower)
 	{
+		if (m_ePrevStateLower == m_eCurStateLower && m_iPrevDir == m_iDir)
+			break;
+
 	case PLAYER_STATE::IDLE:
 	{
-		if(m_iDir == -1)
-			GetAnimator()->Play(L"PLAYER_LOWER_PART_IDLE_LEFT", L"PLAYER_UPPER_PART_IDLE_LEFT", true);
+		if (m_iDir == -1)
+			GetAnimator()->PlayL(L"PLAYER_IDLE_LOWER_PART_LEFT", true);
 		else
-			GetAnimator()->Play(L"PLAYER_LOWER_PART_IDLE_RIGHT", L"PLAYER_UPPER_PART_IDLE_RIGHT", true);
+			GetAnimator()->PlayL(L"PLAYER_IDLE_LOWER_PART_RIGHT", true);
 	}
 
 		break;
 	case PLAYER_STATE::WALK:
 	{
 		if (m_iDir == -1)
-		{
-			GetAnimator()->Play(L"PLAYER_LOWER_PART_WALK_LEFT", L"PLAYER_UPPER_PART_WALK_LEFT", true);
-		}
+			GetAnimator()->PlayL(L"PLAYER_WALK_LOWER_PART_LEFT", true);
 		else
-		{
-			GetAnimator()->Play(L"PLAYER_LOWER_PART_WALK_RIGHT", L"PLAYER_UPPER_PART_WALK_RIGHT", true);
-		}
+			GetAnimator()->PlayL(L"PLAYER_WALK_LOWER_PART_RIGHT", true);
 	}
 		break;
 
 	case PLAYER_STATE::JUMP:
+	{
 		if (m_iDir == -1)
-			GetAnimator()->Play(L"JUMP_LEFT", true);
+			GetAnimator()->PlayL(L"PLAYER_IDLE_JUMP_LOWER_PART_LEFT", true);
 		else
-			GetAnimator()->Play(L"JUMP_RIGHT", true);
+			GetAnimator()->PlayL(L"PLAYER_IDLE_JUMP_LOWER_PART_RIGHT", true);
+	}
+		break;
+		
+	case PLAYER_STATE::DEAD:
+
+		break;
+	}
+	
+
+	switch (m_eCurStateUpper)
+	{
+		if (m_ePrevStateUpper == m_eCurStateUpper && m_iPrevDir == m_iDir)
+			break;
+
+	case PLAYER_STATE::IDLE:
+	{
+		if (m_iDir == -1)
+			GetAnimator()->PlayU(L"PLAYER_IDLE_UPPER_PART_LEFT", true);
+		else
+			GetAnimator()->PlayU(L"PLAYER_IDLE_UPPER_PART_RIGHT", true);
+	}
+
+		break;
+	case PLAYER_STATE::WALK:
+	{
+		if (m_iDir == -1)
+			GetAnimator()->PlayU(L"PLAYER_WALK_UPPER_PART_LEFT", true);
+		else
+			GetAnimator()->PlayU(L"PLAYER_WALK_UPPER_PART_RIGHT", true);
+	}
+		break;
+
+	case PLAYER_STATE::JUMP:
+	{
+		if (m_iDir == -1)
+			GetAnimator()->PlayU(L"PLAYER_IDLE_JUMP_UPPER_PART_LEFT", true);
+		else
+			GetAnimator()->PlayU(L"PLAYER_IDLE_JUMP_UPPER_PART_RIGHT", true);
+	}
 		break;
 
 	case PLAYER_STATE::ATTACK:
-
+	{
+		if (m_iDir == -1)
+			GetAnimator()->PlayU(L"PLAYER_SHOOT_UPPER_PART_LEFT", false);
+		else
+			GetAnimator()->PlayU(L"PLAYER_SHOOT_UPPER_PART_RIGHT", false);
+	}
 		break;
 
 	case PLAYER_STATE::DEAD:
 
 		break;
 	}
+
+
 }
 
 void CPlayer::update_gravity()
@@ -274,7 +412,7 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 		Vec2 vPos = GetPos();
 		if (vPos.y < pOtherObj->GetPos().y)
 		{
-			m_eCurState = PLAYER_STATE::IDLE;
+			m_eCurStateLower = PLAYER_STATE::IDLE;
 		}
 	}
 }

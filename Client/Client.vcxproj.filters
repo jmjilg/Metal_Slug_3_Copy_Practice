@@ -47,15 +47,6 @@
     <Filter Include="Engine\04. Object\Player">
       <UniqueIdentifier>{b6768e1a-6702-42ae-a5ce-96e3fce5df08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Resource">
-      <UniqueIdentifier>{aa5e6a33-3e32-41b3-bbdd-b7963aac8484}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Resource\Texture">
-      <UniqueIdentifier>{97d7cc4e-a496-4cf6-9f2a-d72a7e5595cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\06. Resource\Sound">
-      <UniqueIdentifier>{f4fa4eb3-593b-47a3-8e02-62747e604eec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\PathMgr">
       <UniqueIdentifier>{a0e085ae-cf74-4e27-92c4-67d74e732f89}</UniqueIdentifier>
     </Filter>
@@ -140,6 +131,18 @@
     <Filter Include="Engine\03. Manager\SoundMgr">
       <UniqueIdentifier>{4fc424ef-85c6-407b-b5a3-ebd08eb12852}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Resourcee">
+      <UniqueIdentifier>{aa5e6a33-3e32-41b3-bbdd-b7963aac8484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Resourcee\Texture">
+      <UniqueIdentifier>{97d7cc4e-a496-4cf6-9f2a-d72a7e5595cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Resourcee\Sound">
+      <UniqueIdentifier>{f4fa4eb3-593b-47a3-8e02-62747e604eec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\TestAnim">
+      <UniqueIdentifier>{9b938639-f7de-4165-b711-ffd4ba023a61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -192,13 +195,13 @@
       <Filter>Engine\04. Object\Missile</Filter>
     </ClInclude>
     <ClInclude Include="CRes.h">
-      <Filter>Engine\06. Resource</Filter>
+      <Filter>Engine\06. Resourcee</Filter>
     </ClInclude>
     <ClInclude Include="CTexture.h">
-      <Filter>Engine\06. Resource\Texture</Filter>
+      <Filter>Engine\06. Resourcee\Texture</Filter>
     </ClInclude>
     <ClInclude Include="CSound.h">
-      <Filter>Engine\06. Resource\Sound</Filter>
+      <Filter>Engine\06. Resourcee\Sound</Filter>
     </ClInclude>
     <ClInclude Include="CPathMgr.h">
       <Filter>Engine\03. Manager\PathMgr</Filter>
@@ -278,6 +281,9 @@
     <ClInclude Include="CSoundMgr.h">
       <Filter>Engine\03. Manager\SoundMgr</Filter>
     </ClInclude>
+    <ClInclude Include="CTestAnim.h">
+      <Filter>Engine\04. Object\TestAnim</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -325,13 +331,13 @@
       <Filter>Engine\04. Object\Missile</Filter>
     </ClCompile>
     <ClCompile Include="CRes.cpp">
-      <Filter>Engine\06. Resource</Filter>
+      <Filter>Engine\06. Resourcee</Filter>
     </ClCompile>
     <ClCompile Include="CTexture.cpp">
-      <Filter>Engine\06. Resource\Texture</Filter>
+      <Filter>Engine\06. Resourcee\Texture</Filter>
     </ClCompile>
     <ClCompile Include="CSound.cpp">
-      <Filter>Engine\06. Resource\Sound</Filter>
+      <Filter>Engine\06. Resourcee\Sound</Filter>
     </ClCompile>
     <ClCompile Include="CPathMgr.cpp">
       <Filter>Engine\03. Manager\PathMgr</Filter>
@@ -408,5 +414,12 @@
     <ClCompile Include="CSoundMgr.cpp">
       <Filter>Engine\03. Manager\SoundMgr</Filter>
     </ClCompile>
+    <ClCompile Include="CTestAnim.cpp">
+      <Filter>Engine\04. Object\TestAnim</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

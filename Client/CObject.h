@@ -23,17 +23,19 @@ private:
 	CGravity*	m_pGravity;
 	
 	bool		m_bAlive;
+	bool		m_bClear;
 
 public:
 	void SetPos(Vec2 _vPos) { m_vPos = _vPos; }
 	void SetScale(Vec2 _vScale) { m_vScale = _vScale; }
+	void SetClear(bool _bClear) { m_bClear = _bClear; }
 
 	Vec2 GetPos() { return m_vPos; }
 	Vec2 GetScale() { return m_vScale; }
+	bool GetClear() { return m_bClear; }
 
 	void SetName(const wstring& _strName) { m_strName = _strName; }
 	const wstring& GetName() { return m_strName; }
-
 	CCollider* GetCollider() { return m_pCollider; }
 	CAnimator* GetAnimator() { return m_pAnimator; }
 	CRigidBody* GetRigidBody() { return m_pRigidBody; }
@@ -71,5 +73,6 @@ public:
 	virtual ~CObject();
 	
 	friend class CEventMgr;
+
 };
 

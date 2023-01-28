@@ -14,6 +14,7 @@ CObject::CObject()
 	, m_pRigidBody(nullptr)
 	, m_pGravity(nullptr)
 	, m_bAlive(true)
+	, m_bClear(false)
 {
 }
 
@@ -89,7 +90,7 @@ void CObject::render(HDC _dc)
 	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(m_vPos);
 
 	Rectangle(_dc
-		, (int)(vRenderPos.x - m_vScale.x / 2.f)
+		, (int)(vRenderPos.x - m_vScale.x / 2.f) 
 		, (int)(vRenderPos.y - m_vScale.y / 2.f)
 		, (int)(vRenderPos.x + m_vScale.x / 2.f)
 		, (int)(vRenderPos.y + m_vScale.y / 2.f));
@@ -104,7 +105,7 @@ void CObject::component_render(HDC _dc)
 		m_pAnimator->render(_dc);
 	}
 	
-	if (nullptr != m_pCollider)
+	if (nullptr != m_pCollider && false == m_bClear)
 	{
 		m_pCollider->render(_dc);
 	}
