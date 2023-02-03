@@ -7,34 +7,64 @@ enum class PLAYER_STATE
 {
     IDLE,
     WALK,
-    ATTACK,
     JUMP,
     SHOOT,
     SIT_DOWN,
-    STAND_UP,
+    SIT_DOWN_WALK,
+    LOOK_UP,
+    LOOK_DOWN,
     DEAD,
+
+    ///
+
+    HAND_GUN_IDLE,
+    HAND_GUN_WALK,
+    HAND_GUN_JUMP,
+    HAND_GUN_SHOOT,
+    HAND_GUN_SIT_DOWN,
+    HAND_GUN_SIT_DOWN_WALK,
+    HAND_GUN_LOOK_UP,
+    HAND_GUN_LOOK_DOWN,
+
+    //
+
+    HEAVY_MACHINE_GUN_IDLE,
+    HEAVY_MACHINE_GUN_WALK,
+    HEAVY_MACHINE_GUN_JUMP,
+    HEAVY_MACHINE_GUN_SHOOT,
+    HEAVY_MACHINE_GUN_SIT_DOWN,
+    HEAVY_MACHINE_GUN_SIT_DOWN_WALK,
+    HEAVY_MACHINE_GUN_LOOK_UP,
+    HEAVY_MACHINE_GUN_LOOK_DOWN,
+
+    //
+
+    GRENADE_IDLE,
+    GRENADE_WALK,
+    GRENADE_JUMP,
+    GRENADE_SHOOT,
+    GRENADE_SIT_DOWN,
+    GRENADE_SIT_DOWN_WALK,
+    GRENADE_LOOK_UP,
+    GRENADE_LOOK_DOWN,
+
+    //
+
+    KNIFE_IDLE,
+    KNIFE_WALK,
+    KNIFE_JUMP,
+    KNIFE_SHOOT,
+    KNIFE_SIT_DOWN,
+    KNIFE_SIT_DOWN_WALK,
+    KNIFE_LOOK_UP,
+    KNIFE_LOOK_DOWN,
 };
 
-
-
-enum class PLAYER_ATTACK
+enum class WEAPON
 {
-    NORMAL_SHOOT_LEFT,
-    NORMAL_SHOOT_RIGHT,
-    NORMAL_SHOOT_UP,
-    MELEE_ATTACK_LEFT,
-    MELEE_ATTACK_RIGHT,
-    GRENADE_THROW_LEFT,
-    GRENADE_THROW_RIGHT,
-    SIT_DOWN_NORMAL_SHOOT_LEFT,
-    SIT_DOWN_NORMAL_SHOOT_RIGHT,
-    SIT_DOWN_NORMAL_SHOOT_UP,
-    SIT_DOWN_MELEE_ATTACK_LEFT,
-    SIT_DOWN_MELEE_ATTACK_RIGHT,
-    SIT_DOWN_GRENADE_THROW_LEFT,
-    SIT_DOWN_GRENADE_THROW_RIGHT,
-    SKILL_ATT_1,
-    // ....
+    HAND_GUN,
+    HEAVY_MACHIN_GUN,
+    GRENADE,
 };
 
 class CTexture;
@@ -46,13 +76,15 @@ private:
     vector<CObject*>    m_vecColObj;
 
     PLAYER_STATE        m_eCurStateUpper;
-    PLAYER_STATE        m_eMoveState;
-    PLAYER_STATE        m_eAttackState;
     PLAYER_STATE        m_eCurStateLower;
     PLAYER_STATE        m_ePrevStateUpper;
     PLAYER_STATE        m_ePrevStateLower;
+    WEAPON              m_eCurWeapon;
+    WEAPON              m_ePrevWeapon;
     int                 m_iDir;
     int                 m_iPrevDir;
+    int                 m_iGrenade;
+    int                 m_iGrenadeCount;
     bool                m_bAttack;
 
 public:
@@ -71,6 +103,12 @@ private:
     virtual void OnCollisionEnter(CCollider* _pOther);
 
     CLONE(CPlayer);
+
+private:
+    void UpdateIdle();
+    void UpdateMoving();
+    void UpdateDie();
+
 
 public:
     CPlayer();

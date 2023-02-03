@@ -125,7 +125,8 @@ void CScene_Tool::update()
 	
 	if (KEY_TAP(KEY::S))
 	{
-		m_pTestAnim->GetAnimator()->StopAnimation(true);
+		m_pTestAnim->GetAnimator()->StopAnimationL(true);
+		m_pTestAnim->GetAnimator()->StopAnimationU(true);
 	}
 
 	
@@ -442,11 +443,13 @@ INT_PTR CALLBACK AnimationToolProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
 			return TRUE;
 		}
 		case IDC_BUTTON_Play:
-			pToolScene->GetTestAnim()->GetAnimator()->StopAnimation(false);
+			pToolScene->GetTestAnim()->GetAnimator()->StopAnimationL(false);
+			pToolScene->GetTestAnim()->GetAnimator()->StopAnimationU(false);
 			return TRUE;
 
 		case IDC_BUTTON_STOP:
-			pToolScene->GetTestAnim()->GetAnimator()->StopAnimation(true);
+			pToolScene->GetTestAnim()->GetAnimator()->StopAnimationL(true);
+			pToolScene->GetTestAnim()->GetAnimator()->StopAnimationU(true);
 			return TRUE;
 
 		case IDC_BUTTON_Clear:

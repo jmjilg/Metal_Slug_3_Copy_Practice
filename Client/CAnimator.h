@@ -17,7 +17,8 @@ private:
 
 public:
 	CObject* GetObj() { return m_pOwner; }
-	void StopAnimation(bool _bStop);
+	void StopAnimationL(bool _bStop);
+	void StopAnimationU(bool _bStop);
 	CAnimation* GetCurAnimL() { return m_pCurAnimL; }
 	CAnimation* GetCurAnimU() { return m_pCurAnimU; }
 

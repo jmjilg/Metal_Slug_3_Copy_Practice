@@ -53,6 +53,9 @@ void CAnimation::update()
 
 void CAnimation::render(HDC _dc)
 {
+	if (m_bStop)
+		return;
+
 	if (m_bFinish)
 		return;
 

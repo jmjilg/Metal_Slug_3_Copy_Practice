@@ -58,10 +58,14 @@ void CAnimator::render(HDC _dc)
 	}
 }
 
-void CAnimator::StopAnimation(bool _bStop)
+void CAnimator::StopAnimationL(bool _bStop)
 {
 	if(m_pCurAnimL != nullptr)
 		m_pCurAnimL->SetStop(_bStop);
+}
+
+void CAnimator::StopAnimationU(bool _bStop)
+{
 	if(m_pCurAnimU != nullptr)
 		m_pCurAnimU->SetStop(_bStop);
 }
