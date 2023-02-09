@@ -25,12 +25,12 @@ CTestAnim::CTestAnim()
 
 
 
-	/*GetAnimator()->CreateAnimation(L"PLAYER_WALK_JUMP_LOWER_PART_LEFT", pLeftTex, Vec2(1785.f, 1551.f), Vec2(24.f, 66.f), Vec2(-30.f, 0.f), Vec2(0.f, -15.f), 0.1f, 6);
-	GetAnimator()->CreateAnimation(L"PLAYER_WALK_JUMP_LOWER_PART_RIGHT", pRightTex, Vec2(9.f, 1551.f), Vec2(24.f, 66.f), Vec2(30.f, 0.f), Vec2(0.f, -15.f), 0.1f, 6);
+	/*GetAnimator()->CreateAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_LEFT", pLeftTex, Vec2(1787.f, 2226.f), Vec2(22.f, 54.f), Vec2(-25.f, 0.f), Vec2(0.f, -0.f), 0.1f, 6);
+	GetAnimator()->CreateAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_RIGHT", pRightTex, Vec2(9.f, 2226.f), Vec2(22.f, 54.f), Vec2(25.f, 0.f), Vec2(0.f, -0.f), 0.1f, 6);
 
 
-	GetAnimator()->FindAnimation(L"PLAYER_WALK_JUMP_LOWER_PART_LEFT")->Save(L"animation\\PLAYER_WALK_JUMP_LOWER_PART_LEFT.anim");
-	GetAnimator()->FindAnimation(L"PLAYER_WALK_JUMP_LOWER_PART_RIGHT")->Save(L"animation\\PLAYER_WALK_JUMP_LOWER_PART_RIGHT.anim"); */
+	GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_LEFT")->Save(L"animation\\PLAYER_HAND_GUN_LOOK_DOWN_LEFT.anim");
+	GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_RIGHT")->Save(L"animation\\PLAYER_HAND_GUN_LOOK_DOWN_RIGHT.anim"); */
 }
 
 CTestAnim::~CTestAnim()
