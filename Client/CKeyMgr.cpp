@@ -114,6 +114,7 @@ void CKeyMgr::update()
 		// Mouse 위치 계산
 		POINT ptPos = {};
 		GetCursorPos(&ptPos);
+		//GetPhysicalCursorPos(&ptPos); 
 		ScreenToClient(CCore::GetInst()->GetMainHwnd(), &ptPos);
 		
 		m_vCurMousePos = Vec2((float)ptPos.x, (float)ptPos.y);

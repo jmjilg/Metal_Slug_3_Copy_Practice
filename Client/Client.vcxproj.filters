@@ -143,6 +143,9 @@
     <Filter Include="Engine\04. Object\TestAnim">
       <UniqueIdentifier>{9b938639-f7de-4165-b711-ffd4ba023a61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\BackGround">
+      <UniqueIdentifier>{e6eaec7a-d50b-49c0-bfa5-80fb5b9d09a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -284,6 +287,9 @@
     <ClInclude Include="CTestAnim.h">
       <Filter>Engine\04. Object\TestAnim</Filter>
     </ClInclude>
+    <ClInclude Include="CBackGround.h">
+      <Filter>Engine\04. Object\BackGround</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -416,6 +422,9 @@
     </ClCompile>
     <ClCompile Include="CTestAnim.cpp">
       <Filter>Engine\04. Object\TestAnim</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGround.cpp">
+      <Filter>Engine\04. Object\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

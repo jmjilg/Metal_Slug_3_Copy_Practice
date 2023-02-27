@@ -1,4 +1,7 @@
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CGravity.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CGround.cpp"
 
 
@@ -24,7 +27,4 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CPathMgr.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CPlayer.cpp"
 

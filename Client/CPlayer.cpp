@@ -17,6 +17,8 @@
 
 #include "CRigidBody.h"
 #include "CGravity.h"
+#include "CCore.h"
+#include "CKeyMgr.h"
 
 CPlayer::CPlayer()
 	: m_eCurStateUpper(PLAYER_STATE::IDLE)
@@ -27,11 +29,13 @@ CPlayer::CPlayer()
 	, m_eBefore_The_Change_Lower(PLAYER_STATE::IDLE)
 	, m_eCurWeapon(WEAPON::HAND_GUN)
 	, m_ePrevWeapon(WEAPON::HAND_GUN)
-	, m_iDir(1)
+	, m_iDir(1.f, 0.f)
 	, m_iPrevDir(1)
 	, m_iGrenade(10)
 	, m_iGrenadeCount(0)
 	, m_bJump(false)
+	, m_vMissileDir(1.f, 0.f)
+	, m_vMissilePrevDir(1.f, 0.f)
 {
 	// Texture 로딩하기
 	//m_pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Player.bmp");
@@ -131,6 +135,11 @@ void CPlayer::update()
 		SetPos(Vec2(640.f, 384.f));
 	}
 
+	if (KEY_TAP(KEY::J))
+	{
+		CreateMissile();
+	}
+
 	GetAnimator()->update();
 
 	if (m_ePrevStateLower != m_stkStateLower.top())
@@ -141,7 +150,9 @@ void CPlayer::update()
 
 	m_ePrevStateLower = m_stkStateLower.top();
 	m_ePrevStateUpper = m_stkStateUpper.top();
-	m_iPrevDir = m_iDir;
+	m_iPrevDir = m_iDir.x;
+
+	CCore::GetInst()->SetPlayerPos(GetPos());
 }
 
 void CPlayer::render(HDC _dc)
@@ -150,7 +161,7 @@ void CPlayer::render(HDC _dc)
 	//int iHeight = (int)m_pTex->Height();
 
 	//Vec2 vPos = GetPos();
-
+	
 	//BitBlt(_dc
 	//	, (int)vPos.x - (float)(iWidth / 2)
 	//	, (int)vPos.y - (float)(iHeight / 2)
@@ -161,14 +172,13 @@ void CPlayer::render(HDC _dc)
 	//TransparentBlt(_dc
 	//	, (int)vPos.x - (float)(iWidth / 2)
 	//	, (int)vPos.y - (float)(iHeight / 2)
-	//	, iWidth, iHeight  
+	//	, iWidth, iHeight
 	//	, m_pTex->GetDC()
 	//	, 0, 0, iWidth, iHeight
 	//	, RGB(255, 255, 255));
 
 	// 컴포넌트(충돌체, etc...) 가 있는 경우 렌더
 	component_render(_dc);
-
 
 	// 알파블렌드 테스트 코드(비행기 스프라이트)
 	/*CTexture* pTex = CResMgr::GetInst()->LoadTexture(L"Plane", L"texture\\Player_A.bmp");
@@ -194,19 +204,20 @@ void CPlayer::render(HDC _dc)
 		, 0, 0
 		, int(width), int(height)
 		, bf);*/
+	
 }
 
 void CPlayer::CreateMissile()
 {
 	Vec2 vMissilePos = GetPos();
-	vMissilePos.y -= GetScale().y / 2.f;
+	//vMissilePos.y -= GetScale().y / 2.f; 메탈슬러그는 탑뷰가 아니기 때문에 이 코드가 없어도 됨
 
 	// Missile Object
 	CMissile* pMissile = new CMissile;
 	pMissile->SetName(L"Missile_Player");
 	pMissile->SetPos(vMissilePos);
 	pMissile->SetScale(Vec2(25.f, 25.f));
-	pMissile->SetDir(Vec2(0.f, -1.f));
+	pMissile->SetDir(m_vMissileDir);
 	
 	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER); // 앞으로 생성될 모든 종류의 오브젝트를 커버할 수 있어야함
 }
@@ -334,13 +345,13 @@ void CPlayer::update_IDLE(stack<PLAYER_STATE>& _stkState)
 	} 
 	else if (KEY_HOLD(KEY::A))
 	{
-		m_iDir = -1;
+		m_iDir.x = -1;
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::WALK);
 	}
 	else if (KEY_HOLD(KEY::D))
 	{
-		m_iDir = 1;
+		m_iDir.x = 1;
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::WALK);
 	}
@@ -384,9 +395,20 @@ void CPlayer::update_JUMP(stack<PLAYER_STATE>& _stkState)
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::LOOK_DOWN);
 	}
+	
+	else if (KEY_HOLD(KEY::W) && (&_stkState == &m_stkStateUpper))
+	{
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::LOOK_UP);
+	}
 
 	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper))
-	{
+	{		
+		if (KEY_HOLD(KEY::A))
+			m_iDir.x = -1;
+		else if (KEY_HOLD(KEY::D))
+			m_iDir.x = -1;
+
 		_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
 	}
 
@@ -458,10 +480,18 @@ void CPlayer::update_WALK_JUMP(stack<PLAYER_STATE>& _stkState)
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::WALK);
 	}
-
-
+	else if (KEY_HOLD(KEY::S) && (&_stkState == &m_stkStateUpper))
+	{
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::LOOK_DOWN);
+	}
 	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper))
 	{
+		if (KEY_HOLD(KEY::A))
+			m_iDir.x = -1;
+		else if (KEY_HOLD(KEY::D))
+			m_iDir.x = 1;
+
 		_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
 	}
 
@@ -477,16 +507,21 @@ void CPlayer::update_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 
 	else if (KEY_HOLD(KEY::A))
 	{
-		m_iDir = -1;
+		m_iDir.x = -1;
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::SIT_DOWN_WALK);
 	}
 
 	else if (KEY_HOLD(KEY::D))
 	{
-		m_iDir = 1;
+		m_iDir.x = 1;
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::SIT_DOWN_WALK);
+	}
+
+	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateLower))
+	{
+		_stkState.push(PLAYER_STATE::HAND_GUN_SIT_DOWN);
 	}
 }
 
@@ -510,6 +545,10 @@ void CPlayer::update_SIT_DOWN_WALK(stack<PLAYER_STATE>& _stkState)
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::WALK);
 	}
+	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateLower))
+	{
+		_stkState.push(PLAYER_STATE::HAND_GUN_SIT_DOWN);
+	}
 
 }
 
@@ -524,6 +563,10 @@ void CPlayer::update_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 	{
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::JUMP);
+	}
+	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper))
+	{
+		_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_DOWN);
 	}
 	
 }
@@ -558,9 +601,33 @@ void CPlayer::update_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 {
+	if ((m_iPrevDir != m_iDir.x) || KEY_HOLD(KEY::S))
+	{
+		_stkState.pop();		
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT")->SetFrame(0);
+
+		return;
+	}
+
+	if (KEY_HOLD(KEY::W) && KEY_TAP(KEY::J))
+	{
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT")->SetFrame(0);
+
+		return;
+	}
+
+
 	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
 	{
-		if (-1 == m_iDir)
+		if (-1 == m_iDir.x)
 			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT")->SetFrame(0);
 		else
 			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT")->SetFrame(0);
@@ -569,9 +636,15 @@ void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 	}
 	else // 애니메이션이 안끝났을 때
 	{
+		if (KEY_HOLD(KEY::A))
+			m_iDir.x = -1;
+		else if (KEY_HOLD(KEY::D))
+			m_iDir.x = 1;
+
 		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
-			if (-1 == m_iDir)
+
+			if (-1 == m_iDir.x)
 				GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_LEFT")->SetFrame(0);
 			else
 				GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UPPER_PART_RIGHT")->SetFrame(0);
@@ -608,9 +681,20 @@ void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 	}
 
 
+	if ((m_iPrevDir != m_iDir.x) || KEY_HOLD(KEY::S))
+	{
+		_stkState.pop();
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_RIGHT")->SetFrame(0);
+
+		return;
+	}
+
 	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
 	{
-		if (-1 == m_iDir)
+		if (-1 == m_iDir.x)
 			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_LEFT")->SetFrame(0);
 		else
 			GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_RIGHT")->SetFrame(0);
@@ -621,7 +705,7 @@ void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 	{
 		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
-			if (-1 == m_iDir)
+			if (-1 == m_iDir.x)
 				GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_LEFT")->SetFrame(0);
 			else
 				GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_RIGHT")->SetFrame(0);
@@ -632,10 +716,23 @@ void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	if (GetGravity()->GetGround())
+	{
+		_stkState.pop();
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::IDLE);		
+		
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_RIGHT")->SetFrame(0);
+
+		return;
+	}
 
 	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
 	{
-		if (-1 == m_iDir)
+		if (-1 == m_iDir.x)
 			GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_LEFT")->SetFrame(0);
 		else
 			GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_RIGHT")->SetFrame(0);
@@ -646,7 +743,7 @@ void CPlayer::update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 	{
 		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
-			if (-1 == m_iDir)
+			if (-1 == m_iDir.x)
 				GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_LEFT")->SetFrame(0);
 			else
 				GetAnimator()->FindAnimation(L"PLAYER_HAND_GUN_LOOK_DOWN_RIGHT")->SetFrame(0);
@@ -656,6 +753,41 @@ void CPlayer::update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+
+	if ((m_iPrevDir != m_iDir.x) || KEY_AWAY(KEY::S))
+	{
+		_stkState.pop();
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::IDLE);
+
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_IDLE_SIT_DOWN_SHOOT_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_IDLE_SIT_DOWN_SHOOT_RIGHT")->SetFrame(0);
+
+		return;
+	}
+
+	if (GetAnimator()->GetCurAnimL()->IsFinish()) // 애니메이션이 끝났을 때
+	{
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_IDLE_SIT_DOWN_SHOOT_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_IDLE_SIT_DOWN_SHOOT_RIGHT")->SetFrame(0);
+
+		_stkState.pop(); // 원래 상태로 돌아간다
+	}
+	else // 애니메이션이 안끝났을 때
+	{
+		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
+		{
+			if (-1 == m_iDir.x)
+				GetAnimator()->FindAnimation(L"PLAYER_IDLE_SIT_DOWN_SHOOT_LEFT")->SetFrame(0);
+			else
+				GetAnimator()->FindAnimation(L"PLAYER_IDLE_SIT_DOWN_SHOOT_RIGHT")->SetFrame(0);
+		}
+	}
+	GetRigidBody()->SetVelocity(Vec2(0.f, 0.f));
 }
 
 
@@ -663,7 +795,6 @@ void CPlayer::update_state()
 {
 	LOWERPART_update();
 	UPPERPART_update();
-
 
 	//GetAnimator()->StopAnimationL(false);
 	//GetAnimator()->StopAnimationU(false);
@@ -829,27 +960,39 @@ void CPlayer::update_move()
 {
 	CRigidBody* pRigid = GetRigidBody();
 
-	if (KEY_HOLD(KEY::A))
+	if (KEY_HOLD(KEY::D) && KEY_HOLD(KEY::A) && GetGravity()->GetGround())
+	{
+		// 만약 둘 다 누른 상태면 플레이어 멈춤
+		pRigid->SetVelocity(Vec2(0.f, 0.f));
+	}
+
+	else if (KEY_HOLD(KEY::A))
 	{
 		if (!GetGravity()->GetGround()) // 만약 점프중이라면 가속도 붙음
 		{
-			pRigid->SetVelocity(Vec2(-100.f, pRigid->GetVelocity().y));
-			pRigid->AddForce(Vec2(-300.f, 0.f)); 
+			Vec2 temp = Vec2(0.f, pRigid->GetVelocity().y);
+			pRigid->SetVelocity(Vec2(-100.f, temp.y));
+			//pRigid->AddVelocity(Vec2(-100.f, 0.f));
+			//pRigid->AddForce(Vec2(-300.f, 0.f)); 
+
 		}
 		else // 점프중이 아니라면 가속도 안붙음
 			pRigid->SetVelocity(Vec2(-100.f, pRigid->GetVelocity().y));
 	}
 
-	if (KEY_HOLD(KEY::D))
+	else if (KEY_HOLD(KEY::D))
 	{
 		if (!GetGravity()->GetGround()) // 만약 점프중이라면 가속도 붙음
 		{
 			pRigid->SetVelocity(Vec2(100.f, pRigid->GetVelocity().y));
-			pRigid->AddForce(Vec2(300.f, 0.f));
+			//pRigid->AddVelocity(Vec2(100.f, 0.f));
+			//pRigid->AddForce(Vec2(300.f, 0.f));
+
 		}
 		else // 점프중이 아니라면 가속도 안붙음
 			pRigid->SetVelocity(Vec2(100.f, pRigid->GetVelocity().y));
 	}
+
 	
 	if (KEY_AWAY(KEY::A) && GetGravity()->GetGround())
 	{
@@ -879,18 +1022,18 @@ void CPlayer::update_animation()
 
 	switch (m_stkStateLower.top())
 	{
-		if (m_ePrevStateLower == m_stkStateLower.top() && m_iPrevDir == m_iDir)
+		if (m_ePrevStateLower == m_stkStateLower.top() && m_iPrevDir == m_iDir.x)
 			break;
 
 	case PLAYER_STATE::IDLE:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayL(L"PLAYER_IDLE_LOWER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayL(L"PLAYER_IDLE_LOWER_PART_RIGHT", true);
 
 		break;
 	case PLAYER_STATE::WALK:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayL(L"PLAYER_WALK_LOWER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayL(L"PLAYER_WALK_LOWER_PART_RIGHT", true);
@@ -898,7 +1041,7 @@ void CPlayer::update_animation()
 		break;
 		
 	case PLAYER_STATE::WALK_JUMP:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayL(L"PLAYER_WALK_JUMP_LOWER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayL(L"PLAYER_WALK_JUMP_LOWER_PART_RIGHT", true);
@@ -906,7 +1049,7 @@ void CPlayer::update_animation()
 		break;
 
 	case PLAYER_STATE::JUMP:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayL(L"PLAYER_IDLE_JUMP_LOWER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayL(L"PLAYER_IDLE_JUMP_LOWER_PART_RIGHT", true);
@@ -914,7 +1057,7 @@ void CPlayer::update_animation()
 		break;
 
 	case PLAYER_STATE::SIT_DOWN:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_LEFT", true);
 		else
 			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_RIGHT", true);
@@ -922,15 +1065,15 @@ void CPlayer::update_animation()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_SIT_DOWN:
-		if (m_iDir == -1)
-			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_LEFT", true);
+		if (m_iDir.x == -1)
+			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_SHOOT_LEFT", false);
 		else
-			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_RIGHT", true);
+			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_SHOOT_RIGHT", false);
 
 		break;
 		
 	case PLAYER_STATE::SIT_DOWN_WALK:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_WALK_LEFT", true);
 		else
 			GetAnimator()->PlayL(L"PLAYER_IDLE_SIT_DOWN_WALK_RIGHT", true);
@@ -953,18 +1096,18 @@ void CPlayer::update_animation()
 
 	switch (m_stkStateUpper.top())
 	{
-		if (m_ePrevStateUpper == m_stkStateUpper.top() && m_iPrevDir == m_iDir)
+		if (m_ePrevStateUpper == m_stkStateUpper.top() && m_iPrevDir == m_iDir.x)
 			break;
 
 	case PLAYER_STATE::IDLE:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_IDLE_UPPER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayU(L"PLAYER_IDLE_UPPER_PART_RIGHT", true);
 
 		break;
 	case PLAYER_STATE::WALK:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_WALK_UPPER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayU(L"PLAYER_WALK_UPPER_PART_RIGHT", true);
@@ -972,7 +1115,7 @@ void CPlayer::update_animation()
 		break;
 		
 	case PLAYER_STATE::WALK_JUMP:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_WALK_JUMP_UPPER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayU(L"PLAYER_WALK_JUMP_UPPER_PART_RIGHT", true);
@@ -980,7 +1123,7 @@ void CPlayer::update_animation()
 		break;
 
 	case PLAYER_STATE::JUMP:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_IDLE_JUMP_UPPER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayU(L"PLAYER_IDLE_JUMP_UPPER_PART_RIGHT", true);
@@ -988,7 +1131,7 @@ void CPlayer::update_animation()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_SHOOT:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_SHOOT_UPPER_PART_LEFT", false);
 		else
 			GetAnimator()->PlayU(L"PLAYER_SHOOT_UPPER_PART_RIGHT", false);
@@ -996,7 +1139,7 @@ void CPlayer::update_animation()
 		break;
 
 	case PLAYER_STATE::LOOK_UP:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_LOOK_UP_UPPER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayU(L"PLAYER_LOOK_UP_UPPER_PART_RIGHT", true);
@@ -1004,7 +1147,7 @@ void CPlayer::update_animation()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_LOOK_UP:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_SHOOT_UP_UPPER_PART_LEFT", false);
 		else
 			GetAnimator()->PlayU(L"PLAYER_SHOOT_UP_UPPER_PART_RIGHT", false);
@@ -1012,7 +1155,7 @@ void CPlayer::update_animation()
 		break;
 
 	case PLAYER_STATE::LOOK_DOWN:
-		if (m_iDir == -1)
+		if (m_iDir.x == -1)
 			GetAnimator()->PlayU(L"PLAYER_LOOK_DOWN_UPPER_PART_LEFT", true);
 		else
 			GetAnimator()->PlayU(L"PLAYER_LOOK_DOWN_UPPER_PART_RIGHT", true);
@@ -1020,10 +1163,10 @@ void CPlayer::update_animation()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_LOOK_DOWN:
-		if (m_iDir == -1)
-			GetAnimator()->PlayU(L"PLAYER_SHOOT_UPPER_PART_LEFT", false);
+		if (m_iDir.x == -1)
+			GetAnimator()->PlayU(L"PLAYER_HAND_GUN_LOOK_DOWN_LEFT", false);
 		else
-			GetAnimator()->PlayU(L"PLAYER_SHOOT_UPPER_PART_RIGHT", false);
+			GetAnimator()->PlayU(L"PLAYER_HAND_GUN_LOOK_DOWN_RIGHT", false);
 
 		break;
 

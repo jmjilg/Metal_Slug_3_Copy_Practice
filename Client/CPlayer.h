@@ -93,11 +93,13 @@ private:
     PLAYER_STATE        m_eBefore_The_Change_Lower; // 상태가 변했을 때, 변하기 전의 상태를 기록함
     WEAPON              m_eCurWeapon;
     WEAPON              m_ePrevWeapon;
-    int                 m_iDir;
+    Vec2                m_iDir;
     int                 m_iPrevDir;
     int                 m_iGrenade;
     int                 m_iGrenadeCount;
     bool                m_bJump;
+
+    Vec2                m_vMissilePrevDir;
 
 public:
     virtual void update();

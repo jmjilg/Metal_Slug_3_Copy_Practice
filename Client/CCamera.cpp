@@ -114,6 +114,8 @@ void CCamera::render(HDC _dc)
 		// 효과 종료
 		m_listCamEffect.pop_front();
 	}
+
+
 }
 
 void CCamera::CalDiff()

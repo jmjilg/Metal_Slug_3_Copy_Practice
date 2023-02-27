@@ -12,6 +12,7 @@
 #include "CResMgr.h"
 #include "CSound.h"
 #include "CSoundMgr.h"
+#include "CPlayer.h"
 
 #include "CTexture.h"
 #include "CResMgr.h"
@@ -19,12 +20,14 @@
 
 #include "resource.h"
 
+
 CCore::CCore()
 	:m_hWnd(0)
 	, m_ptResolution{}
 	, m_hDC(0)
 	, m_arrBrush{}
 	, m_arrPen{}
+	, m_vPlayerPos(0.f, 0.f)
 {
 
 }
@@ -110,11 +113,51 @@ void CCore::progress()
 	// 화면 Clear
 	Clear();
 
+	
+
 	CSceneMgr::GetInst()->render(m_pMemTex->GetDC());
 	CCamera::GetInst()->render(m_pMemTex->GetDC());
 
 	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
 		, m_pMemTex->GetDC(), 0, 0, SRCCOPY);
+
+	//StretchBlt(m_hDC, 0, 0, m_ptResolution.x * 2.5, m_ptResolution.y * 2.5
+	//	, m_pMemTex->GetDC(), 0, 0, m_ptResolution.x, m_ptResolution.y, SRCCOPY);
+
+		// 실제 게임할때 비율
+
+				// 마우스 좌표 출력 (함수가 좀 더러워 지긴 한데...)
+	Vec2 vMousePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());	
+	Vec2 vPlayerPos = CCamera::GetInst()->GetRealPos(GetPlayerPos());
+	Vec2 vCamPos = CCamera::GetInst()->GetLookAt();
+	wstring strMouseRenderPosx = L"MousePosX : ";
+	wstring strMouseRenderPosy = L"MousePosY : ";
+	wstring strCamPosX = L"CamPosX : ";
+	wstring strCamPosY = L"CamPosY : ";
+	wstring strPlayerPosX = L"PlayerPosX : ";
+	wstring strPlayerPosY = L"PlayerPosY : ";
+	//wstring strFPS = L"FPS : ";
+
+	strMouseRenderPosx.append(std::to_wstring((int)vMousePos.x));
+	strMouseRenderPosy.append(std::to_wstring((int)vMousePos.y));
+	strCamPosX.append(std::to_wstring((int)vCamPos.x));
+	strCamPosY.append(std::to_wstring((int)vCamPos.y));
+	strPlayerPosX.append(std::to_wstring((int)vPlayerPos.x));
+	strPlayerPosY.append(std::to_wstring((int)vPlayerPos.y));
+	//strMouseRenderPosy.append(std::to_wstring((int)vMousePos.y));
+	//HDC hdc = CCore::GetInst()->GetMemTex()->GetDC();
+
+	TextOut(m_hDC, 1150, 10, strMouseRenderPosx.c_str(), strMouseRenderPosx.size());
+	TextOut(m_hDC, 1150, 30, strMouseRenderPosy.c_str(), strMouseRenderPosy.size());
+	TextOut(m_hDC, 1150, 50, strCamPosX.c_str(), strCamPosX.size());
+	TextOut(m_hDC, 1150, 70, strCamPosY.c_str(), strCamPosY.size());
+	TextOut(m_hDC, 1150, 90, strPlayerPosX.c_str(), strPlayerPosX.size());
+	TextOut(m_hDC, 1150, 110, strPlayerPosY.c_str(), strPlayerPosY.size());
+	//TextOut(hMainDC, 100, 200, strMouseRenderPosy.c_str(), strMouseRenderPosy.size());
+
+
+
+	
 
 	CTimeMgr::GetInst()->render();
 

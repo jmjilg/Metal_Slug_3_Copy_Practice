@@ -26,7 +26,7 @@ private:
 	Vec2				m_vPrevLookAt; // 카메라가 보는 이전프레임 위치
 
 
-	CObject*			 m_pTargetObj;	// 카메라 타겟 오브젝트
+	CObject*			m_pTargetObj;	// 카메라 타겟 오브젝트
 	Vec2				m_vDiff;	// 해상도 중심위치와, 카메라 LookAt 간의 차이 값
 
 	float				m_fTime;	// 타켓을 따라가는데 걸리는 시간

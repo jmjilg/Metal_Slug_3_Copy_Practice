@@ -35,6 +35,7 @@ public:
 	void DockMenu();
 	void DivideMenu();
 	void ChangeWindowSize(Vec2 _vResolution, bool _bMenu);
+	CTexture* GetMemTex() { return m_pMemTex; }
 
 public:
 	HWND GetMainHwnd() { return m_hWnd; }
@@ -43,4 +44,9 @@ public:
 	POINT GetResolution() { return m_ptResolution; }
 	HBRUSH GetBrush(BRUSH_TYPE _eType) { return m_arrBrush[(UINT)_eType]; }
 	HPEN GetPen(PEN_TYPE _eType) { return m_arrPen[(UINT)_eType]; }
+	Vec2 GetPlayerPos() { return m_vPlayerPos; }
+	void SetPlayerPos(Vec2 vPos) { m_vPlayerPos = vPos; }
+
+private:
+	Vec2 m_vPlayerPos;
 };

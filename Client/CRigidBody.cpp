@@ -39,7 +39,8 @@ void CRigidBody::finalupdate()
 	m_vAccel += m_vAccelA;
 
 	// 속도
-	m_vVelocity += m_vAccel * fDT;
+	float tempDT = fDT;
+	m_vVelocity += m_vAccel * tempDT;
 
 	// 마찰력에 의한 반대방향으로의 가속도
 	if (!m_vVelocity.IsZero())

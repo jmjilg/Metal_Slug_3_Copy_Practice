@@ -1,4 +1,7 @@
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CPlayer.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CRes.cpp"
 
 
@@ -24,7 +27,4 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CSoundMgr.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CState.cpp"
 

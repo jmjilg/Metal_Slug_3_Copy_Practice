@@ -26,6 +26,7 @@
 #include "CTimeMgr.h"
 
 #include "CGround.h"
+#include "CBackGround.h"
 
 CScene_Start::CScene_Start()
 	: m_bUseForce(false)
@@ -70,7 +71,7 @@ void CScene_Start::update()
 						float fRatio =  1.f - (fLen / m_fForceRadius);
 						float fForce = m_fForce * fRatio;
 
-						vecObj[j]->GetRigidBody()->AddForce(vDiff.Normalize() * fForce);						
+						vecObj[j]->GetRigidBody()->AddForce(vDiff.Normalize() * fForce);					
 					}
 				}
 
@@ -128,11 +129,20 @@ void CScene_Start::Enter()
 	// Object 추가
 	CObject* pObj = new CPlayer;
 	pObj->SetName(L"Player");
-	pObj->SetPos(Vec2(640.f, 384.f));
+	pObj->SetPos(Vec2(150.f, 200.f));
 	pObj->SetScale(Vec2(100.f, 100.f));
 	AddObject(pObj, GROUP_TYPE::PLAYER);
 
 	RegisterPlayer(pObj);
+
+
+	// 배경 추가
+	CObject* pBackGround = new CBackGround;
+	pBackGround->SetName(L"BackGround");
+	pBackGround->SetPos(Vec2(640.f, 384.f));
+	pBackGround->SetScale(Vec2(1280.f, 274.f));
+	//pObj->SetScale(Vec2(2889.f, 274.f));
+	AddObject(pBackGround, GROUP_TYPE::BACKGROUND);
 
 	/*CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);
 	pOtherPlayer->SetPos(Vec2(740.f, 384.f)); 아래로 바뀜 */
@@ -153,7 +163,7 @@ void CScene_Start::Enter()
 	// 땅 물체 배치
 	CObject* pGround = new CGround;
 	pGround->SetName(L"Ground");
-	pGround->SetPos(Vec2(640.f, 584.f));
+	pGround->SetPos(Vec2(150.f, 200.f));
 	pGround->SetScale(Vec2(500.f, 60.f));
 	AddObject(pGround, GROUP_TYPE::GROUND);
 
