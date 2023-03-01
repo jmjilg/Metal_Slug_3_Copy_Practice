@@ -34,7 +34,6 @@ CPlayer::CPlayer()
 	, m_iGrenade(10)
 	, m_iGrenadeCount(0)
 	, m_bJump(false)
-	, m_vMissileDir(1.f, 0.f)
 	, m_vMissilePrevDir(1.f, 0.f)
 {
 	// Texture 로딩하기
@@ -217,7 +216,7 @@ void CPlayer::CreateMissile()
 	pMissile->SetName(L"Missile_Player");
 	pMissile->SetPos(vMissilePos);
 	pMissile->SetScale(Vec2(25.f, 25.f));
-	pMissile->SetDir(m_vMissileDir);
+	pMissile->SetDir(m_iDir);
 	
 	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER); // 앞으로 생성될 모든 종류의 오브젝트를 커버할 수 있어야함
 }
@@ -334,6 +333,9 @@ void CPlayer::update_NONE(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_IDLE(stack<PLAYER_STATE>& _stkState)
 {
+	if(&_stkState == &m_stkStateUpper)
+		m_iDir.y = 0;
+
 	if (KEY_TAP(KEY::K))
 	{
 		if (GetRigidBody())
@@ -554,6 +556,9 @@ void CPlayer::update_SIT_DOWN_WALK(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	if (&_stkState == &m_stkStateUpper)
+		m_iDir.y = 1;
+
 	if (KEY_AWAY(KEY::S) && !GetGravity()->GetGround())
 	{
 		_stkState.pop();
@@ -573,6 +578,9 @@ void CPlayer::update_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 {
+	if (&_stkState == &m_stkStateUpper)
+		m_iDir.y = -1;
+
 	if (KEY_AWAY(KEY::W))
 	{
 		if (PLAYER_STATE::IDLE == m_eBefore_The_Change_Upper) // 이전 상태가 LOOK_UP이라서 안돌아옴
@@ -655,6 +663,9 @@ void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 {
+	if (&_stkState == &m_stkStateUpper)
+		m_iDir.y = -1;
+
 	if (KEY_AWAY(KEY::W))
 	{
 		if (PLAYER_STATE::IDLE == m_eBefore_The_Change_Upper) // 이전 상태가 LOOK_UP이라서 안돌아옴
@@ -703,7 +714,7 @@ void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 	}
 	else // 애니메이션이 안끝났을 때
 	{
-		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
+		if (KEY_TAP(KEY::J) && KEY_HOLD(KEY::W)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
 			if (-1 == m_iDir.x)
 				GetAnimator()->FindAnimation(L"PLAYER_SHOOT_UP_UPPER_PART_LEFT")->SetFrame(0);
@@ -716,6 +727,9 @@ void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	if (&_stkState == &m_stkStateUpper)
+		m_iDir.y = 1;
+
 	if (GetGravity()->GetGround())
 	{
 		_stkState.pop();
