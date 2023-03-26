@@ -1,4 +1,16 @@
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCollider.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCollisionMgr.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCore.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CEventMgr.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CGravity.cpp"
 
 
@@ -18,13 +30,4 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CMonster.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CObject.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CPanelUI.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CPathMgr.cpp"
 

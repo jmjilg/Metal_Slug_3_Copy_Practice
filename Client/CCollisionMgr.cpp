@@ -76,9 +76,9 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 			}
 			
 
-			if(IsCollision(pLeftCol, pRightCol))
+			if(IsCollision(pLeftCol, pRightCol) || IsCollisionGround(pLeftCol, pRightCol))
 			{
-				// 현재 충돌 중이다.
+				// 현재 충돌 중이다. 
 
 				if (iter->second)
 				{
@@ -128,6 +128,24 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 
 bool CCollisionMgr::IsCollision(CCollider* _pLeftCol, CCollider* _pRightCol)
 {
+	Vec2 vLeftPos = _pLeftCol->GetFinalPos();
+	Vec2 vLeftScale = _pLeftCol->GetScale();
+
+	Vec2 vRightPos = _pRightCol->GetFinalPos();
+	Vec2 vRightScale = _pRightCol->GetScale();
+
+	if (abs(vRightPos.x - vLeftPos.x) <= (vLeftScale.x + vRightScale.x) / 2.f
+		&& abs(vRightPos.y - vLeftPos.y) <= (vLeftScale.y + vRightScale.y) / 2.f)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool CCollisionMgr::IsCollisionGround(CCollider* _pLeftCol, CCollider* _pRightCol)
+{
+	// 작업해야함
 	Vec2 vLeftPos = _pLeftCol->GetFinalPos();
 	Vec2 vLeftScale = _pLeftCol->GetScale();
 

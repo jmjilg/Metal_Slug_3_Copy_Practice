@@ -21,6 +21,7 @@ public:
 	void StopAnimationU(bool _bStop);
 	CAnimation* GetCurAnimL() { return m_pCurAnimL; }
 	CAnimation* GetCurAnimU() { return m_pCurAnimU; }
+	void SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b);
 
 
 public:

@@ -16,10 +16,10 @@ CMissile::CMissile()
 {
 	m_vDir.Normalize();
 	CreateCollider();
-	GetCollider()->SetScale(Vec2(15.f, 15.f));
+	GetCollider()->SetScale(Vec2(10.f, 10.f));
 
 
-	CTexture* pHandGunTex = CResMgr::GetInst()->LoadTexture(L"BulletSFX", L"texture\\HandGunSFX10x10.bmp"); // 핸드건의 총알만 여기서 따옴
+	CTexture* pHandGunTex = CResMgr::GetInst()->LoadTexture(L"BulletSFX", L"texture\\HandGunSFX15x15.bmp"); // 핸드건의 총알만 여기서 따옴
 	CTexture* pWeaponTex = CResMgr::GetInst()->LoadTexture(L"WeaponSFX", L"texture\\WeaponSFX.bmp"); 
 
 	m_pTex = pHandGunTex;
@@ -59,17 +59,21 @@ void CMissile::render(HDC _dc)
 	//Ellipse(_dc, (int)(vPos.x - vScale.x / 2.f), (int)(vPos.y - vScale.y / 2.f)
 	//	, (int)(vPos.x + vScale.x / 2.f), (int)(vPos.y + vScale.y / 2.f));
 
-	// vPos = CCamera::GetInst()->GetRenderPos(vPos); 필요한가?
+	vPos = CCamera::GetInst()->GetRenderPos(vPos);  // 필요함. 이게 아니면 실제 좌표가 아닌 렌더링 좌표에서만 출력이 됨
+
+	//vPos = GetCollider()->GetFinalPos();
+
+
 
 	TransparentBlt(_dc
-		, (int)(vPos.x - 10 / 2.f)
+		, (int)(vPos.x - 15 / 2.f)
 		, (int)(vPos.y - 10 / 2.f)
-		, 10
+		, 15
 		, 10
 		, m_pTex->GetDC()
 		, 0
 		, 0
-		, 10
+		, 15
 		, 10
 		, RGB(0, 0, 0)
 	);

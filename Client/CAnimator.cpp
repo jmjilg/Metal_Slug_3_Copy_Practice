@@ -70,6 +70,14 @@ void CAnimator::StopAnimationU(bool _bStop)
 		m_pCurAnimU->SetStop(_bStop);
 }
 
+void CAnimator::SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b)
+{
+	if (nullptr != m_pCurAnimL)
+		m_pCurAnimL->SetTransParentColor(_r, _g, _b);
+	if (nullptr != m_pCurAnimU)
+		m_pCurAnimU->SetTransParentColor(_r, _g, _b);
+}
+
 void CAnimator::CreateAnimation(const wstring& _strName, CTexture* _pTex, Vec2 _vLT
 								, Vec2 _vSliceSize, Vec2 _vStep, Vec2 _vOffset, float _fDuration, UINT _iFreamCount)
 {

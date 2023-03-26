@@ -28,6 +28,7 @@ CCore::CCore()
 	, m_arrBrush{}
 	, m_arrPen{}
 	, m_vPlayerPos(0.f, 0.f)
+	, m_bStretchRender(false)
 {
 
 }
@@ -118,17 +119,19 @@ void CCore::progress()
 	CSceneMgr::GetInst()->render(m_pMemTex->GetDC());
 	CCamera::GetInst()->render(m_pMemTex->GetDC());
 
-	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
-		, m_pMemTex->GetDC(), 0, 0, SRCCOPY);
+	if (m_bStretchRender)
+		StretchBlt(m_hDC, 0, 0, m_ptResolution.x * 2.5, m_ptResolution.y * 2.5
+			, m_pMemTex->GetDC(), 0, 0, m_ptResolution.x, m_ptResolution.y, SRCCOPY);
+	else
+		BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
+			, m_pMemTex->GetDC(), 0, 0, SRCCOPY);
 
-	//StretchBlt(m_hDC, 0, 0, m_ptResolution.x * 2.5, m_ptResolution.y * 2.5
-	//	, m_pMemTex->GetDC(), 0, 0, m_ptResolution.x, m_ptResolution.y, SRCCOPY);
 
 		// 실제 게임할때 비율
 
 				// 마우스 좌표 출력 (함수가 좀 더러워 지긴 한데...)
 	Vec2 vMousePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());	
-	Vec2 vPlayerPos = CCamera::GetInst()->GetRealPos(GetPlayerPos());
+	Vec2 vPlayerPos = GetPlayerPos();
 	Vec2 vCamPos = CCamera::GetInst()->GetLookAt();
 	wstring strMouseRenderPosx = L"MousePosX : ";
 	wstring strMouseRenderPosy = L"MousePosY : ";

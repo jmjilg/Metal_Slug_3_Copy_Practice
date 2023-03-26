@@ -41,7 +41,7 @@ CPlayer::CPlayer()
 
 
 	CreateCollider();
-	GetCollider()->SetOffsetPos(Vec2(0.f, 15.f));
+	GetCollider()->SetOffsetPos(Vec2(0.f, 30.f));
 	GetCollider()->SetScale(Vec2(20.f, 20.f));
 
 	CreateRigidBody();
@@ -51,7 +51,7 @@ CPlayer::CPlayer()
 	CTexture* pRightTex = CResMgr::GetInst()->LoadTexture(L"PlayerRight", L"texture\\Marco_Rossi_Right.bmp");
 
 	CreateAnimator();	
-
+	
 	GetAnimator()->LoadAnimation(L"animation\\PLAYER_GRENADE_THROW_UPPER_PART_LEFT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\PLAYER_GRENADE_THROW_UPPER_PART_RIGHT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\PLAYER_IDLE_JUMP_LOWER_PART_LEFT.anim");
@@ -128,6 +128,9 @@ void CPlayer::update()
 	update_state();
 
 	update_animation();
+
+
+	GetAnimator()->SetTransParentColor(153, 217, 234); // 무시할 RGB값 설정 (한번만 하면 됨)
 
 	if (KEY_TAP(KEY::ENTER))
 	{
@@ -208,7 +211,7 @@ void CPlayer::render(HDC _dc)
 
 void CPlayer::CreateMissile()
 {
-	Vec2 vMissilePos = GetPos();
+	Vec2 vMissilePos = GetPos();	
 	//vMissilePos.y -= GetScale().y / 2.f; 메탈슬러그는 탑뷰가 아니기 때문에 이 코드가 없어도 됨
 
 	// Missile Object
@@ -305,8 +308,21 @@ void CPlayer::UPPERPART_update()
 
 void CPlayer::update_NONE(stack<PLAYER_STATE>& _stkState)
 {
+	//if (GetCollider() != nullptr)
+	//{
+	//	GetCollider()->SetOffsetPos(Vec2(0.f, 15.f));
+	//	GetCollider()->SetScale(Vec2(10.f, 10.f));
+	//}
+
 	if (KEY_AWAY(KEY::S))
 	{
+
+		//if (GetCollider() != nullptr)
+		//{
+		//	GetCollider()->SetOffsetPos(Vec2(0.f, 15.f));
+		//	GetCollider()->SetScale(Vec2(20.f, 20.f));
+		//}
+
 		if (PLAYER_STATE::IDLE == m_eBefore_The_Change_Upper)
 		{
 			_stkState.pop();

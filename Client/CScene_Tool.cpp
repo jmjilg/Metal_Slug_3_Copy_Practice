@@ -21,6 +21,7 @@
 #include "CAnimation.h"
 #include "CTestAnim.h"
 #include "string"
+#include "CCore.h"
 
 using namespace std;
 
@@ -127,6 +128,14 @@ void CScene_Tool::update()
 	{
 		m_pTestAnim->GetAnimator()->StopAnimationL(true);
 		m_pTestAnim->GetAnimator()->StopAnimationU(true);
+	}
+
+	if (KEY_TAP(KEY::SPACE))
+	{
+		if(CCore::GetInst()->GetStretchRender())
+			CCore::GetInst()->SetStretchRender(false);
+		else
+			CCore::GetInst()->SetStretchRender(true);
 	}
 
 	

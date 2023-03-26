@@ -27,6 +27,10 @@ private:
 	bool				m_bFinish;		// 재생 끝에 도달여부
 	bool				m_bStop;		// 일시정지 여부
 
+	COLORREF			m_red;
+	COLORREF			m_green;
+	COLORREF			m_blue;
+
 public:
 	const wstring& GetName() { return m_strName; }
 	bool IsFinish() { return m_bFinish; }
@@ -40,6 +44,7 @@ public:
 
 	tAnimFrm& GetFrame(int _iIdx) { return m_vecFrm[_iIdx]; }	
 	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
+	void SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b) { m_red = _r, m_green = _g, m_blue = _b; }
 
 private:
 	void SetName(const wstring& _strName) { m_strName = _strName; }

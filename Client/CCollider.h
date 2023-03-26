@@ -16,10 +16,12 @@ private:
 	int			 m_iCol;
 
 	bool		 m_bActive;		// 충돌체 활성화 여부
+	bool		 m_bLineTo;		// 충돌체를 Line으로 그릴것인지 여부
 	 
 public:
 	void SetOffsetPos(Vec2 _vPos) { m_vOffsetPos = _vPos; }
 	void SetScale(Vec2 _vScale) { m_vScale = _vScale; }
+	void SetLineTo(bool _b) { m_bLineTo = _b; }
 
 	Vec2 GetOffsetPos() { return m_vOffsetPos; }
 	Vec2 GetScale() { return m_vScale; }
@@ -27,6 +29,8 @@ public:
 	Vec2 GetFinalPos() { return m_vFinalPos; }
 
 	CObject* GetObj() { return m_pOwner; }
+
+	bool GetLineTo() { return m_bLineTo; }
 
 	UINT GetID() { return m_iID; }
 

@@ -21,7 +21,8 @@ private:
 	// 메뉴
 	HMENU	m_hMenu; // Tool Scene 에서만 사용
 
-
+	// 확대 여부
+	bool m_bStretchRender;
 
 public:
 	int Init(HWND _hWnd, POINT _ptResolution);
@@ -46,6 +47,8 @@ public:
 	HPEN GetPen(PEN_TYPE _eType) { return m_arrPen[(UINT)_eType]; }
 	Vec2 GetPlayerPos() { return m_vPlayerPos; }
 	void SetPlayerPos(Vec2 vPos) { m_vPlayerPos = vPos; }
+	bool GetStretchRender() { return m_bStretchRender; }
+	void SetStretchRender(bool _b) { m_bStretchRender = _b; }
 
 private:
 	Vec2 m_vPlayerPos;

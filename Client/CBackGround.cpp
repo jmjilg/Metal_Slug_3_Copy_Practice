@@ -8,7 +8,7 @@ CBackGround::CBackGround()
 	: m_pBackground(nullptr)
 {
 	// Texture 로딩하기
-	m_pBackground = CResMgr::GetInst()->LoadTexture(L"Mission1", L"texture\\Mission1.bmp");
+	m_pBackground = CResMgr::GetInst()->LoadTexture(L"BackGround", L"texture\\BackGround.bmp");
 }
 
 CBackGround::~CBackGround()

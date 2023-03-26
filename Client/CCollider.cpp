@@ -14,6 +14,7 @@ CCollider::CCollider()
 	, m_iID(g_iNextID++)
 	, m_iCol(0)
 	, m_bActive(true)
+	, m_bLineTo(false)
 {
 }
 
@@ -51,11 +52,15 @@ void CCollider::render(HDC _dc)
 
 	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(m_vFinalPos);
 
-	Rectangle(_dc
-		, (int)(vRenderPos.x - m_vScale.x / 2.f)
-		, (int)(vRenderPos.y - m_vScale.y / 2.f)
-		, (int)(vRenderPos.x + m_vScale.x / 2.f)
-		, (int)(vRenderPos.y + m_vScale.y / 2.f));
+	if (m_bLineTo)
+		LineTo(_dc, (int)vRenderPos.x, (int)vRenderPos.y);
+	else
+		Rectangle(_dc
+			, (int)(vRenderPos.x - m_vScale.x / 2.f)
+			, (int)(vRenderPos.y - m_vScale.y / 2.f)
+			, (int)(vRenderPos.x + m_vScale.x / 2.f)
+			, (int)(vRenderPos.y + m_vScale.y / 2.f));
+	
 	//MoveToEx(_dc, vRenderPos.x - m_vScale.x, vRenderPos.y, NULL);
 	//LineTo(_dc, (int)(vRenderPos.x + m_vScale.x), vRenderPos.y);
 	//MoveToEx(_dc, vRenderPos.x, vRenderPos.y - m_vScale.y, NULL);

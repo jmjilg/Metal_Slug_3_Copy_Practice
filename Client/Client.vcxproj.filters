@@ -146,6 +146,45 @@
     <Filter Include="Engine\04. Object\BackGround">
       <UniqueIdentifier>{e6eaec7a-d50b-49c0-bfa5-80fb5b9d09a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BackGroundAnimation">
+      <UniqueIdentifier>{87dd777d-8865-413b-a297-0b08d7c64459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BrokenCongaHouse">
+      <UniqueIdentifier>{bc7a91d0-cfec-4b03-b824-b25c9145bdf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BrokenShip">
+      <UniqueIdentifier>{cf342407-9839-4c6d-802c-c4c27629be2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\CongaHouse">
+      <UniqueIdentifier>{1afbe5f6-cd8e-406b-b58f-74a02d3a6d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\Ship">
+      <UniqueIdentifier>{a3d7b9ee-cc70-45a9-a027-885cfdaab83e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\ShipDoor">
+      <UniqueIdentifier>{8feadb06-9bdd-4af3-a0f4-6b07f264b1af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\SlugTransport">
+      <UniqueIdentifier>{c0b354db-5342-437d-86f1-f23d23d346da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\SlugTransportWave">
+      <UniqueIdentifier>{d639659e-2a8e-4008-b665-d0034b391066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\SlugTransportWave2">
+      <UniqueIdentifier>{53e947b2-2071-4c23-ba77-cdac33d01b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\Swamp">
+      <UniqueIdentifier>{7ecfb1a1-4c00-4b5b-a0eb-70ec9f64afcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BeachFront">
+      <UniqueIdentifier>{858f108b-161f-4ee5-b737-f935ca6a3ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\Beach">
+      <UniqueIdentifier>{cb796e99-63bf-4bf5-9610-bc6720b85fe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\SwampUnder">
+      <UniqueIdentifier>{edac8df1-7eae-46d2-87dc-250836767139}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -290,6 +329,43 @@
     <ClInclude Include="CBackGround.h">
       <Filter>Engine\04. Object\BackGround</Filter>
     </ClInclude>
+    <ClInclude Include="CBackGroundAnim.h">
+      <Filter>Engine\04. Object\BackGround\BackGroundAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="CBeach.h">
+      <Filter>Engine\04. Object\BackGround\Beach</Filter>
+    </ClInclude>
+    <ClInclude Include="CBeachFront.h">
+      <Filter>Engine\04. Object\BackGround\BeachFront</Filter>
+    </ClInclude>
+    <ClInclude Include="CBrokenCongaHouse.h">
+      <Filter>Engine\04. Object\BackGround\BrokenCongaHouse</Filter>
+    </ClInclude>
+    <ClInclude Include="CBrokenShip.h">
+      <Filter>Engine\04. Object\BackGround\BrokenShip</Filter>
+    </ClInclude>
+    <ClInclude Include="CCongaHouse.h">
+      <Filter>Engine\04. Object\BackGround\CongaHouse</Filter>
+    </ClInclude>
+    <ClInclude Include="CShip.h">
+      <Filter>Engine\04. Object\BackGround\Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="CShipDoor.h">
+      <Filter>Engine\04. Object\BackGround\ShipDoor</Filter>
+    </ClInclude>
+    <ClInclude Include="CSlugTransport.h">
+      <Filter>Engine\04. Object\BackGround\SlugTransport</Filter>
+    </ClInclude>
+    <ClInclude Include="CSlugTransportWave.h">
+      <Filter>Engine\04. Object\BackGround\SlugTransportWave</Filter>
+    </ClInclude>
+    <ClInclude Include="CSlugTransportWave2.h">
+      <Filter>Engine\04. Object\BackGround\SlugTransportWave2</Filter>
+    </ClInclude>
+    <ClInclude Include="CSwamp.h">
+      <Filter>Engine\04. Object\BackGround\Swamp</Filter>
+    </ClInclude>
+    <ClInclude Include="CSwampUnder.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -426,6 +502,43 @@
     <ClCompile Include="CBackGround.cpp">
       <Filter>Engine\04. Object\BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="CBackGroundAnim.cpp">
+      <Filter>Engine\04. Object\BackGround\BackGroundAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="CBeach.cpp">
+      <Filter>Engine\04. Object\BackGround\Beach</Filter>
+    </ClCompile>
+    <ClCompile Include="CBeachFront.cpp">
+      <Filter>Engine\04. Object\BackGround\BeachFront</Filter>
+    </ClCompile>
+    <ClCompile Include="CBrokenCongaHouse.cpp">
+      <Filter>Engine\04. Object\BackGround\BrokenCongaHouse</Filter>
+    </ClCompile>
+    <ClCompile Include="CBrokenShip.cpp">
+      <Filter>Engine\04. Object\BackGround\BrokenShip</Filter>
+    </ClCompile>
+    <ClCompile Include="CCongaHouse.cpp">
+      <Filter>Engine\04. Object\BackGround\CongaHouse</Filter>
+    </ClCompile>
+    <ClCompile Include="CShip.cpp">
+      <Filter>Engine\04. Object\BackGround\Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="CShipDoor.cpp">
+      <Filter>Engine\04. Object\BackGround\ShipDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="CSlugTransport.cpp">
+      <Filter>Engine\04. Object\BackGround\SlugTransport</Filter>
+    </ClCompile>
+    <ClCompile Include="CSlugTransportWave.cpp">
+      <Filter>Engine\04. Object\BackGround\SlugTransportWave</Filter>
+    </ClCompile>
+    <ClCompile Include="CSlugTransportWave2.cpp">
+      <Filter>Engine\04. Object\BackGround\SlugTransportWave2</Filter>
+    </ClCompile>
+    <ClCompile Include="CSwamp.cpp">
+      <Filter>Engine\04. Object\BackGround\Swamp</Filter>
+    </ClCompile>
+    <ClCompile Include="CSwampUnder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

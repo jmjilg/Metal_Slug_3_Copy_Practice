@@ -18,6 +18,9 @@ CAnimation::CAnimation()
 	, m_fAccTime(0.f)
 	, m_bFinish(false)
 	, m_bStop(false)
+	, m_red(248)
+	, m_green(0)
+	, m_blue(248)
 {
 }
 
@@ -53,8 +56,8 @@ void CAnimation::update()
 
 void CAnimation::render(HDC _dc)
 {
-	if (m_bStop)
-		return;
+	//if (m_bStop)
+	//	return;    //Tool Scene에서 볼땐 주석처리
 
 	if (m_bFinish)
 		return;
@@ -76,7 +79,7 @@ void CAnimation::render(HDC _dc)
 		, (int)(m_vecFrm[m_iCurFrm].vLT.y)
 		, (int)(m_vecFrm[m_iCurFrm].vSlice.x)
 		, (int)(m_vecFrm[m_iCurFrm].vSlice.y)
-		, RGB(153, 217, 234)
+		, RGB(m_red, m_green, m_blue)
 	);
 }
 
