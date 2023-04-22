@@ -3,6 +3,7 @@
 
 #include "CObject.h"
 #include "CTimeMgr.h"
+#include "CCollider.h"
 
 
 CRigidBody::CRigidBody()
@@ -91,15 +92,18 @@ void CRigidBody::Move()
 
 	if (0.f != fSpeed)
 	{
-		// 이동 방향
-		Vec2 vDir = m_vVelocity;
-		vDir.Normalize();
-		// 이동 방향과 이동 속도를 분해는 해봤지만 사실상 의미는 없음 그냥 바로 velocity * fDT 하면 됨. 하지만 단계별로 보고자 표시해놓음
 
-		Vec2 vPos = m_pOwner->GetPos();
+			// 이동 방향
+			Vec2 vDir = m_vVelocity;
+			vDir.Normalize();
+			// 이동 방향과 이동 속도를 분해는 해봤지만 사실상 의미는 없음 그냥 바로 velocity * fDT 하면 됨. 하지만 단계별로 보고자 표시해놓음
 
-		vPos += m_vVelocity * fDT; // vDir * fSpeed * fDT 와 같음
+			Vec2 vPos = m_pOwner->GetPos();
 
-		m_pOwner->SetPos(vPos);
+			vPos += m_vVelocity * fDT; // vDir * fSpeed * fDT 와 같음
+
+			//if (m_pOwner->GetCollider()->) // 오브젝트가 대각선 충돌체 범위에 있으면
+
+			m_pOwner->SetPos(vPos);
 	}
 }

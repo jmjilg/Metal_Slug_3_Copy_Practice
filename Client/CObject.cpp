@@ -15,6 +15,7 @@ CObject::CObject()
 	, m_pGravity(nullptr)
 	, m_bAlive(true)
 	, m_bClear(false)
+	, m_bStandLine(true)
 {
 }
 

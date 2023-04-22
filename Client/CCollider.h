@@ -4,7 +4,7 @@ class CObject;
 
 class CCollider
 {
-private:
+protected:
 	static UINT g_iNextID;
 
 	CObject*	 m_pOwner;		// collider 를 소유하고 있는 오브젝트
@@ -16,21 +16,26 @@ private:
 	int			 m_iCol;
 
 	bool		 m_bActive;		// 충돌체 활성화 여부
-	bool		 m_bLineTo;		// 충돌체를 Line으로 그릴것인지 여부
+	bool		 m_bIsRay;		// 직선 충돌체인지 여부
+	
+	vector<Vec2> m_vecRay;		// 두 점을 기준으로하는 여러가지 직선들
+	Vec2		 m_H;			// 직선 충돌체에서 플레이어와 가장 가까운 점
 	 
 public:
 	void SetOffsetPos(Vec2 _vPos) { m_vOffsetPos = _vPos; }
 	void SetScale(Vec2 _vScale) { m_vScale = _vScale; }
-	void SetLineTo(bool _b) { m_bLineTo = _b; }
+	void SetIsRay(bool _b) { m_bIsRay = _b; }
+	void SetH(Vec2 _v) { m_H = _v; }
 
 	Vec2 GetOffsetPos() { return m_vOffsetPos; }
 	Vec2 GetScale() { return m_vScale; }
+	bool GetIsRay() { return m_bIsRay; }
+	Vec2 GetH() { return m_H; }
 
 	Vec2 GetFinalPos() { return m_vFinalPos; }
-
 	CObject* GetObj() { return m_pOwner; }
+	vector<Vec2>& GetVecRay() { return m_vecRay; }
 
-	bool GetLineTo() { return m_bLineTo; }
 
 	UINT GetID() { return m_iID; }
 

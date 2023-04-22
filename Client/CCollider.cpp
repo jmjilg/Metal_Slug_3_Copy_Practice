@@ -14,7 +14,7 @@ CCollider::CCollider()
 	, m_iID(g_iNextID++)
 	, m_iCol(0)
 	, m_bActive(true)
-	, m_bLineTo(false)
+	, m_bIsRay(false)
 {
 }
 
@@ -52,19 +52,31 @@ void CCollider::render(HDC _dc)
 
 	Vec2 vRenderPos = CCamera::GetInst()->GetRenderPos(m_vFinalPos);
 
-	if (m_bLineTo)
-		LineTo(_dc, (int)vRenderPos.x, (int)vRenderPos.y);
-	else
+	if (m_bIsRay) // 직선 충돌체인 경우
+	{
+
+
+		for (size_t i = 0; i < m_vecRay.size()-1; i=i+2)
+		{
+			Vec2 vRenderPos1 = CCamera::GetInst()->GetRenderPos(m_vecRay[i]);
+			Vec2 vRenderPos2 = CCamera::GetInst()->GetRenderPos(m_vecRay[i+1]);
+			MoveToEx(_dc, vRenderPos1.x, vRenderPos1.y, NULL);
+			LineTo(_dc, vRenderPos2.x, vRenderPos2.y);
+		}
+	}
+	else // 박스형 충돌체인 경우
+	{
 		Rectangle(_dc
 			, (int)(vRenderPos.x - m_vScale.x / 2.f)
 			, (int)(vRenderPos.y - m_vScale.y / 2.f)
 			, (int)(vRenderPos.x + m_vScale.x / 2.f)
 			, (int)(vRenderPos.y + m_vScale.y / 2.f));
+	}
+
+
+
 	
-	//MoveToEx(_dc, vRenderPos.x - m_vScale.x, vRenderPos.y, NULL);
-	//LineTo(_dc, (int)(vRenderPos.x + m_vScale.x), vRenderPos.y);
-	//MoveToEx(_dc, vRenderPos.x, vRenderPos.y - m_vScale.y, NULL);
-	//LineTo(_dc, vRenderPos.x, (int)(vRenderPos.y + m_vScale.y));
+
 }
 
 
@@ -85,6 +97,5 @@ void CCollider::OnCollisionExit(CCollider* _pOther)
 	--m_iCol;
 	m_pOwner->OnCollisionExit(_pOther);
 }
-
 
 

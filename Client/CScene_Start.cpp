@@ -27,6 +27,7 @@
 #include "CTimeMgr.h"
 
 #include "CGround.h"
+#include "CRayGround.h"
 #include "CBackGround.h"
 #include "CBackGroundAnim.h"
 #include "CBrokenCongaHouse.h"
@@ -59,13 +60,13 @@ void CScene_Start::update()
 {
 	if (KEY_HOLD(KEY::LBTN))
 	{
-		m_bUseForce = true;
-		CreateForce();
+		//m_bUseForce = true;
+		//CreateForce();
 	}
-	else
-	{
-		m_bUseForce = false;
-	}
+	//else
+	//{
+	//	m_bUseForce = false;
+	//}
 
 	if (KEY_TAP(KEY::SPACE))
 	{
@@ -150,7 +151,7 @@ void CScene_Start::Enter()
 	// Object 추가
 	CObject* pObj = new CPlayer;
 	pObj->SetName(L"Player");
-	pObj->SetPos(Vec2(150.f, 200.f));
+	pObj->SetPos(Vec2(0.f, 0.f));
 	pObj->SetScale(Vec2(100.f, 100.f));
 	AddObject(pObj, GROUP_TYPE::PLAYER);
 
@@ -211,19 +212,19 @@ void CScene_Start::Enter()
 	//AddObject(pCongaHouse, GROUP_TYPE::CONGAHOUSE);
 	
 
-	//CObject* pShip = new CShip;
-	//pShip->SetName(L"Ship");
-	//pShip->SetPos(Vec2(1510.f, 93.f));
-	//pShip->SetScale(Vec2(203.f, 192.f));
-	//AddObject(pShip, GROUP_TYPE::SHIP);
-	//
+	CObject* pShip = new CShip;
+	pShip->SetName(L"Ship");
+	pShip->SetPos(Vec2(1510.f, 93.f));
+	pShip->SetScale(Vec2(203.f, 192.f));
+	AddObject(pShip, GROUP_TYPE::SHIP);
+	
 
 	//CObject* pShipDoor = new CShipDoor;
 	//pShipDoor->SetName(L"ShipDoor");
 	//pShipDoor->SetPos(Vec2(1550.f, 130.f));
 	//pShipDoor->SetScale(Vec2(705.f, 48.f));
 	//AddObject(pShipDoor, GROUP_TYPE::SHIPDOOR);
-	
+	//
 
 	//CObject* pSlugTransport = new CSlugTransport;
 	//pSlugTransport->SetName(L"SlugTransport");
@@ -231,22 +232,20 @@ void CScene_Start::Enter()
 	//pSlugTransport->SetScale(Vec2(705.f, 48.f));
 	////pObj->SetScale(Vec2(2889.f, 274.f));
 	//AddObject(pSlugTransport, GROUP_TYPE::SLUGTRANSPORT);
-	//
+	
 
 	//CObject* pSlugTransportWave = new CSlugTransportWave;
 	//pSlugTransportWave->SetName(L"SlugTransportWave");
 	//pSlugTransportWave->SetPos(Vec2(667.f, 274.f));
 	//pSlugTransportWave->SetScale(Vec2(705.f, 48.f));
-	////pObj->SetScale(Vec2(2889.f, 274.f));
 	//AddObject(pSlugTransportWave, GROUP_TYPE::SLUGTRANSPORTWAVE);
-	//
-	//CObject* pSlugTransportWave2 = new CSlugTransportWave2;
-	//pSlugTransportWave2->SetName(L"SlugTransportWave2");
-	//pSlugTransportWave2->SetPos(Vec2(667.f, 274.f));
-	//pSlugTransportWave2->SetScale(Vec2(705.f, 48.f));
-	////pObj->SetScale(Vec2(2889.f, 274.f));
-	//AddObject(pSlugTransportWave2, GROUP_TYPE::SLUGTRANSPORTWAVE2);
-	
+	/*
+	CObject* pSlugTransportWave2 = new CSlugTransportWave2;
+	pSlugTransportWave2->SetName(L"SlugTransportWave2");
+	pSlugTransportWave2->SetPos(Vec2(667.f, 274.f));
+	pSlugTransportWave2->SetScale(Vec2(705.f, 48.f));
+	AddObject(pSlugTransportWave2, GROUP_TYPE::SLUGTRANSPORTWAVE2);
+	*/
 
 	CObject* pSwamp = new CSwamp;
 	pSwamp->SetName(L"Swamp");
@@ -279,11 +278,30 @@ void CScene_Start::Enter()
 
 	// 땅 물체 배치
 	CObject* pGround = new CGround;
-	pGround->GetCollider()->SetLineTo(true);
 	pGround->SetName(L"Ground");
 	pGround->SetPos(Vec2(100.f, 400.f));
 	pGround->SetScale(Vec2(100.f, 10.f));
 	AddObject(pGround, GROUP_TYPE::GROUND);
+	
+	CObject* pRayGround = new CRayGround;
+	pRayGround->SetName(L"Ground");
+	pRayGround->SetPos(Vec2(100.f, 400.f));
+	pRayGround->SetScale(Vec2(100.f, 10.f));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(0, 180));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(230, 180));
+	//pRayGround->GetCollider()->GetVecRay().push_back(Vec2(0, 150));
+	//pRayGround->GetCollider()->GetVecRay().push_back(Vec2(230, 150));
+
+
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(231, 180));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(432, 171));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(433, 171));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(560, 171));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(561, 171));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(634, 154));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(635, 154));
+	pRayGround->GetCollider()->GetVecRay().push_back(Vec2(700, 154));
+	AddObject(pRayGround, GROUP_TYPE::GROUND);
 
 	// 타일 로딩
 	//LoadTile(L"Tile\\Start.tile");				

@@ -74,5 +74,11 @@ public:
 	
 	friend class CEventMgr;
 
+protected:
+	bool		m_bStandLine;  // 이 변수가 true여야 직선 충돌체의 충돌판정을 할 수 있음.
+
+public:
+	bool GetbStandLine() { return m_bStandLine; }
+
 };
 

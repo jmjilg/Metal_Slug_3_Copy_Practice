@@ -5,10 +5,15 @@
 #include "CScene.h"
 #include "CObject.h"
 #include "CCollider.h"
+#include "CRayCollider.h"
+#include "CKeyMgr.h"
+#include <functional>
+#include <numeric>
 
 
 CCollisionMgr::CCollisionMgr()
 	: m_arrCheck{}
+	, IsUnderRay(false)
 {
 }
 
@@ -52,8 +57,8 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 		for (size_t j = 0; j < vecRight.size(); ++j)
 		{
 			// 충돌체가 없거나, 자기 자신과의 충돌인 경우
-			if (nullptr == vecRight[j]->GetCollider() 
-				||	vecLeft[i] == vecRight[j])
+			if (nullptr == vecRight[j]->GetCollider()
+				|| vecLeft[i] == vecRight[j])
 			{
 				continue;
 			}
@@ -69,14 +74,21 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 			iter = m_mapColInfo.find(ID.ID);
 
 			// 충돌 정보가 미 등록 상태인 경우 등록(충돌하지 않았다 로)
-			if (m_mapColInfo.end() == iter) 
+			if (m_mapColInfo.end() == iter)
 			{
 				m_mapColInfo.insert(make_pair(ID.ID, false));
 				iter = m_mapColInfo.find(ID.ID);
 			}
-			
 
-			if(IsCollision(pLeftCol, pRightCol) || IsCollisionGround(pLeftCol, pRightCol))
+			auto func = &CCollisionMgr::IsCollision;
+			// 만약 선형 충돌체라면 IsRayCollision, 아니면 IsCollision 검사를 시행
+			if (pLeftCol->GetIsRay() || pRightCol->GetIsRay())
+				func = &CCollisionMgr::IsRayCollision;
+			else
+				func = &CCollisionMgr::IsCollision;
+
+
+			if ((this->*func)(pLeftCol, pRightCol))
 			{
 				// 현재 충돌 중이다. 
 
@@ -90,7 +102,7 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 						pRightCol->OnCollisionExit(pLeftCol);
 						iter->second = false;
 					}
-					else 
+					else
 					{
 						pLeftCol->OnCollision(pRightCol);
 						pRightCol->OnCollision(pLeftCol);
@@ -118,78 +130,108 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 					pRightCol->OnCollisionExit(pLeftCol);
 					iter->second = false;
 				}
-				
+
 			}
 
 		}
 	}
-
 }
-
-bool CCollisionMgr::IsCollision(CCollider* _pLeftCol, CCollider* _pRightCol)
-{
-	Vec2 vLeftPos = _pLeftCol->GetFinalPos();
-	Vec2 vLeftScale = _pLeftCol->GetScale();
-
-	Vec2 vRightPos = _pRightCol->GetFinalPos();
-	Vec2 vRightScale = _pRightCol->GetScale();
-
-	if (abs(vRightPos.x - vLeftPos.x) <= (vLeftScale.x + vRightScale.x) / 2.f
-		&& abs(vRightPos.y - vLeftPos.y) <= (vLeftScale.y + vRightScale.y) / 2.f)
+	bool CCollisionMgr::IsCollision(CCollider * _pLeftCol, CCollider * _pRightCol) // 박스형 충돌체 충돌감지
 	{
-		return true;
+
+		Vec2 vLeftPos = _pLeftCol->GetFinalPos();
+		Vec2 vLeftScale = _pLeftCol->GetScale();
+
+		Vec2 vRightPos = _pRightCol->GetFinalPos();
+		Vec2 vRightScale = _pRightCol->GetScale();
+
+		if (abs(vRightPos.x - vLeftPos.x) <= (vLeftScale.x + vRightScale.x) / 2.f
+			&& abs(vRightPos.y - vLeftPos.y) <= (vLeftScale.y + vRightScale.y) / 2.f)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
-	return false;
-}
-
-bool CCollisionMgr::IsCollisionGround(CCollider* _pLeftCol, CCollider* _pRightCol)
-{
-	// 작업해야함
-	Vec2 vLeftPos = _pLeftCol->GetFinalPos();
-	Vec2 vLeftScale = _pLeftCol->GetScale();
-
-	Vec2 vRightPos = _pRightCol->GetFinalPos();
-	Vec2 vRightScale = _pRightCol->GetScale();
-
-	if (abs(vRightPos.x - vLeftPos.x) <= (vLeftScale.x + vRightScale.x) / 2.f
-		&& abs(vRightPos.y - vLeftPos.y) <= (vLeftScale.y + vRightScale.y) / 2.f)
+	bool CCollisionMgr::IsRayCollision(CCollider * _pLeftCol, CCollider * _pRightCol) // 직선형 충돌체 충돌감지
 	{
-		return true;
+		// left가 땅, right가 플레이어
+		auto temp = _pLeftCol->GetVecRay();
+
+		if (!_pRightCol->GetObj()->GetbStandLine())
+			return false;
+
+		if (temp.size() < 2)
+			return false;
+
+		for (size_t i = 0; i < _pLeftCol->GetVecRay().size()-1; i=i+2)
+		{
+			Vec2 vLeftDot = _pLeftCol->GetVecRay()[i];
+			Vec2 vRightDot = _pLeftCol->GetVecRay()[i+1];
+
+			Vec2 vRightPos = _pRightCol->GetFinalPos();
+			Vec2 vRightScale = _pRightCol->GetScale();
+
+			// 플레이어의 발밑 위치
+			Vec2 vFootPos = vRightPos;
+			vFootPos.y = vRightPos.y + vRightScale.y / 2;
+
+
+			//Vec2 H = vLeftDot + std::inner_product((vRightDot - vLeftDot).Normalize(), vRightPos - vLeftDot) * (vRightDot - vLeftDot).Normalize();
+			Vec2 inner_product;
+			inner_product.x = (vRightDot - vLeftDot).Normalize().x * (vFootPos - vLeftDot).x;
+			inner_product.y = (vRightDot - vLeftDot).Normalize().y * (vFootPos - vLeftDot).y;
+
+			// 플레이어의 발밑에서 가장 가까운 위치에 있는 직선 충돌체위의 점 H
+			Vec2 H = vLeftDot +  (vRightDot - vLeftDot).Normalize() * inner_product.Length();
+			_pLeftCol->SetH(H);
+
+			// 플레이어의 발밑과 점 사이의 선분 거리
+			double Distance = sqrt(pow(vFootPos.x - H.x, 2) + pow(vFootPos.y - H.y, 2));
+
+			if ((abs(Distance) < 3.f) && (vFootPos.x >= vLeftDot.x) && (vFootPos.x <= vRightDot.x) )
+			{
+				if (KEY_TAP(KEY::K))
+					return false;
+				
+				return true;
+			}
+
+		}
+
+		return false;
 	}
 
-	return false;
-}
 
 
 
-
-void CCollisionMgr::CheckGroup(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
-{
-	// 더 작은 값의 그룹 타입을 행으로,
-	// 큰 값을 열(비트) 로 사용
-
-	UINT iRow = (UINT)_eLeft;
-	UINT iCol = (UINT)_eRight;
-
-	if (iCol < iRow)
+	void CCollisionMgr::CheckGroup(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 	{
-		iRow = (UINT)_eRight;
-		iCol = (UINT)_eLeft;
+		// 더 작은 값의 그룹 타입을 행으로,
+		// 큰 값을 열(비트) 로 사용
+
+		UINT iRow = (UINT)_eLeft;
+		UINT iCol = (UINT)_eRight;
+
+		if (iCol < iRow)
+		{
+			iRow = (UINT)_eRight;
+			iCol = (UINT)_eLeft;
+		}
+
+		if (m_arrCheck[iRow] & (1 << iCol))
+		{
+			m_arrCheck[iRow] &= ~(1 << iCol);
+
+		}
+		else
+		{
+			m_arrCheck[iRow] |= (1 << iCol);
+
+		}
+
+
 	}
-
-	if (m_arrCheck[iRow] & (1 << iCol))
-	{
-		m_arrCheck[iRow] &= ~(1 << iCol);
-
-	}
-	else
-	{
-		m_arrCheck[iRow] |= (1 << iCol);
-
-	}
-
-	
-}
 
 

@@ -22,6 +22,7 @@ CAnimation::CAnimation()
 	, m_green(0)
 	, m_blue(248)
 {
+
 }
 
 CAnimation::~CAnimation()

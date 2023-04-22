@@ -101,9 +101,24 @@ private:
 
     Vec2                m_vMissilePrevDir;
 
+private:
+    LARGE_INTEGER	m_llCurCount;
+    LARGE_INTEGER	m_llPrevCount;
+    LARGE_INTEGER	m_llFrequency; // 1초당 셀수있는 카운트값
+
+    double			m_dDT; // 프레임 사이의 시간값, 프레임과 프레임 사이의 걸린 시간
+    double			m_dAcc;	// 1초 체크를 위한 누적 시간
+    UINT			m_iCallCount; // 함수 호출 횟수 체크
+    UINT			m_iFPS; // 초당 호출 횟수
+
 public:
     virtual void update();
     virtual void render(HDC _dc);
+
+public:
+    double GetDT() { return m_dDT; }
+    float GetfDT() { return (float)m_dDT; }
+    bool GetbStandLine() { return m_bStandLine; }
 
 private:
     void CreateMissile();
@@ -111,12 +126,14 @@ private:
     void update_move();
     void update_animation();
     void update_gravity();
+    void update_jumptime();
     void SetIsJump(bool _bJump) { m_bJump = _bJump; }
     bool IsJump() { return m_bJump; }
 
     virtual void OnCollisionEnter(CCollider* _pOther);
 
     CLONE(CPlayer);
+
 
 private:
 	void LOWERPART_update();

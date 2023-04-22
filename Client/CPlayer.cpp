@@ -5,7 +5,6 @@
 #include "CScene.h"
 
 #include "CKeyMgr.h"
-#include "CTimeMgr.h"
 
 #include "CMissile.h"
 
@@ -35,6 +34,12 @@ CPlayer::CPlayer()
 	, m_iGrenadeCount(0)
 	, m_bJump(false)
 	, m_vMissilePrevDir(1.f, 0.f)
+	, m_llCurCount{}
+	, m_llPrevCount{}
+	, m_llFrequency{}
+	, m_dDT(0.)
+	, m_dAcc(0.)
+	, m_iCallCount(0)
 {
 	// Texture 로딩하기
 	//m_pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Player.bmp");
@@ -114,6 +119,12 @@ CPlayer::CPlayer()
 
 
 	CreateGravity();
+
+	// 현재 카운트 
+	QueryPerformanceCounter(&m_llPrevCount);
+
+	// 초당 카운트 횟수
+	QueryPerformanceFrequency(&m_llFrequency);
 }
 
 CPlayer::~CPlayer()
@@ -129,12 +140,22 @@ void CPlayer::update()
 
 	update_animation();
 
+	update_jumptime();
+
 
 	GetAnimator()->SetTransParentColor(153, 217, 234); // 무시할 RGB값 설정 (한번만 하면 됨)
 
+
+	if (KEY_TAP(KEY::LBTN))
+	{
+		Vec2 vMousePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
+		SetPos(vMousePos);
+	}
+
 	if (KEY_TAP(KEY::ENTER))
 	{
-		SetPos(Vec2(640.f, 384.f));
+		//SetPos(Vec2(640.f, 384.f));
+		SetPos(Vec2(150.f, 200.f));
 	}
 
 	if (KEY_TAP(KEY::J))
@@ -271,7 +292,7 @@ void CPlayer::UPPERPART_update()
 		update_IDLE(m_stkStateUpper);
 		break;
 
-	case PLAYER_STATE::JUMP:
+	case PLAYER_STATE::JUMP:		
 		update_JUMP(m_stkStateUpper); // JUMP_WALK와의 상호작용 구현 필요
 		break;		
 
@@ -358,6 +379,8 @@ void CPlayer::update_IDLE(stack<PLAYER_STATE>& _stkState)
 		{
 			GetRigidBody()->SetVelocity(Vec2(GetRigidBody()->GetVelocity().x, -350.f));
 		}
+		m_dAcc = 0.f;
+		m_bStandLine = false;
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::JUMP);
 	} 
@@ -479,6 +502,8 @@ void CPlayer::update_WALK(stack<PLAYER_STATE>& _stkState)
 		{
 			GetRigidBody()->SetVelocity(Vec2(GetRigidBody()->GetVelocity().x, -350.f));
 		}
+		m_dAcc = 0.f;
+		m_bStandLine = false;
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::WALK_JUMP);
 	}
@@ -1211,6 +1236,36 @@ void CPlayer::update_animation()
 void CPlayer::update_gravity()
 {
 	GetRigidBody()->AddForce(Vec2(0.f, 500.f));
+}
+
+void CPlayer::update_jumptime()
+{
+
+	QueryPerformanceCounter(&m_llCurCount);
+
+	// 이전 프레임의 카운팅과, 현재 프레임 카운팅 값의 차이를 구한다.
+	m_dDT = (double)(m_llCurCount.QuadPart - m_llPrevCount.QuadPart) / (double)m_llFrequency.QuadPart;
+
+
+
+	m_dAcc += m_dDT; // DT 누적, 흘러간 시간을 의미
+
+	if (m_dAcc >= 0.5f) // 0.5초에 한 번
+	{
+		m_bStandLine = true;
+		m_dAcc = 0.;
+	}
+
+
+	// 이전 카운트 값을 현재값으로 갱신(다음번에 계산을 위해서)
+	m_llPrevCount = m_llCurCount;
+
+
+#ifdef _DEBUG
+	if (m_dDT > (1. / 60.))
+		m_dDT = (1. / 60.);
+
+#endif
 }
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)

@@ -185,6 +185,12 @@
     <Filter Include="Engine\04. Object\BackGround\SwampUnder">
       <UniqueIdentifier>{edac8df1-7eae-46d2-87dc-250836767139}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\07. Component\Collider\Ray">
+      <UniqueIdentifier>{461fe8fd-5019-4c3e-b760-20fc0e1dbd0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\07. Component\Collider\Box">
+      <UniqueIdentifier>{ec923728-9bf6-4ddd-8f74-9fdd86d7cc75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -268,9 +274,6 @@
     </ClInclude>
     <ClInclude Include="CAnimator.h">
       <Filter>Engine\07. Component\Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="CCollider.h">
-      <Filter>Engine\07. Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="CAnimation.h">
       <Filter>Engine\07. Component\Animator\Animation</Filter>
@@ -366,6 +369,15 @@
       <Filter>Engine\04. Object\BackGround\Swamp</Filter>
     </ClInclude>
     <ClInclude Include="CSwampUnder.h" />
+    <ClInclude Include="CCollider.h">
+      <Filter>Engine\07. Component\Collider\Box</Filter>
+    </ClInclude>
+    <ClInclude Include="CRayCollider.h">
+      <Filter>Engine\07. Component\Collider\Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="CRayGround.h">
+      <Filter>Engine\04. Object\Ground</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -444,9 +456,6 @@
     </ClCompile>
     <ClCompile Include="CAnimator.cpp">
       <Filter>Engine\07. Component\Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="CCollider.cpp">
-      <Filter>Engine\07. Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="CAnimation.cpp">
       <Filter>Engine\07. Component\Animator\Animation</Filter>
@@ -539,6 +548,15 @@
       <Filter>Engine\04. Object\BackGround\Swamp</Filter>
     </ClCompile>
     <ClCompile Include="CSwampUnder.cpp" />
+    <ClCompile Include="CCollider.cpp">
+      <Filter>Engine\07. Component\Collider\Box</Filter>
+    </ClCompile>
+    <ClCompile Include="CRayCollider.cpp">
+      <Filter>Engine\07. Component\Collider\Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="CRayGround.cpp">
+      <Filter>Engine\04. Object\Ground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
