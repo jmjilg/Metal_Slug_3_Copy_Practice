@@ -27,10 +27,25 @@ void CTraceState::update()
 
 	Vec2 vMonDir = vPlayerPos - vMonPos;
 	vMonDir.Normalize();
+	if (vMonDir.x < 0)
+		GetMonster()->SetDir(-1);
+	else
+		GetMonster()->SetDir(1);
 
-	vMonPos += vMonDir * GetMonster()->GetInfo().fSpeed * fDT;
+	vMonPos.x = vMonPos.x + vMonDir.x * GetMonster()->GetInfo().fSpeed * fDT;
 
 	GetMonster()->SetPos(vMonPos);
+
+
+	Vec2 vDiff = vPlayerPos - vMonPos;
+	float fLen = vDiff.Length();
+	//long temp = GetMonster()->GetInfo().lAttAcc;
+
+	// 플레이어가 몬스터의 공격범위범위 안으로 진입
+	if (fLen < GetMonster()->GetInfo().fAttRange.x && GetMonster()->GetInfo().lAttAcc > 4000)
+	{
+		ChangeAIState(GetAI(), MON_STATE::CLAWING);
+	}
 }
 
 void CTraceState::Enter()

@@ -1,5 +1,8 @@
 #pragma once
 #include "CObject.h"
+
+class CRayGround;
+
 class CSlugTransport :
     public CObject
 {

@@ -16,6 +16,10 @@ CScene::CScene()
 	, m_iTileY(0)
 	, m_pPlayer(nullptr)
 	, m_pMonster(nullptr)
+	, m_pRayGround(nullptr)
+	, m_CongaHouse(true)
+	, m_BrokenShip(true)
+	, m_Ship(true)
 {
 	
 }

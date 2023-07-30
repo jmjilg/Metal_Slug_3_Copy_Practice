@@ -191,6 +191,63 @@
     <Filter Include="Engine\07. Component\Collider\Box">
       <UniqueIdentifier>{ec923728-9bf6-4ddd-8f74-9fdd86d7cc75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\BackGround\DestroyedBrokenShip">
+      <UniqueIdentifier>{12623df3-d3c0-4dba-9036-af0207d44d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Attack\Locust">
+      <UniqueIdentifier>{ff70e713-65b2-44c9-bea5-0954e789cc95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Attack\Huge_Hermit">
+      <UniqueIdentifier>{a26b344c-b5ce-4c96-a5c7-2845264832ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Attack\Chowmein_Conga">
+      <UniqueIdentifier>{b0310c93-1407-42ad-a11c-411665a2233d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Monster\Chowmein_Conga">
+      <UniqueIdentifier>{f6f82e5b-7b4b-4432-80a2-bbc5a376ea31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Monster\Locust">
+      <UniqueIdentifier>{e0c31a8d-46ed-4d0b-914b-1b2e19d6f967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Monster\Huge_Hermit">
+      <UniqueIdentifier>{c644b3b7-5e3a-45fc-a149-033488019b18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\Obstacle">
+      <UniqueIdentifier>{d58ce65f-d147-430a-a107-21504151fe48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\R724">
+      <UniqueIdentifier>{5ac72646-6343-4431-9056-1e1874906c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Captive">
+      <UniqueIdentifier>{aa2e7ee0-10f6-42ec-a7aa-9dadc6f160b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\CGrenade">
+      <UniqueIdentifier>{598eab89-8279-4b7e-a872-92c703d7d6d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Missile\CHeavyMachineGun">
+      <UniqueIdentifier>{a441e252-e11e-4167-918c-ff4e871b4a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Flying">
+      <UniqueIdentifier>{701396a8-bdd4-4e28-a175-aa652b92e692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Kidnapping">
+      <UniqueIdentifier>{fcfb59d1-3ce5-4cfb-a2b4-c8f90ef1b677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\EventObject">
+      <UniqueIdentifier>{17b5965d-4b47-4b04-ab1b-2c7e39384ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\CameraBox">
+      <UniqueIdentifier>{6c5c12dd-a7b3-440e-9786-fea030f7919b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BeachBackGround">
+      <UniqueIdentifier>{344550c5-651d-4dd9-87f4-939e9401e8d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\SwampBackGround">
+      <UniqueIdentifier>{e2b894eb-d292-42b4-bb22-2c78ccac9bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BossStageBackGround">
+      <UniqueIdentifier>{fe2c45f0-d0c7-4502-9a87-543b22fa0729}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -368,7 +425,6 @@
     <ClInclude Include="CSwamp.h">
       <Filter>Engine\04. Object\BackGround\Swamp</Filter>
     </ClInclude>
-    <ClInclude Include="CSwampUnder.h" />
     <ClInclude Include="CCollider.h">
       <Filter>Engine\07. Component\Collider\Box</Filter>
     </ClInclude>
@@ -377,6 +433,94 @@
     </ClInclude>
     <ClInclude Include="CRayGround.h">
       <Filter>Engine\04. Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="CDestroyedBrokenShip.h">
+      <Filter>Engine\04. Object\BackGround\DestroyedBrokenShip</Filter>
+    </ClInclude>
+    <ClInclude Include="CDeadState.h">
+      <Filter>Engine\08. Module\AI\State\Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="CAttackState.h">
+      <Filter>Engine\08. Module\AI\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="CBubblefire.h">
+      <Filter>Engine\08. Module\AI\State\Attack\Chowmein_Conga</Filter>
+    </ClInclude>
+    <ClInclude Include="CChowmein_Conga.h">
+      <Filter>Engine\04. Object\Monster\Chowmein_Conga</Filter>
+    </ClInclude>
+    <ClInclude Include="CHuge_Hermit.h">
+      <Filter>Engine\04. Object\Monster\Huge_Hermit</Filter>
+    </ClInclude>
+    <ClInclude Include="CLocust.h">
+      <Filter>Engine\04. Object\Monster\Locust</Filter>
+    </ClInclude>
+    <ClInclude Include="CClawing.h">
+      <Filter>Engine\08. Module\AI\State\Attack\Chowmein_Conga</Filter>
+    </ClInclude>
+    <ClInclude Include="CObstacle.h">
+      <Filter>Engine\04. Object\BackGround\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="CR724.h">
+      <Filter>Engine\04. Object\BackGround\R724</Filter>
+    </ClInclude>
+    <ClInclude Include="CCaptive.h">
+      <Filter>Engine\04. Object\Captive</Filter>
+    </ClInclude>
+    <ClInclude Include="CGrenade.h">
+      <Filter>Engine\04. Object\CGrenade</Filter>
+    </ClInclude>
+    <ClInclude Include="CSupplies.h" />
+    <ClInclude Include="CHeavyMachineGun.h">
+      <Filter>Engine\04. Object\Missile\CHeavyMachineGun</Filter>
+    </ClInclude>
+    <ClInclude Include="CFlying.h">
+      <Filter>Engine\08. Module\AI\State\Flying</Filter>
+    </ClInclude>
+    <ClInclude Include="CKidnapping.h">
+      <Filter>Engine\08. Module\AI\State\Kidnapping</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventObject.h">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventObject2.h">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventObject3.h">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventObject4.h">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventObject5.h">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventObject6.h">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraBox.h">
+      <Filter>Engine\04. Object\CameraBox</Filter>
+    </ClInclude>
+    <ClInclude Include="CBeachBackGround1.h">
+      <Filter>Engine\04. Object\BackGround\BeachBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CBeachBackGround2.h">
+      <Filter>Engine\04. Object\BackGround\BeachBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CSwampUnder.h">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CSwampBackGround.h">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossStageBackGround.h">
+      <Filter>Engine\04. Object\BackGround\BossStageBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CSwampBackGround2.h">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CSwampBackGround3.h">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -547,7 +691,6 @@
     <ClCompile Include="CSwamp.cpp">
       <Filter>Engine\04. Object\BackGround\Swamp</Filter>
     </ClCompile>
-    <ClCompile Include="CSwampUnder.cpp" />
     <ClCompile Include="CCollider.cpp">
       <Filter>Engine\07. Component\Collider\Box</Filter>
     </ClCompile>
@@ -556,6 +699,94 @@
     </ClCompile>
     <ClCompile Include="CRayGround.cpp">
       <Filter>Engine\04. Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="CDestroyedBrokenShip.cpp">
+      <Filter>Engine\04. Object\BackGround\DestroyedBrokenShip</Filter>
+    </ClCompile>
+    <ClCompile Include="CDeadState.cpp">
+      <Filter>Engine\08. Module\AI\State\Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="CAttackState.cpp">
+      <Filter>Engine\08. Module\AI\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="CBubblefire.cpp">
+      <Filter>Engine\08. Module\AI\State\Attack\Chowmein_Conga</Filter>
+    </ClCompile>
+    <ClCompile Include="CChowmein_Conga.cpp">
+      <Filter>Engine\04. Object\Monster\Chowmein_Conga</Filter>
+    </ClCompile>
+    <ClCompile Include="CHuge_Hermit.cpp">
+      <Filter>Engine\04. Object\Monster\Huge_Hermit</Filter>
+    </ClCompile>
+    <ClCompile Include="CLocust.cpp">
+      <Filter>Engine\04. Object\Monster\Locust</Filter>
+    </ClCompile>
+    <ClCompile Include="CClawing.cpp">
+      <Filter>Engine\08. Module\AI\State\Attack\Chowmein_Conga</Filter>
+    </ClCompile>
+    <ClCompile Include="CObstacle.cpp">
+      <Filter>Engine\04. Object\BackGround\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="CR724.cpp">
+      <Filter>Engine\04. Object\BackGround\R724</Filter>
+    </ClCompile>
+    <ClCompile Include="CCaptive.cpp">
+      <Filter>Engine\04. Object\Captive</Filter>
+    </ClCompile>
+    <ClCompile Include="CGrenade.cpp">
+      <Filter>Engine\04. Object\CGrenade</Filter>
+    </ClCompile>
+    <ClCompile Include="CSupplies.cpp" />
+    <ClCompile Include="CHeavyMachineGun.cpp">
+      <Filter>Engine\04. Object\Missile\CHeavyMachineGun</Filter>
+    </ClCompile>
+    <ClCompile Include="CFlying.cpp">
+      <Filter>Engine\08. Module\AI\State\Flying</Filter>
+    </ClCompile>
+    <ClCompile Include="CKidnapping.cpp">
+      <Filter>Engine\08. Module\AI\State\Kidnapping</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventObject.cpp">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventObject2.cpp">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventObject3.cpp">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventObject4.cpp">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventObject5.cpp">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventObject6.cpp">
+      <Filter>Engine\04. Object\EventObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraBox.cpp">
+      <Filter>Engine\04. Object\CameraBox</Filter>
+    </ClCompile>
+    <ClCompile Include="CBeachBackGround1.cpp">
+      <Filter>Engine\04. Object\BackGround\BeachBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CBeachBackGround2.cpp">
+      <Filter>Engine\04. Object\BackGround\BeachBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CSwampUnder.cpp">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CSwampBackGround.cpp">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossStageBackGround.cpp">
+      <Filter>Engine\04. Object\BackGround\BossStageBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CSwampBackGround2.cpp">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CSwampBackGround3.cpp">
+      <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

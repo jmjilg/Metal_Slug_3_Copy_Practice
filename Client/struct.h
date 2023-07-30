@@ -93,6 +93,12 @@ public:
 		y *= _f;
 	}
 
+	void operator /= (float _f)
+	{
+		x /= _f;
+		y /= _f;
+	}
+
 	Vec2 operator /(Vec2 _vOther)
 	{
 		assert(!(0.f == _vOther.x || 0.f == _vOther.y));

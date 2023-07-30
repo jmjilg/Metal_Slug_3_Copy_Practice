@@ -17,7 +17,13 @@ private:
 	UINT			 m_iTileY;	// 타일 세로 개수
 
 	CObject*		 m_pPlayer; // Player
-	CObject* m_pMonster;
+	CObject*		 m_pMonster;
+
+protected:
+	CObject*		 m_pRayGround; // 직선 충돌체
+	bool			 m_CongaHouse;
+	bool			 m_BrokenShip;	
+	bool			 m_Ship;
 
 public:
 	void SetName(const wstring& _strName){m_strName = _strName;}
@@ -25,6 +31,10 @@ public:
 
 	UINT GetTileX() { return m_iTileX; }
 	UINT GetTileY() { return m_iTileY; }
+	CObject* GetRayGround() { return m_pRayGround; }
+	void SetCongaHouse(bool _b) { m_CongaHouse = _b; }
+	void SetBrokenShip(bool _b) { m_BrokenShip = _b; }
+	void SetShip(bool _b) { m_Ship = _b; }
 
 	CObject* GetPlayer() { return m_pPlayer; }
 

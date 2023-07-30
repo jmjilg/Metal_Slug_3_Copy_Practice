@@ -138,6 +138,8 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 }
 	bool CCollisionMgr::IsCollision(CCollider * _pLeftCol, CCollider * _pRightCol) // 박스형 충돌체 충돌감지
 	{
+		if (_pLeftCol->GetDead() || _pRightCol->GetDead())
+			return false;
 
 		Vec2 vLeftPos = _pLeftCol->GetFinalPos();
 		Vec2 vLeftScale = _pLeftCol->GetScale();
@@ -157,21 +159,22 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 	bool CCollisionMgr::IsRayCollision(CCollider * _pLeftCol, CCollider * _pRightCol) // 직선형 충돌체 충돌감지
 	{
 		// left가 땅, right가 플레이어
-		auto temp = _pLeftCol->GetVecRay();
+		// right가 땅, left가 플레이어로 바꾸자
+		auto temp = _pRightCol->GetVecRay();
 
-		if (!_pRightCol->GetObj()->GetbStandLine())
+		if (!_pLeftCol->GetObj()->GetbStandLine())
 			return false;
 
 		if (temp.size() < 2)
 			return false;
 
-		for (size_t i = 0; i < _pLeftCol->GetVecRay().size()-1; i=i+2)
+		for (size_t i = 0; i < _pRightCol->GetVecRay().size() - 1; i = i + 2)
 		{
-			Vec2 vLeftDot = _pLeftCol->GetVecRay()[i];
-			Vec2 vRightDot = _pLeftCol->GetVecRay()[i+1];
+			Vec2 vLeftDot = _pRightCol->GetVecRay()[i];
+			Vec2 vRightDot = _pRightCol->GetVecRay()[i + 1];
 
-			Vec2 vRightPos = _pRightCol->GetFinalPos();
-			Vec2 vRightScale = _pRightCol->GetScale();
+			Vec2 vRightPos = _pLeftCol->GetFinalPos();
+			Vec2 vRightScale = _pLeftCol->GetScale();
 
 			// 플레이어의 발밑 위치
 			Vec2 vFootPos = vRightPos;
@@ -184,17 +187,17 @@ void CCollisionMgr::CollisionGroupUpdate(GROUP_TYPE _eLeft, GROUP_TYPE _eRight)
 			inner_product.y = (vRightDot - vLeftDot).Normalize().y * (vFootPos - vLeftDot).y;
 
 			// 플레이어의 발밑에서 가장 가까운 위치에 있는 직선 충돌체위의 점 H
-			Vec2 H = vLeftDot +  (vRightDot - vLeftDot).Normalize() * inner_product.Length();
-			_pLeftCol->SetH(H);
+			Vec2 H = vLeftDot + (vRightDot - vLeftDot).Normalize() * inner_product.Length();
+			_pRightCol->SetH(H);
 
 			// 플레이어의 발밑과 점 사이의 선분 거리
 			double Distance = sqrt(pow(vFootPos.x - H.x, 2) + pow(vFootPos.y - H.y, 2));
 
-			if ((abs(Distance) < 3.f) && (vFootPos.x >= vLeftDot.x) && (vFootPos.x <= vRightDot.x) )
+			if ((abs(Distance) < 10.f) && ((vFootPos.x >= vLeftDot.x) && (vFootPos.x <= vRightDot.x)))  
 			{
 				if (KEY_TAP(KEY::K))
 					return false;
-				
+
 				return true;
 			}
 

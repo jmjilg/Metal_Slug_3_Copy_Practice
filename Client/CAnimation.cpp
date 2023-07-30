@@ -31,6 +31,7 @@ CAnimation::~CAnimation()
 
 void CAnimation::update()
 {
+
 	if (m_bStop)
 		return;
 
@@ -57,8 +58,8 @@ void CAnimation::update()
 
 void CAnimation::render(HDC _dc)
 {
-	//if (m_bStop)
-	//	return;    //Tool Scene에서 볼땐 주석처리
+	if (m_bStop)
+		return;    //Tool Scene에서 볼땐 주석처리
 
 	if (m_bFinish)
 		return;
@@ -71,7 +72,7 @@ void CAnimation::render(HDC _dc)
 	vPos = CCamera::GetInst()->GetRenderPos(vPos);
 
 	TransparentBlt(_dc
-		, (int)(vPos.x - m_vecFrm[m_iCurFrm].vSlice.x / 2.f)
+		, (int)(vPos.x - m_vecFrm[m_iCurFrm].vSlice.x / 2.f)	
 		, (int)(vPos.y - m_vecFrm[m_iCurFrm].vSlice.y / 2.f)
 		, (int)(m_vecFrm[m_iCurFrm].vSlice.x)
 		, (int)(m_vecFrm[m_iCurFrm].vSlice.y)

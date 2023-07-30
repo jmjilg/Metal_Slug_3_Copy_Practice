@@ -4,8 +4,6 @@
 class CIdleState :
     public CState
 {
-private:
-
 
 public:
     virtual void update();

@@ -55,7 +55,9 @@ void CRayGround::OnCollision(CCollider* _pOther)
 
 	CObject* pOtherObj = _pOther->GetObj();
 
-	if (pOtherObj->GetName() == L"Player")// || 직선 충돌체와 부딪혓을때)
+	wstring temp = pOtherObj->GetName();
+	
+	if (temp == L"Player" || temp == L"Chowmein_Conga" || temp == L"Locust" ||  temp == L"Captive" )// || 직선 충돌체와 부딪혓을때)
 	{
 		pOtherObj->GetGravity()->SetGround(true);
 

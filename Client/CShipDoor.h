@@ -7,6 +7,7 @@ class CShipDoor :
 private:
     CTexture* m_pTexture;
     Vec2 m_vFinalPos;
+    bool m_IsFinish;
 
 
 private:

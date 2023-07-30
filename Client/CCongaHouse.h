@@ -1,5 +1,7 @@
 #pragma once
 #include "CObject.h"
+
+
 class CCongaHouse :
     public CObject
 {
@@ -7,6 +9,7 @@ class CCongaHouse :
 private:
     CTexture* m_pTexture;
     Vec2 m_vFinalPos;
+    int m_iHP;
 
 
 private:
@@ -16,6 +19,12 @@ private:
 
 public:
     CLONE(CCongaHouse);
+
+public:
+    virtual void OnCollisionEnter(CCollider* _pOther);
+    //virtual void OnCollision(CCollider* _pOther);
+    //virtual void OnCollisionExit(CCollider* _pOther);
+
 
 public:
     CCongaHouse();

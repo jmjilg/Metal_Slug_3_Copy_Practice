@@ -42,8 +42,9 @@ public:
 	}
 	void SetStop(bool _bStop) { m_bStop = _bStop; }
 
-	tAnimFrm& GetFrame(int _iIdx) { return m_vecFrm[_iIdx]; }	
+	tAnimFrm& GetFrame(int _iIdx) { return m_vecFrm[_iIdx]; }
 	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
+	int GetCurFrame() { return m_iCurFrm; }
 	void SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b) { m_red = _r, m_green = _g, m_blue = _b; }
 
 private:

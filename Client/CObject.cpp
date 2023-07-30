@@ -5,6 +5,7 @@
 #include "CAnimator.h"
 #include "CRigidBody.h"
 #include "CGravity.h"
+#include "AI.h"
 
 CObject::CObject()
 	: m_vPos{}
@@ -16,6 +17,9 @@ CObject::CObject()
 	, m_bAlive(true)
 	, m_bClear(false)
 	, m_bStandLine(true)
+	, m_pObstacle(nullptr)
+	, m_bColliderRender(true)
+	, m_pCameraBox(nullptr)
 {
 }
 
@@ -28,6 +32,7 @@ CObject::CObject(const CObject& _origin)
 	, m_pRigidBody(nullptr)
 	, m_pGravity(nullptr)
 	, m_bAlive(true)
+	, m_pRayGround(nullptr)
 {
 	if (_origin.m_pCollider)
 	{
@@ -84,6 +89,9 @@ void CObject::finalupdate()
 
 	if (m_pCollider)
 		m_pCollider->finalupdate();
+	
+
+
 }
 
 void CObject::render(HDC _dc)
@@ -106,7 +114,7 @@ void CObject::component_render(HDC _dc)
 		m_pAnimator->render(_dc);
 	}
 	
-	if (nullptr != m_pCollider && false == m_bClear)
+	if (nullptr != m_pCollider && false == m_bClear && m_bColliderRender)
 	{
 		m_pCollider->render(_dc);
 	}
@@ -137,4 +145,3 @@ void CObject::CreateGravity()
 	m_pGravity = new CGravity;
 	m_pGravity->m_pOwner = this;
 }
-

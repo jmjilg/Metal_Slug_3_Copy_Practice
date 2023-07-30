@@ -1,16 +1,4 @@
 
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CSwamp.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CSwampUnder.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CTestAnim.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CTexture.cpp"
-
-
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CTile.cpp"
 
 
@@ -30,4 +18,7 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\main.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\SelectGDI.cpp"
 

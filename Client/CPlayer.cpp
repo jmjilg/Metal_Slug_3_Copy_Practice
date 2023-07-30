@@ -7,6 +7,7 @@
 #include "CKeyMgr.h"
 
 #include "CMissile.h"
+#include "CHeavyMachineGun.h"
 
 #include "CResMgr.h"
 #include "CTexture.h"
@@ -18,6 +19,7 @@
 #include "CGravity.h"
 #include "CCore.h"
 #include "CKeyMgr.h"
+#include "CCamera.h"
 
 CPlayer::CPlayer()
 	: m_eCurStateUpper(PLAYER_STATE::IDLE)
@@ -40,6 +42,9 @@ CPlayer::CPlayer()
 	, m_dDT(0.)
 	, m_dAcc(0.)
 	, m_iCallCount(0)
+	, m_iLife(3)
+	, m_bAttacked(false)
+	, m_bSetCamera(false)
 {
 	// Texture 로딩하기
 	//m_pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Player.bmp");
@@ -101,7 +106,11 @@ CPlayer::CPlayer()
 	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_UPPER_PART_LEFT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\PLAYER_WALK_UPPER_PART_RIGHT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\PLAYER_HAND_GUN_LOOK_DOWN_LEFT.anim");
-	GetAnimator()->LoadAnimation(L"animation\\PLAYER_HAND_GUN_LOOK_DOWN_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_HAND_GUN_LOOK_DOWN_RIGHT.anim");	
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_DEAD_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_DEAD_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_RESPAWN_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_RESPAWN_RIGHT.anim");
 
 	m_stkStateLower.push(PLAYER_STATE::IDLE);
 	m_stkStateUpper.push(PLAYER_STATE::IDLE);
@@ -146,7 +155,7 @@ void CPlayer::update()
 	GetAnimator()->SetTransParentColor(153, 217, 234); // 무시할 RGB값 설정 (한번만 하면 됨)
 
 
-	if (KEY_TAP(KEY::LBTN))
+	if (KEY_TAP(KEY::LBTN) && !m_bAttacked)
 	{
 		Vec2 vMousePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
 		SetPos(vMousePos);
@@ -154,11 +163,22 @@ void CPlayer::update()
 
 	if (KEY_TAP(KEY::ENTER))
 	{
-		//SetPos(Vec2(640.f, 384.f));
-		SetPos(Vec2(150.f, 200.f));
+		if (m_bSetCamera)
+			m_bSetCamera = false;
+		else
+			m_bSetCamera = true;
 	}
 
-	if (KEY_TAP(KEY::J))
+
+	if (m_bSetCamera)
+	{
+		Vec2 vPos = GetPos();
+		vPos.x += 292; // 535; 해상도가 1980 768 일때
+		vPos.y += 58; // 252; 해상도가 1980 768 일때
+		CCamera::GetInst()->SetLookAt(vPos);
+	}
+
+	if (KEY_TAP(KEY::J) && !m_bAttacked)
 	{
 		CreateMissile();
 	}
@@ -175,7 +195,7 @@ void CPlayer::update()
 	m_ePrevStateUpper = m_stkStateUpper.top();
 	m_iPrevDir = m_iDir.x;
 
-	CCore::GetInst()->SetPlayerPos(GetPos());
+	CCore::GetInst()->SetPlayerPos(GetPos()); // 화면에 출력할 플레이어 좌표 정보 기록
 }
 
 void CPlayer::render(HDC _dc)
@@ -199,6 +219,9 @@ void CPlayer::render(HDC _dc)
 	//	, m_pTex->GetDC()
 	//	, 0, 0, iWidth, iHeight
 	//	, RGB(255, 255, 255));
+
+	//SetColliderRender(false);   Collider 렌더링 안하도록 설정
+	
 
 	// 컴포넌트(충돌체, etc...) 가 있는 경우 렌더
 	component_render(_dc);
@@ -234,6 +257,13 @@ void CPlayer::CreateMissile()
 {
 	Vec2 vMissilePos = GetPos();	
 	//vMissilePos.y -= GetScale().y / 2.f; 메탈슬러그는 탑뷰가 아니기 때문에 이 코드가 없어도 됨
+	
+	vMissilePos.x += 10;
+	vMissilePos.y += 10;
+	if (m_iDir.y != 0)  // 위나 밑을 볼때 총알 오프셋 조정
+		vMissilePos.x -= 10;
+	if (m_stkStateUpper.top() == PLAYER_STATE::NONE)
+		vMissilePos.y += 10;
 
 	// Missile Object
 	CMissile* pMissile = new CMissile;
@@ -270,18 +300,29 @@ void CPlayer::LOWERPART_update()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_SIT_DOWN:
-		update_HAND_GUN_SIT_DOWN(m_stkStateLower);
+		update_HAND_GUN_SHOOT_SIT_DOWN(m_stkStateLower);
 		break;
-		
+
 	case PLAYER_STATE::SIT_DOWN_WALK:
 		update_SIT_DOWN_WALK(m_stkStateLower);
 		break;
+
+	case PLAYER_STATE::DEAD:
+		update_DEAD(m_stkStateLower);
+		break;
+		
+	case PLAYER_STATE::RESPAWN:
+		update_RESPAWN(m_stkStateLower);
+		break;
+
 
 	}
 }
 
 void CPlayer::UPPERPART_update()
 {
+	// m_btemp = CKeyMgr::GetInst()->GetKeyState(KEY::J) == KEY_STATE::TAP;
+
 	switch (m_stkStateUpper.top())
 	{
 	case PLAYER_STATE::NONE:
@@ -313,7 +354,7 @@ void CPlayer::UPPERPART_update()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_LOOK_DOWN:
-		update_HAND_GUN_LOOK_DOWN(m_stkStateUpper);
+		update_HAND_GUN_SHOOT_DOWN(m_stkStateUpper);
 		break;
 		
 	case PLAYER_STATE::LOOK_UP: 
@@ -321,9 +362,9 @@ void CPlayer::UPPERPART_update()
 		break;
 		
 	case PLAYER_STATE::HAND_GUN_LOOK_UP: 
-		update_HAND_GUN_LOOK_UP(m_stkStateUpper);
-		break;
-
+		update_HAND_GUN_SHOOT_UP(m_stkStateUpper);
+		break;		
+		
 	}
 }
 
@@ -334,6 +375,15 @@ void CPlayer::update_NONE(stack<PLAYER_STATE>& _stkState)
 	//	GetCollider()->SetOffsetPos(Vec2(0.f, 15.f));
 	//	GetCollider()->SetScale(Vec2(10.f, 10.f));
 	//}
+
+	if (m_bAttacked)
+	{
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::NONE);
+		GetAnimator()->StopAnimationU(true);
+		return;
+	}
+
 
 	if (KEY_AWAY(KEY::S))
 	{
@@ -370,6 +420,21 @@ void CPlayer::update_NONE(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_IDLE(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if(&_stkState == &m_stkStateUpper)
 		m_iDir.y = 0;
 
@@ -425,6 +490,21 @@ void CPlayer::update_IDLE(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_JUMP(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (GetGravity()->GetGround()) // RigidBody에 대한 내용 수정 필요.
 	{
 		_stkState.pop();
@@ -458,6 +538,21 @@ void CPlayer::update_JUMP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_WALK(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (0.f == GetRigidBody()->GetSpeed())
 	{
 		_stkState.pop();
@@ -518,6 +613,21 @@ void CPlayer::update_WALK(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_WALK_JUMP(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (GetGravity()->GetGround())
 	{
 		_stkState.pop();
@@ -542,6 +652,21 @@ void CPlayer::update_WALK_JUMP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (KEY_AWAY(KEY::S))
 	{
 		_stkState.pop();
@@ -570,6 +695,21 @@ void CPlayer::update_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_SIT_DOWN_WALK(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (KEY_AWAY(KEY::A))
 	{
 		_stkState.pop();
@@ -597,6 +737,21 @@ void CPlayer::update_SIT_DOWN_WALK(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (&_stkState == &m_stkStateUpper)
 		m_iDir.y = 1;
 
@@ -619,6 +774,21 @@ void CPlayer::update_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (&_stkState == &m_stkStateUpper)
 		m_iDir.y = -1;
 
@@ -640,6 +810,7 @@ void CPlayer::update_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 			_stkState.push(PLAYER_STATE::IDLE);
 		} // 키를 마구잡이로 연타하다 보면 특정 상태로 고정될 때가 있음.(재생을 멈췄다 재생시켰다 하다보니 UPPER part가 특정상태로 고정되버림) 정확한 원인을 아는게 아니라 살짝 불안정하지만 임시방편으로 이렇게 함		
 	}
+
 	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper) && KEY_HOLD(KEY::W))
 		//|| KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper) && KEY_HOLD(KEY::A)
 		//|| KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper) && KEY_HOLD(KEY::D)) // 모르겠네... 왜 안재생되는 거냐
@@ -650,6 +821,21 @@ void CPlayer::update_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if ((m_iPrevDir != m_iDir.x) || KEY_HOLD(KEY::S))
 	{
 		_stkState.pop();		
@@ -702,8 +888,23 @@ void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 
 }
 
-void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
+void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (&_stkState == &m_stkStateUpper)
 		m_iDir.y = -1;
 
@@ -766,8 +967,23 @@ void CPlayer::update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 
 }
 
-void CPlayer::update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
+void CPlayer::update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
 	if (&_stkState == &m_stkStateUpper)
 		m_iDir.y = 1;
 
@@ -806,8 +1022,23 @@ void CPlayer::update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState)
 	}
 }
 
-void CPlayer::update_HAND_GUN_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
+void CPlayer::update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
 
 	if ((m_iPrevDir != m_iDir.x) || KEY_AWAY(KEY::S))
 	{
@@ -843,6 +1074,48 @@ void CPlayer::update_HAND_GUN_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 		}
 	}
 	GetRigidBody()->SetVelocity(Vec2(0.f, 0.f));
+}
+
+void CPlayer::update_DEAD(stack<PLAYER_STATE>& _stkState)
+{
+	GetAnimator()->StopAnimationU(true);
+	//m_iLife--;
+	if (GetAnimator()->GetCurAnimL()->IsFinish()) //  GetAnimator()->GetCurAnimL()->GetCurFrame() == 18
+	{
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::RESPAWN);
+
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_DEAD_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_DEAD_RIGHT")->SetFrame(0);
+	}
+
+	
+}
+
+void CPlayer::update_RESPAWN(stack<PLAYER_STATE>& _stkState)
+{
+	if (GetAnimator()->GetCurAnimL()->IsFinish()) // GetAnimator()->GetCurAnimL()->GetCurFrame() == 16
+	{
+		m_bAttacked = false;
+		GetAnimator()->StopAnimationU(false);
+
+
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::IDLE); //LOWER PART
+
+
+		m_stkStateUpper.pop();
+		m_stkStateUpper.push(PLAYER_STATE::IDLE);
+
+		if (-1 == m_iDir.x)
+			GetAnimator()->FindAnimation(L"PLAYER_RESPAWN_LEFT")->SetFrame(0);
+		else
+			GetAnimator()->FindAnimation(L"PLAYER_RESPAWN_RIGHT")->SetFrame(0);
+
+		
+	}
 }
 
 
@@ -1013,6 +1286,10 @@ void CPlayer::update_state()
 
 void CPlayer::update_move()
 {
+
+	if (m_bAttacked)
+		return;
+
 	CRigidBody* pRigid = GetRigidBody();
 
 	if (KEY_HOLD(KEY::D) && KEY_HOLD(KEY::A) && GetGravity()->GetGround())
@@ -1144,6 +1421,18 @@ void CPlayer::update_animation()
 	//	break;
 
 	case PLAYER_STATE::DEAD:
+		if (m_iDir.x == -1)
+			GetAnimator()->PlayL(L"PLAYER_DEAD_LEFT", false);
+		else
+			GetAnimator()->PlayL(L"PLAYER_DEAD_RIGHT", false);
+
+		break;
+
+	case PLAYER_STATE::RESPAWN:
+		if (m_iDir.x == -1)
+			GetAnimator()->PlayL(L"PLAYER_RESPAWN_LEFT", false);
+		else
+			GetAnimator()->PlayL(L"PLAYER_RESPAWN_RIGHT", false);
 
 		break;
 	}
@@ -1225,9 +1514,6 @@ void CPlayer::update_animation()
 
 		break;
 
-	case PLAYER_STATE::DEAD:
-
-		break;
 	}
 
 

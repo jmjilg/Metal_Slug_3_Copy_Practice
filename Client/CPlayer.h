@@ -16,6 +16,7 @@ enum class PLAYER_STATE
     LOOK_UP,
     LOOK_DOWN,
     DEAD,
+    RESPAWN,
 
     ///
 
@@ -70,7 +71,6 @@ enum class WEAPON
 {
     HAND_GUN,
     HEAVY_MACHIN_GUN,
-    GRENADE,
 };
 
 class CTexture;
@@ -97,9 +97,14 @@ private:
     int                 m_iPrevDir;
     int                 m_iGrenade;
     int                 m_iGrenadeCount;
+    int                 m_iLife;
     bool                m_bJump;
+    bool                m_bAttacked;                // 플레이어가 몬스터에게 공격을 받았는지 여부
+    bool                m_bSetCamera;                // 카메라가 계속 플레이어를 타겟으로 할지 여부
 
     Vec2                m_vMissilePrevDir;
+
+  //  bool m_btemp = false; // 디버깅용 임시 변수
 
 private:
     LARGE_INTEGER	m_llCurCount;
@@ -119,6 +124,8 @@ public:
     double GetDT() { return m_dDT; }
     float GetfDT() { return (float)m_dDT; }
     bool GetbStandLine() { return m_bStandLine; }
+    bool GetbAttacked() { return m_bAttacked; }
+    void SetAttacked(bool _b) { m_bAttacked = _b; }
 
 private:
     void CreateMissile();
@@ -151,10 +158,12 @@ private:
     void update_LOOK_UP(stack<PLAYER_STATE>& _stkState);
 
     void update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState);
-    void update_HAND_GUN_LOOK_UP(stack<PLAYER_STATE>& _stkState);
-    void update_HAND_GUN_LOOK_DOWN(stack<PLAYER_STATE>& _stkState);
-    void update_HAND_GUN_SIT_DOWN(stack<PLAYER_STATE>& _stkState);
+    void update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState);
+    void update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState);
+    void update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState);
     
+    void update_DEAD(stack<PLAYER_STATE>& _stkState);
+    void update_RESPAWN(stack<PLAYER_STATE>& _stkState);
 private:
     //virtual void OnCollision(CCollider* _pOther);         // 충돌 중인 경우 호출되는 함수
     //virtual void OnCollisionEnter(CCollider* _pOther);     // 충돌 진입 시

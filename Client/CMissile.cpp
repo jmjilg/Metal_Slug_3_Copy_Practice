@@ -13,6 +13,7 @@ CMissile::CMissile()
 	: m_fTheta( PI / 4.f)
 	, m_vDir(Vec2(1.f, 0.f))
 	, m_pTex(nullptr)
+	, IsCollision(false)
 {
 	m_vDir.Normalize();
 	CreateCollider();
@@ -21,6 +22,7 @@ CMissile::CMissile()
 
 	CTexture* pHandGunTex = CResMgr::GetInst()->LoadTexture(L"BulletSFX", L"texture\\HandGunSFX15x15.bmp"); // 핸드건의 총알만 여기서 따옴
 	CTexture* pWeaponTex = CResMgr::GetInst()->LoadTexture(L"WeaponSFX", L"texture\\WeaponSFX.bmp"); 
+
 
 	m_pTex = pHandGunTex;
 }
@@ -86,8 +88,23 @@ void CMissile::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
 
-	if (pOtherObj->GetName() == L"Monster")
+	if (!IsCollision)
 	{
-		DeleteObject(this);
+
+		if (pOtherObj->GetName() == L"Chowmein_Conga" || pOtherObj->GetName() == L"Locust")
+		{
+			DeleteObject(this);
+		}
+		else if (pOtherObj->GetName() == L"CongaHouse")
+		{
+			DeleteObject(this);
+		}
+		else if (pOtherObj->GetName() == L"BrokenShip")
+		{
+			DeleteObject(this);
+		}
+
+		IsCollision = !IsCollision;
 	}
+
 }

@@ -3,7 +3,6 @@
 class CBeachFront :
     public CObject
 {
-
 private:
     CTexture* m_pTexture;
     Vec2 m_vFinalPos;

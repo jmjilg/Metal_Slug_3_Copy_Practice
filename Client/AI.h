@@ -7,12 +7,12 @@ class AI
 {
 private:
 	map<MON_STATE, CState*>	m_mapState;
-	CState*					m_pCurState;
-	CMonster*				m_pOwner;
+	CState* m_pCurState;
+	CMonster* m_pOwner;
 
 public:
 	void update();
-	
+
 public:
 	void AddState(CState* _pState);
 	CState* GetState(MON_STATE _eState);
@@ -21,6 +21,7 @@ public:
 	void ChangeState(MON_STATE _eNextState);
 
 	CMonster* GetOwner() { return m_pOwner; }
+	CState* GetCurState() { return m_pCurState; }
 
 public:
 	AI();

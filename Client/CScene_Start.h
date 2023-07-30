@@ -11,12 +11,14 @@ private:
     float   m_fForce;
     bool    m_bUseForce;
 
+
 public:
     virtual void update();
     virtual void render(HDC _dc);
 
     virtual void Enter();
     virtual void Exit();
+
 
 public:
     void CreateForce();

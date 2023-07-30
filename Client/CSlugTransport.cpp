@@ -3,6 +3,8 @@
 #include "CResMgr.h"
 #include "CAnimation.h"
 #include "CAnimator.h"
+#include "CCollider.h"
+#include "CRayGround.h"
 
 CSlugTransport::CSlugTransport()
 	: m_pTexture(nullptr)
@@ -12,11 +14,8 @@ CSlugTransport::CSlugTransport()
 
 	CreateAnimator();
 
-	//GetAnimator()->CreateAnimation(L"Ship", m_pTexture, Vec2(569.f, 884.f), Vec2(194.f, 192.f), Vec2(198.f, 0.f), Vec2(-0.f, -0.f), 0.1f, 5);
-
-
-	// Animation 저장해보기
-	//GetAnimator()->FindAnimation(L"Ship")->Save(L"animation\\BackGround\\Ship.anim");
+	SetRayGround(new CRayGround);
+	GetRayGround()->SetName(L"SlugTransPortGround");
 
 	GetAnimator()->LoadAnimation(L"animation\\BackGround\\SlugTransport.anim");
 }
@@ -32,6 +31,14 @@ void CSlugTransport::start()
 void CSlugTransport::update()
 {
 	GetAnimator()->PlayL(L"SlugTransport", true);
+	CRayGround* p = GetRayGround();
+	
+	int size = p->GetCollider()->GetVecRay().size();
+
+	for (int i = 0; i < size; ++i)
+	{
+		p->GetCollider()->GetVecRay()[i] += Vec2(1.f, 0.f);
+	}
 }
 
 void CSlugTransport::render(HDC _dc)

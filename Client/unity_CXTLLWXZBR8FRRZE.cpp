@@ -8,6 +8,9 @@
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CAnimator.cpp"
 
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CAttackState.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBackGround.cpp"
 
 
@@ -17,17 +20,14 @@
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBeach.cpp"
 
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBeachBackGround1.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBeachBackGround2.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBeachFront.cpp"
 
 
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBrokenCongaHouse.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBrokenShip.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBtnUI.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCamera.cpp"
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBossStageBackGround.cpp"
 

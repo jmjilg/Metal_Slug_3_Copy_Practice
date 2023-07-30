@@ -7,11 +7,12 @@ class CTexture;
 class CMissile :
     public CObject
 {
-private:
+protected:
     float       m_fTheta; // 이동 방향
 
     Vec2        m_vDir;
     CTexture*   m_pTex;
+    bool        IsCollision; // 이미 한번 충돌했으므로 또 충돌했을때 Delete이벤트의 중복 실행 방지 
 
 
 public:

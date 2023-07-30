@@ -15,6 +15,8 @@ CCollider::CCollider()
 	, m_iCol(0)
 	, m_bActive(true)
 	, m_bIsRay(false)
+	, m_bDead(false)
+	, m_bObstacle(false)
 {
 }
 
@@ -44,8 +46,13 @@ void CCollider::render(HDC _dc)
 {
 	PEN_TYPE ePen = PEN_TYPE::GREEN;
 
+	if (m_bObstacle)
+		ePen = PEN_TYPE::BLUE;
+
 	if (m_iCol)
 		ePen = PEN_TYPE::RED;
+
+
 
 	SelectGDI p(_dc, ePen);
 	SelectGDI b(_dc, BRUSH_TYPE::HOLLOW);
@@ -54,8 +61,6 @@ void CCollider::render(HDC _dc)
 
 	if (m_bIsRay) // 직선 충돌체인 경우
 	{
-
-
 		for (size_t i = 0; i < m_vecRay.size()-1; i=i+2)
 		{
 			Vec2 vRenderPos1 = CCamera::GetInst()->GetRenderPos(m_vecRay[i]);
@@ -72,9 +77,6 @@ void CCollider::render(HDC _dc)
 			, (int)(vRenderPos.x + m_vScale.x / 2.f)
 			, (int)(vRenderPos.y + m_vScale.y / 2.f));
 	}
-
-
-
 	
 
 }

@@ -73,15 +73,15 @@ int CCore::Init(HWND _hWnd, POINT _ptResolution)
 	CSceneMgr::GetInst()->init();
 	CSoundMgr::GetInst()->init();
 
-	// Sound 로드 테스트
-	// CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\Blue_Water_Fangs.wav");
-	// CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_01");
-	// 
-	// pNewSound->Play(); // 인자로 true를 주면 반복재생
-	// 
-	// pNewSound->SetPosition(50.f); // 백분률, 소리 위치 설정
-	// pNewSound->PlayToBGM(true); // 인자로 true를 주면 반복재생
-	// pNewSound->SetVolume(60.f);
+	 //Sound 로드 테스트
+	 //CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\Blue_Water_Fangs.wav");
+	 //CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_01");
+	 //
+	 //pNewSound->Play(); // 인자로 true를 주면 반복재생
+	 //
+	 //pNewSound->SetPosition(50.f); // 백분률, 소리 위치 설정
+	 //pNewSound->PlayToBGM(true); // 인자로 true를 주면 반복재생
+	 //pNewSound->SetVolume(60.f);
 
 	return S_OK;
 }
@@ -120,7 +120,7 @@ void CCore::progress()
 	CCamera::GetInst()->render(m_pMemTex->GetDC());
 
 	if (m_bStretchRender)
-		StretchBlt(m_hDC, 0, 0, m_ptResolution.x * 2.5, m_ptResolution.y * 2.5
+		StretchBlt(m_hDC, 0, 0, m_ptResolution.x * 2, m_ptResolution.y * 1.7
 			, m_pMemTex->GetDC(), 0, 0, m_ptResolution.x, m_ptResolution.y, SRCCOPY);
 	else
 		BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
@@ -130,13 +130,21 @@ void CCore::progress()
 		// 실제 게임할때 비율
 
 				// 마우스 좌표 출력 (함수가 좀 더러워 지긴 한데...)
-	Vec2 vMousePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());	
+	Vec2 vMousePos = CCamera::GetInst()->GetRealPos(CKeyMgr::GetInst()->GetMousePos());
 	Vec2 vPlayerPos = GetPlayerPos();
 	Vec2 vCamPos = CCamera::GetInst()->GetLookAt();
+	if (m_bStretchRender)
+	{
+		//vMousePos /= 2.5f;
+		//vPlayerPos /= 2.5f;
+		//vCamPos /= 2.5f;
+	}
 	wstring strMouseRenderPosx = L"MousePosX : ";
 	wstring strMouseRenderPosy = L"MousePosY : ";
 	wstring strCamPosX = L"CamPosX : ";
 	wstring strCamPosY = L"CamPosY : ";
+	wstring strStretchCamPosX = L"StretchCamPosX : ";
+	wstring strStretchCamPosY = L"StretchCamPosY : ";
 	wstring strPlayerPosX = L"PlayerPosX : ";
 	wstring strPlayerPosY = L"PlayerPosY : ";
 	//wstring strFPS = L"FPS : ";
@@ -150,12 +158,15 @@ void CCore::progress()
 	//strMouseRenderPosy.append(std::to_wstring((int)vMousePos.y));
 	//HDC hdc = CCore::GetInst()->GetMemTex()->GetDC();
 
-	TextOut(m_hDC, 1150, 10, strMouseRenderPosx.c_str(), strMouseRenderPosx.size());
-	TextOut(m_hDC, 1150, 30, strMouseRenderPosy.c_str(), strMouseRenderPosy.size());
-	TextOut(m_hDC, 1150, 50, strCamPosX.c_str(), strCamPosX.size());
-	TextOut(m_hDC, 1150, 70, strCamPosY.c_str(), strCamPosY.size());
-	TextOut(m_hDC, 1150, 90, strPlayerPosX.c_str(), strPlayerPosX.size());
-	TextOut(m_hDC, 1150, 110, strPlayerPosY.c_str(), strPlayerPosY.size());
+	TextOut(m_hDC, 510, 10, strMouseRenderPosx.c_str(), strMouseRenderPosx.size());  // 1130 , 10
+	TextOut(m_hDC, 510, 30, strMouseRenderPosy.c_str(), strMouseRenderPosy.size());
+	TextOut(m_hDC, 510, 50, strCamPosX.c_str(), strCamPosX.size());
+	TextOut(m_hDC, 510, 70, strCamPosY.c_str(), strCamPosY.size());
+	//TextOut(m_hDC, 1130, 90, strStretchCamPosX.c_str(), strStretchCamPosX.size());
+	//TextOut(m_hDC, 1130, 110, strStretchCamPosY.c_str(), strStretchCamPosY.size());
+	TextOut(m_hDC, 510, 130, strPlayerPosX.c_str(), strPlayerPosX.size());
+	TextOut(m_hDC, 510, 150, strPlayerPosY.c_str(), strPlayerPosY.size());
+	//TextOut(m_hDC, 640, 384, strStretchCamPosX.c_str(), strStretchCamPosX.size());
 	//TextOut(hMainDC, 100, 200, strMouseRenderPosy.c_str(), strMouseRenderPosy.size());
 
 

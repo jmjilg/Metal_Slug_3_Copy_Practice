@@ -30,7 +30,7 @@ void CIdleState::update()
 	float fLen = vDiff.Length();
 
 	// 플레이어가 몬스터의 인식범위 안으로 진입
-	if (fLen < pMonster->GetInfo().fRecogRange)
+	if (fLen < pMonster->GetInfo().fRecogRange && GetMonster()->GetInfo().lAttAcc > 2000)
 	{
 		ChangeAIState(GetAI(), MON_STATE::TRACE);
 	}
