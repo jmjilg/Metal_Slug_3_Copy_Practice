@@ -24,6 +24,7 @@ protected:
 	bool			 m_CongaHouse;
 	bool			 m_BrokenShip;	
 	bool			 m_Ship;
+	bool			 m_bColliderRender;      // 충돌체 렌더링 할건지 여부
 
 public:
 	void SetName(const wstring& _strName){m_strName = _strName;}

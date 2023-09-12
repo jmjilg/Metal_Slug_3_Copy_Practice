@@ -15,6 +15,7 @@ struct tMonInfo
     Vec2     vOrigPos;
     Vec2     vNextPos;       // 거대 메뚜기에게만 해당, 패트롤할 목적지
     Vec2     vKidnappingPos;  // 거대 메뚜기에게만 해당, 공격할 위치 저장
+    bool     bContact;        // M3_Rocket_Launch_Support_Van 이 SlugTransport와 부딪혔는지 여부를 알려주는 변수
 };
 
 class AI;
@@ -25,6 +26,7 @@ class CMonster :
 protected:
     tMonInfo    m_tInfo;
     AI*         m_pAI;
+    CObject*    m_pRelatedObj;  // 몬스터와 연관되있는 오브젝트, CM3의 경우에는 WoodenStool이 연관되있음
 
 public:
     float GetSpeed() { return m_tInfo.fSpeed; }
@@ -34,6 +36,8 @@ public:
     void SetNextPos(Vec2 _v) { m_tInfo.vNextPos = _v; }
     void SetOrigPos(Vec2 _v) { m_tInfo.vOrigPos = _v; }
     void SetKidnappingPos(Vec2 _v) { m_tInfo.vKidnappingPos = _v; }
+    void SetContact(bool _b) { m_tInfo.bContact = _b; }
+    void SetRelatedObj(CObject* pObj) { m_pRelatedObj = pObj; }
     const tMonInfo& GetInfo() { return m_tInfo; }
     AI* GetAI() { return m_pAI; }
 

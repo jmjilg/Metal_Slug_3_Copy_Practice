@@ -20,6 +20,7 @@ CScene::CScene()
 	, m_CongaHouse(true)
 	, m_BrokenShip(true)
 	, m_Ship(true)
+	, m_bColliderRender(true)
 {
 	
 }
@@ -90,6 +91,16 @@ void CScene::render(HDC _dc)
 		{
 			if (!(*iter)->IsDead())
 			{
+				// 여기는 내가 추가한 부분으로 C키를 눌렀을때 충돌체 렌더링을 끈다
+				if (m_bColliderRender)
+				{
+					(*iter)->SetColliderRender(true);
+				}
+				else if (!m_bColliderRender)
+				{
+					(*iter)->SetColliderRender(false);
+				}// 여기까지
+
 				(*iter)->render(_dc);
 				++iter;
 			}

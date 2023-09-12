@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="CBossStageTileCopy.h" />
     <ClInclude Include="CAnimation.h" />
     <ClInclude Include="CAnimator.h" />
     <ClInclude Include="CAttackState.h" />
@@ -171,6 +172,8 @@
     <ClInclude Include="CBeachBackGround2.h" />
     <ClInclude Include="CBeachFront.h" />
     <ClInclude Include="CBossStageBackGround.h" />
+    <ClInclude Include="CBossStageTile.h" />
+    <ClInclude Include="CBounce.h" />
     <ClInclude Include="CBrokenCongaHouse.h" />
     <ClInclude Include="CBrokenShip.h" />
     <ClInclude Include="CBtnUI.h" />
@@ -184,6 +187,7 @@
     <ClInclude Include="CCollisionMgr.h" />
     <ClInclude Include="CCore.h" />
     <ClInclude Include="CDeadState.h" />
+    <ClInclude Include="CDestroyedState.h" />
     <ClInclude Include="CDestroyedBrokenShip.h" />
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CEventObject.h" />
@@ -192,7 +196,9 @@
     <ClInclude Include="CEventObject4.h" />
     <ClInclude Include="CEventObject5.h" />
     <ClInclude Include="CEventObject6.h" />
+    <ClInclude Include="CFiring.h" />
     <ClInclude Include="CFlying.h" />
+    <ClInclude Include="CFlying_Killer.h" />
     <ClInclude Include="CGravity.h" />
     <ClInclude Include="CGrenade.h" />
     <ClInclude Include="CGround.h" />
@@ -203,6 +209,8 @@
     <ClInclude Include="CKidnapping.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="CLocust.h" />
+    <ClInclude Include="CM3_Missile.h" />
+    <ClInclude Include="CM3_Rocket_Launch_Support_Van.h" />
     <ClInclude Include="CMissile.h" />
     <ClInclude Include="CMonFactory.h" />
     <ClInclude Include="CMonster.h" />
@@ -218,6 +226,7 @@
     <ClInclude Include="CRes.h" />
     <ClInclude Include="CResMgr.h" />
     <ClInclude Include="CRigidBody.h" />
+    <ClInclude Include="CRush.h" />
     <ClInclude Include="CScene.h" />
     <ClInclude Include="CSceneMgr.h" />
     <ClInclude Include="CScene_Start.h" />
@@ -243,6 +252,7 @@
     <ClInclude Include="CTraceState.h" />
     <ClInclude Include="CUI.h" />
     <ClInclude Include="CUIMgr.h" />
+    <ClInclude Include="CWoodenStool.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="func.h" />
@@ -255,6 +265,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AI.cpp" />
+    <ClCompile Include="CBossStageTileCopy.cpp" />
     <ClCompile Include="CAnimation.cpp" />
     <ClCompile Include="CAnimator.cpp" />
     <ClCompile Include="CAttackState.cpp" />
@@ -265,6 +276,8 @@
     <ClCompile Include="CBeachBackGround2.cpp" />
     <ClCompile Include="CBeachFront.cpp" />
     <ClCompile Include="CBossStageBackGround.cpp" />
+    <ClCompile Include="CBossStageTile.cpp" />
+    <ClCompile Include="CBounce.cpp" />
     <ClCompile Include="CBrokenCongaHouse.cpp" />
     <ClCompile Include="CBrokenShip.cpp" />
     <ClCompile Include="CBtnUI.cpp" />
@@ -278,6 +291,7 @@
     <ClCompile Include="CCollisionMgr.cpp" />
     <ClCompile Include="CCore.cpp" />
     <ClCompile Include="CDeadState.cpp" />
+    <ClCompile Include="CDestroyedState.cpp" />
     <ClCompile Include="CDestroyedBrokenShip.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CEventObject.cpp" />
@@ -286,7 +300,9 @@
     <ClCompile Include="CEventObject4.cpp" />
     <ClCompile Include="CEventObject5.cpp" />
     <ClCompile Include="CEventObject6.cpp" />
+    <ClCompile Include="CFiring.cpp" />
     <ClCompile Include="CFlying.cpp" />
+    <ClCompile Include="CFlying_Killer.cpp" />
     <ClCompile Include="CGravity.cpp" />
     <ClCompile Include="CGrenade.cpp" />
     <ClCompile Include="CGround.cpp" />
@@ -296,6 +312,8 @@
     <ClCompile Include="CKeyMgr.cpp" />
     <ClCompile Include="CKidnapping.cpp" />
     <ClCompile Include="CLocust.cpp" />
+    <ClCompile Include="CM3_Missile.cpp" />
+    <ClCompile Include="CM3_Rocket_Launch_Support_Van.cpp" />
     <ClCompile Include="CMissile.cpp" />
     <ClCompile Include="CMonFactory.cpp" />
     <ClCompile Include="CMonster.cpp" />
@@ -311,6 +329,7 @@
     <ClCompile Include="CRes.cpp" />
     <ClCompile Include="CResMgr.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
+    <ClCompile Include="CRush.cpp" />
     <ClCompile Include="CScene.cpp" />
     <ClCompile Include="CSceneMgr.cpp" />
     <ClCompile Include="CScene_Start.cpp" />
@@ -336,6 +355,7 @@
     <ClCompile Include="CTraceState.cpp" />
     <ClCompile Include="CUI.cpp" />
     <ClCompile Include="CUIMgr.cpp" />
+    <ClCompile Include="CWoodenStool.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SelectGDI.cpp" />

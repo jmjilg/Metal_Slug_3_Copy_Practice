@@ -5,6 +5,7 @@
 #include "CAnimator.h"
 #include "CRigidBody.h"
 #include "CGravity.h"
+#include "CObstacle.h"
 #include "AI.h"
 
 CObject::CObject()
@@ -57,7 +58,6 @@ CObject::CObject(const CObject& _origin)
 		m_pGravity = new CGravity(*_origin.m_pGravity);
 		m_pGravity->m_pOwner = this;
 	}
-
 }
 
 CObject::~CObject()
@@ -73,6 +73,7 @@ CObject::~CObject()
 
 	if (nullptr != m_pGravity)
 		delete m_pGravity;
+
 }
 
 void CObject::finalupdate()

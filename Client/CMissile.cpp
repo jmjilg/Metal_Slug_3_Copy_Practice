@@ -90,8 +90,7 @@ void CMissile::OnCollisionEnter(CCollider* _pOther)
 
 	if (!IsCollision)
 	{
-
-		if (pOtherObj->GetName() == L"Chowmein_Conga" || pOtherObj->GetName() == L"Locust")
+		if (pOtherObj->GetName() == L"Chowmein_Conga" || pOtherObj->GetName() == L"Locust" || pOtherObj->GetName() == L"Flying_Killer" || pOtherObj->GetName() == L"M3_Rocket_Launch_Support_Van" || pOtherObj->GetName() == L"M3_Rocket_Launch_Support_Van_Missile" || pOtherObj->GetName() == L"Huge_Hermit")
 		{
 			DeleteObject(this);
 		}

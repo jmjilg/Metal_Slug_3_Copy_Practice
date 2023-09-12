@@ -1,4 +1,13 @@
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CFiring.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CFlying.cpp"
+
+
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CFlying_Killer.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CGravity.cpp"
 
 
@@ -21,13 +30,4 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CKidnapping.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CLocust.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CMissile.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CMonFactory.cpp"
 

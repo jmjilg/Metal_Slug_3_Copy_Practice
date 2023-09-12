@@ -17,6 +17,7 @@ CCollider::CCollider()
 	, m_bIsRay(false)
 	, m_bDead(false)
 	, m_bObstacle(false)
+	, m_bRender(true)
 {
 }
 
@@ -44,6 +45,9 @@ void CCollider::finalupdate()
 
 void CCollider::render(HDC _dc)
 {
+	if (!m_bRender)
+		return;
+
 	PEN_TYPE ePen = PEN_TYPE::GREEN;
 
 	if (m_bObstacle)

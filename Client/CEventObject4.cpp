@@ -12,17 +12,13 @@
 #include "CChowmein_Conga.h"
 #include "CScene.h"
 #include "CSceneMgr.h"
-
+#include "CCameraBox.h"
 
 CEventObject4::CEventObject4()
-	: bIsEnterEvent(false)
-	, m_iMonsterRespawnCount(2)
-	, IsMonsterClear(false)
+	: m_bIsEnterEvent(false)
+	, m_bIsHugeHermitRespawn(false)
+
 {
-	m_arrMonster[0] = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1480, 60));
-	m_arrMonster[1] = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1626, 60));
-	m_arrMonster[2] = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1580, 83));
-	m_arrMonster[2] = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1580, 83));
 }
 
 CEventObject4::~CEventObject4()
@@ -42,40 +38,53 @@ void CEventObject4::render(HDC _dc)
 
 void CEventObject4::update()
 {
-	if (!IsMonsterClear)
+	if (m_bIsEnterEvent)
 	{
-		for (int i = 0; i < 4; ++i)
+		m_lEventAcc = clock() - m_lEventStart; // 이벤트가 시작한 시점부터 얼마나 지났다
+
+		if (!m_bIsHugeHermitRespawn && m_lEventAcc >= 3000.f)
 		{
-			if (!m_arrMonster[i]->IsDead())
-				return;
+			m_bIsHugeHermitRespawn = true;
+			CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::HUGE_HERMIT, Vec2(4650.f, 134.f));
+			CreateObject(pMon, GROUP_TYPE::MONSTER);
+
+
 		}
-		// 배에서 생성된 몬스터가 다죽었을 때, 한번 더 리스폰한다.
-		IsMonsterClear = !IsMonsterClear;
-		return;
 	}
 
-	for (int i = 0; i < 4; ++i)
-	{
-		if (!m_arrMonster[i]->IsDead())
-			return;
-	}
 
-	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
-	pCurScene->SetShip(false); // Ship 오브젝트가 파괴됨에 따라 직선충돌체를 재배치함
 
-	DeleteObject(this);
+	//if (!IsMonsterClear)
+	//{
+	//	for (int i = 0; i < 4; ++i)
+	//	{
+	//		if (!m_arrMonster[i]->IsDead())
+	//			return;
+	//	}
+	//	// 배에서 생성된 몬스터가 다죽었을 때, 한번 더 리스폰한다.
+	//	IsMonsterClear = !IsMonsterClear;
+	//	return;
+	//}
+
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	if (!m_arrMonster[i]->IsDead())
+	//		return;
+	//}
+
+	//CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+	//pCurScene->SetShip(false); // Ship 오브젝트가 파괴됨에 따라 직선충돌체를 재배치함
+
+	//DeleteObject(this);
 
 }
 
 void CEventObject4::OnCollisionEnter(CCollider* _pOther)
 {
-	if (_pOther->GetObj()->GetName() == L"Player")
+	if (_pOther->GetObj()->GetName() == L"SlugTransport" && !m_bIsEnterEvent) // L"Player"
 	{
-		Vec2 vPos = Vec2(1390, 118);
-		vPos.x += 385;
-		vPos.y += 232;
-		CCamera::GetInst()->SetLookAt(vPos);
-
+		m_lEventStart = clock();
+		m_bIsEnterEvent = true;
 	}
 
 }

@@ -54,8 +54,13 @@
 #include "CEventObject.h"
 #include "CEventObject2.h"
 #include "CEventObject3.h"
+#include "CEventObject4.h"
 #include "CCaptive.h"
 #include "CCameraBox.h"
+#include "CM3_Rocket_Launch_Support_Van.h"
+#include "CWoodenStool.h"
+#include "CBossStageTile.h"
+#include "CBossStageTileCopy.h"
 
 CScene_Start::CScene_Start()
 	: m_bUseForce(false)
@@ -124,6 +129,11 @@ CScene_Start::~CScene_Start()
 
 void CScene_Start::update()
 {
+	if (KEY_TAP(KEY::C))
+	{
+		m_bColliderRender = !m_bColliderRender;
+	}
+
 	if (KEY_HOLD(KEY::LBTN))
 	{
 		//m_bUseForce = true;
@@ -141,7 +151,7 @@ void CScene_Start::update()
 		else
 			CCore::GetInst()->SetStretchRender(true);
 	}
-
+	
 
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
@@ -236,6 +246,8 @@ void CScene_Start::render(HDC _dc)
 
 void CScene_Start::Enter()
 {
+	CCore::GetInst()->SetStretchRender(true);
+
 	// Object 추가
 	CObject* pObj = new CPlayer;
 	pObj->SetName(L"Player");
@@ -287,12 +299,6 @@ void CScene_Start::Enter()
 	pDestroyedBrokenShip->SetScale(Vec2(270.f, 102.f));
 	AddObject(pDestroyedBrokenShip, GROUP_TYPE::DESTROYEDBROKENSHIP);
 
-	//CObject* pBeach = new CBeach;
-	//pBeach->SetName(L"Beach");
-	//pBeach->SetPos(Vec2(667.f, 274.f));
-	//pBeach->SetScale(Vec2(705.f, 48.f));
-	////pObj->SetScale(Vec2(2889.f, 274.f));
-	//AddObject(pBeach, GROUP_TYPE::BEACH);
 	
 
 	CObject* pBeachFront = new CBeachFront;
@@ -315,6 +321,13 @@ void CScene_Start::Enter()
 	pBeachBackGround2->SetScale(Vec2(0.f, 0.f));
 	//pObj->SetScale(Vec2(2889.f, 274.f));
 	AddObject(pBeachBackGround2, GROUP_TYPE::BEACHBACKGROUND2);
+
+	CObject* pBeach = new CBeach;  // 사실상 BEACHBACKGROUND3 임
+	pBeach->SetName(L"Beach");
+	pBeach->SetPos(Vec2(667.f, 170.f));
+	pBeach->SetScale(Vec2(705.f, 48.f));
+	//pObj->SetScale(Vec2(2889.f, 274.f));
+	AddObject(pBeach, GROUP_TYPE::BEACHBACKGROUND3);
 	
 
 	CObject* pSwampBackGround = new CSwampBackGround;
@@ -359,22 +372,38 @@ void CScene_Start::Enter()
 	pBossStageBackGround->SetScale(Vec2(0.f, 0.f));
 	AddObject(pBossStageBackGround, GROUP_TYPE::BOSSSTAGEBACKGROUND);
 	
+	CObject* pBossStageBackGroundCopy = new CBossStageBackGround;
+	pBossStageBackGroundCopy->SetName(L"BossStageBackGroundCopy");
+	pBossStageBackGroundCopy->SetPos(Vec2(5223.f, 141.f));
+	pBossStageBackGroundCopy->SetScale(Vec2(0.f, 0.f));
+	AddObject(pBossStageBackGroundCopy, GROUP_TYPE::BOSSSTAGEBACKGROUND);
+
+	pBossStageBackGroundCopy = new CBossStageBackGround;
+	pBossStageBackGroundCopy->SetName(L"BossStageBackGroundCopy");
+	pBossStageBackGroundCopy->SetPos(Vec2(5735.f, 141.f));
+	pBossStageBackGroundCopy->SetScale(Vec2(0.f, 0.f));
+	AddObject(pBossStageBackGroundCopy, GROUP_TYPE::BOSSSTAGEBACKGROUND);
+	
+	pBossStageBackGroundCopy = new CBossStageBackGround;
+	pBossStageBackGroundCopy->SetName(L"BossStageBackGroundCopy");
+	pBossStageBackGroundCopy->SetPos(Vec2(6247.f, 141.f));
+	pBossStageBackGroundCopy->SetScale(Vec2(0.f, 0.f));
+	AddObject(pBossStageBackGroundCopy, GROUP_TYPE::BOSSSTAGEBACKGROUND);
+	
+	pBossStageBackGroundCopy = new CBossStageBackGround;
+	pBossStageBackGroundCopy->SetName(L"BossStageBackGroundCopy");
+	pBossStageBackGroundCopy->SetPos(Vec2(6759.f, 141.f));
+	pBossStageBackGroundCopy->SetScale(Vec2(0.f, 0.f));
+	AddObject(pBossStageBackGroundCopy, GROUP_TYPE::BOSSSTAGEBACKGROUND);
+	
 	CObject* pSlugTransport = new CSlugTransport;
 	pSlugTransport->SetName(L"SlugTransport");
-	pSlugTransport->SetPos(Vec2(2923.f, 189.f));
+	pSlugTransport->SetPos(Vec2(4600.f, 189.f)); //Vec2(2923.f, 189.f)
 	pSlugTransport->SetScale(Vec2(0.f, 0.f));
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2855.f, 215.f));
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2966.f, 215.f));
 
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2966.f, 215.f));
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2984.f, 202.f));
+	pSlugTransport->SetCameraBox((CCameraBox*)pCameraBox);
 
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2984.f, 202.f));
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(3018.f, 202.f));
-
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2886.f, 174.f));
-	pSlugTransport->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(2957.f, 174.f));
-	AddObject(pSlugTransport->GetRayGround(), GROUP_TYPE::GROUND);
+	
 	AddObject(pSlugTransport, GROUP_TYPE::SLUGTRANSPORT);
 
 	//CObject* pBossStageBackGround = new CBossStageBackGround;
@@ -444,6 +473,13 @@ void CScene_Start::Enter()
 	pSwampEvent2->SetScale(Vec2(100.f, 100.f));
 	pSwampEvent2->SetCameraBox((CCameraBox*)pCameraBox);
 	AddObject(pSwampEvent2, GROUP_TYPE::EVENT_OBJECT);
+	
+	CObject* pSwampEvent3 = new CEventObject4;
+	pSwampEvent3->SetName(L"EventObject4"); 
+	pSwampEvent3->SetPos(Vec2(4800.f, 210.f));
+	pSwampEvent3->SetScale(Vec2(50.f, 50.f));
+	pSwampEvent3->SetCameraBox((CCameraBox*)pCameraBox);
+	AddObject(pSwampEvent3, GROUP_TYPE::EVENT_OBJECT);
 
 	
 
@@ -456,17 +492,17 @@ void CScene_Start::Enter()
 
 	 
 	CObject* pStairObstacle2 = new CObstacle;
-	pStairObstacle2->SetName(L"Ground"); // 편의상 Ground라고 하겠음
+	pStairObstacle2->SetName(L"Ground"); 
 	pStairObstacle2->SetPos(Vec2(1636.f, 117.f));
 	pStairObstacle2->SetScale(Vec2(30.f, 20.f));
 	AddObject(pStairObstacle2, GROUP_TYPE::GROUND);
 	 
 	CObject* pStairObstacle3 = new CObstacle;
-	pStairObstacle3->SetName(L"Ground"); // 편의상 Ground라고 하겠음
+	pStairObstacle3->SetName(L"Ground"); 
 	pStairObstacle3->SetPos(Vec2(1675.f, 88.f));
 	pStairObstacle3->SetScale(Vec2(20.f, 15.f));
 	AddObject(pStairObstacle3, GROUP_TYPE::GROUND);
-
+	
 
 	//CObject* pSlugTransport = new CSlugTransport;
 	//pSlugTransport->SetName(L"SlugTransport");
@@ -502,6 +538,26 @@ void CScene_Start::Enter()
 	pSwampUnder->SetScale(Vec2(1289.f, 131.f));
 	AddObject(pSwampUnder, GROUP_TYPE::SWAMPUNDER);
 	
+	CObject* pBossStageTile = new CBossStageTile;
+	pBossStageTile->SetName(L"BossStageTile");
+	pBossStageTile->SetPos(Vec2(4802.f, 219.f));
+	pBossStageTile->SetScale(Vec2(50.f, 50.f));
+	AddObject(pBossStageTile, GROUP_TYPE::BOSSSTAGETILE);
+
+	CObject* pBossStageTileCopy;
+	for (int i = 0; i < 10; ++i)
+	{
+		pBossStageTileCopy = new CBossStageTileCopy;
+		pBossStageTileCopy->SetName(L"BossStageTileCopy");
+		pBossStageTileCopy->SetPos(Vec2(4843.f + 32.f * i, 219.f));
+		pBossStageTileCopy->SetScale(Vec2(50.f, 50.f));
+		AddObject(pBossStageTileCopy, GROUP_TYPE::BOSSSTAGETILECOPY);
+
+		//pBossStageTileCopy->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(4843.f + 32.f * i - 16.f, 207.f));
+		//pBossStageTileCopy->GetRayGround()->GetCollider()->GetVecRay().push_back(Vec2(4843.f + 32.f * i + 16.f, 207.f));
+		//AddObject(pBossStageTileCopy->GetRayGround(), GROUP_TYPE::GROUND);
+	}
+
 	CObject* pCaptive = new CCaptive;
 	pCaptive->SetName(L"Captive");
 	pCaptive->SetPos(Vec2(1015.f, 120.f));
@@ -531,66 +587,111 @@ void CScene_Start::Enter()
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
 
 
-	//CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(454, 149));
-	////CreateObject(pMon, GROUP_TYPE::MONSTER);
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(510, 140));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(566, 149));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(690, 129));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(800, 100));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1040, 125));
+	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(454, 149));
+	//CreateObject(pMon, GROUP_TYPE::MONSTER);
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	 
+	 
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(510, 140));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(566, 149));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(690, 129));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(800, 100));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1040, 125));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1067, 131));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1345, 161));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1384, 162));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1400, 162));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1687, 52));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1719, 49));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2005, 93));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2057, 92));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2141, 107));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2180, 107));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2215, 60));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2256, 124));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2294, 124));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2330, 124));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+	
+	/*pMon = CMonFactory::CreateMonster(MON_TYPE::M3_ROCKET_LAUNCH_SUPPORT_VAN, Vec2(3300.f, 180.f));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	CObject* pSwampObstacle = new CObstacle;
+	pSwampObstacle->SetName(L"Ground");
+	pSwampObstacle->SetPos(Vec2(3300.f, 180.f));
+	pSwampObstacle->SetScale(Vec2(100.f, 100.f));
+	pMon->SetObstacle(pSwampObstacle);
+	AddObject(pSwampObstacle, GROUP_TYPE::GROUND);
+
+
+	CObject* pWoodenStool = new CWoodenStool;
+	pWoodenStool->SetName(L"WoodenStool");
+	pWoodenStool->SetPos(Vec2(3315.f, 230.f));
+	pWoodenStool->SetScale(Vec2(0.f, 0.f));
+	AddObject(pWoodenStool, GROUP_TYPE::WOODENSTOOL);
+
+	pMon->SetRelatedObj(pWoodenStool);
+	
+	pMon = CMonFactory::CreateMonster(MON_TYPE::M3_ROCKET_LAUNCH_SUPPORT_VAN, Vec2(4200.f, 180.f));
+	AddObject(pMon, GROUP_TYPE::MONSTER);
+
+	CObject* pSwampObstacle2 = new CObstacle;
+	pSwampObstacle2->SetName(L"Ground");
+	pSwampObstacle2->SetPos(Vec2(4200.f, 180.f));
+	pSwampObstacle2->SetScale(Vec2(100.f, 100.f));
+	pMon->SetObstacle(pSwampObstacle2);
+	AddObject(pSwampObstacle2, GROUP_TYPE::GROUND);
+
+
+	CObject* pWoodenStool2 = new CWoodenStool;
+	pWoodenStool2->SetName(L"WoodenStool2");
+	pWoodenStool2->SetPos(Vec2(4215.f, 230.f));
+	pWoodenStool2->SetScale(Vec2(0.f, 0.f));
+	AddObject(pWoodenStool2, GROUP_TYPE::WOODENSTOOL);
+
+	pMon->SetRelatedObj(pWoodenStool2);*/
+
+
+	//pMon = CMonFactory::CreateMonster(MON_TYPE::HUGE_HERMIT, Vec2(4700.f, 134.f));
 	//AddObject(pMon, GROUP_TYPE::MONSTER);
 
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1067, 131));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
 
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1345, 161));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1384, 162));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1400, 162));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1687, 52));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(1719, 49));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2005, 93));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2057, 92));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2141, 107));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2180, 107));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2215, 60));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2256, 124));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2294, 124));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
-	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2330, 124));
-	//AddObject(pMon, GROUP_TYPE::MONSTER);
-	//
 	//pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2370, 124));
 	//AddObject(pMon, GROUP_TYPE::MONSTER);	
 	
@@ -637,10 +738,19 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::CAPTIVE, GROUP_TYPE::PROJ_PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::CAPTIVE, GROUP_TYPE::PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::CAPTIVE, GROUP_TYPE::GROUND);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::SLUGTRANSPORT);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::SLUGTRANSPORT, GROUP_TYPE::GROUND);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::SLUGTRANSPORT, GROUP_TYPE::MONSTER);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::SLUGTRANSPORT, GROUP_TYPE::BOSSSTAGETILECOPY);
+
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::BOSSSTAGETILECOPY); // 보스 몬스터와 타일맵
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::BOSSSTAGETILE);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::SLUGTRANSPORT, GROUP_TYPE::EVENT_OBJECT);
 
 	// Camera Look 지정
 	// CCamera::GetInst()->SetLookAt(vResolution / 2.f);
-	CCamera::GetInst()->SetLookAt(Vec2(3014.f, 242.f));
+	// CCamera::GetInst()->SetLookAt(Vec2(3014.f, 242.f)); //늪지대 비추기
+	CCamera::GetInst()->SetLookAt(Vec2(5010.f, 292.f)); // 보스 스테이지 비추기
 
 	// Camera 효과 지정
 	CCamera::GetInst()->FadeOut(1.f);

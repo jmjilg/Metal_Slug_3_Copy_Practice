@@ -56,7 +56,7 @@ void CEventObject::update()
 		if (m_arrMonster2->IsDead())
 			m_bannihilation[1] = true;		
 		if (m_arrMonster3->IsDead())		
-			m_bannihilation[2] = true;		
+			m_bannihilation[2] = true;
 		if (m_arrMonster4->IsDead())
 			m_bannihilation[3] = true;
 

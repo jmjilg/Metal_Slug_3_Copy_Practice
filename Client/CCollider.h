@@ -22,6 +22,8 @@ protected:
 	vector<Vec2> m_vecRay;		// 두 점을 기준으로하는 여러가지 직선들
 	Vec2		 m_H;			// 직선 충돌체에서 플레이어와 가장 가까운 점
 	bool		 m_bObstacle;   // 장애물에 대한 충돌체인지 여부
+
+	bool		 m_bRender;		// 렌더링 할것인가 여부
 	
 	 
 public:
@@ -31,12 +33,14 @@ public:
 	void SetH(Vec2 _v) { m_H = _v; }
 	void SetDead(bool _b) { m_bDead = _b; }
 	void SetObstacle(bool _b) { m_bObstacle = _b; }
+	void SetRender(bool _b) { m_bRender = _b; }
 
 	Vec2 GetOffsetPos() { return m_vOffsetPos; }
 	Vec2 GetScale() { return m_vScale; }
 	bool GetIsRay() { return m_bIsRay; }
 	Vec2 GetH() { return m_H; }
 	bool GetDead() { return m_bDead; }
+	bool GetRender() { return m_bRender; }
 
 	Vec2 GetFinalPos() { return m_vFinalPos; };
 	CObject* GetObj() { return m_pOwner; }

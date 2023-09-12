@@ -1,11 +1,9 @@
 #pragma once
 #include "CMonster.h"
-class CHuge_Hermit :
+class CFlying_Killer :
     public CMonster
 {
 private:
     virtual void update_animation();
-
-public:
 };
 

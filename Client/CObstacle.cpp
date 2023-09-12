@@ -33,7 +33,7 @@ void CObstacle::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
 
-	if (pOtherObj->GetName() == L"Player" || pOtherObj->GetName() == L"Monster" || pOtherObj->GetName() == L"Captive")
+	if (pOtherObj->GetName() == L"Player" || pOtherObj->GetName() == L"Monster" || pOtherObj->GetName() == L"Captive" || pOtherObj->GetName() == L"SlugTransport")
 	{
 		Vec2 vObjPos = _pOther->GetFinalPos();
 		Vec2 vObjScale = _pOther->GetScale();

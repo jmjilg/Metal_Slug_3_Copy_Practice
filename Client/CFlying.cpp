@@ -22,7 +22,6 @@ CFlying::~CFlying()
 
 void CFlying::update()
 {
-
 	// Player 의 위치 체크
 	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
 	Vec2 vPlayerPos = pPlayer->GetPos();

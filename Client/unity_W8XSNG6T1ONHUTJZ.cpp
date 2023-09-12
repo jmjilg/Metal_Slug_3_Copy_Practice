@@ -1,4 +1,7 @@
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBounce.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CBrokenCongaHouse.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCollider.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCollisionMgr.cpp"
 

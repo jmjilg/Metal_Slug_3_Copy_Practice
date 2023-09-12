@@ -1,4 +1,7 @@
 
+#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCollisionMgr.cpp"
+
+
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CCore.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CEventObject6.cpp"
-
-
-#include "C:\Users\fptcm\source\repos\Metal_Slug_3_Copy_Practice\Client\CFlying.cpp"
 

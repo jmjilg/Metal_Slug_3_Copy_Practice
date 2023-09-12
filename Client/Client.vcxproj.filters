@@ -248,6 +248,27 @@
     <Filter Include="Engine\04. Object\BackGround\BossStageBackGround">
       <UniqueIdentifier>{fe2c45f0-d0c7-4502-9a87-543b22fa0729}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\Monster\Flying_Killer">
+      <UniqueIdentifier>{dab2caba-88b3-42e4-a333-c55259bab075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Bounce">
+      <UniqueIdentifier>{cb86ef69-492d-4411-b1b9-38b03ca3e8a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Rush">
+      <UniqueIdentifier>{6e450454-fe54-484b-8c7e-9844a6e11272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van">
+      <UniqueIdentifier>{571ba305-0ec9-4016-87a3-0273c701244a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Firing">
+      <UniqueIdentifier>{0d3eb479-71e0-43a8-9dff-af3a427e5e36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\BackGround\BossStage">
+      <UniqueIdentifier>{ac83b6a1-e9a5-4c50-b595-0e820d2dc3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Destroyed">
+      <UniqueIdentifier>{38a3ede5-034f-44dc-9ce8-e39d61fb4b75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -386,9 +407,6 @@
     <ClInclude Include="CTestAnim.h">
       <Filter>Engine\04. Object\TestAnim</Filter>
     </ClInclude>
-    <ClInclude Include="CBackGround.h">
-      <Filter>Engine\04. Object\BackGround</Filter>
-    </ClInclude>
     <ClInclude Include="CBackGroundAnim.h">
       <Filter>Engine\04. Object\BackGround\BackGroundAnimation</Filter>
     </ClInclude>
@@ -522,6 +540,39 @@
     <ClInclude Include="CSwampBackGround3.h">
       <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
     </ClInclude>
+    <ClInclude Include="CFlying_Killer.h">
+      <Filter>Engine\04. Object\Monster\Flying_Killer</Filter>
+    </ClInclude>
+    <ClInclude Include="CRush.h">
+      <Filter>Engine\08. Module\AI\State\Rush</Filter>
+    </ClInclude>
+    <ClInclude Include="CBounce.h">
+      <Filter>Engine\08. Module\AI\State\Bounce</Filter>
+    </ClInclude>
+    <ClInclude Include="CM3_Rocket_Launch_Support_Van.h">
+      <Filter>Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van</Filter>
+    </ClInclude>
+    <ClInclude Include="CFiring.h">
+      <Filter>Engine\08. Module\AI\State\Firing</Filter>
+    </ClInclude>
+    <ClInclude Include="CM3_Missile.h">
+      <Filter>Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van</Filter>
+    </ClInclude>
+    <ClInclude Include="CWoodenStool.h">
+      <Filter>Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossStageTileCopy.h">
+      <Filter>Engine\04. Object\BackGround\BossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="CBossStageTile.h">
+      <Filter>Engine\04. Object\BackGround\BossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="CBackGround.h">
+      <Filter>Engine\04. Object\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="CDestroyedState.h">
+      <Filter>Engine\08. Module\AI\State\Destroyed</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -651,9 +702,6 @@
     </ClCompile>
     <ClCompile Include="CTestAnim.cpp">
       <Filter>Engine\04. Object\TestAnim</Filter>
-    </ClCompile>
-    <ClCompile Include="CBackGround.cpp">
-      <Filter>Engine\04. Object\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="CBackGroundAnim.cpp">
       <Filter>Engine\04. Object\BackGround\BackGroundAnimation</Filter>
@@ -787,6 +835,39 @@
     </ClCompile>
     <ClCompile Include="CSwampBackGround3.cpp">
       <Filter>Engine\04. Object\BackGround\SwampBackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CFlying_Killer.cpp">
+      <Filter>Engine\04. Object\Monster\Flying_Killer</Filter>
+    </ClCompile>
+    <ClCompile Include="CRush.cpp">
+      <Filter>Engine\08. Module\AI\State\Rush</Filter>
+    </ClCompile>
+    <ClCompile Include="CBounce.cpp">
+      <Filter>Engine\08. Module\AI\State\Bounce</Filter>
+    </ClCompile>
+    <ClCompile Include="CM3_Rocket_Launch_Support_Van.cpp">
+      <Filter>Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van</Filter>
+    </ClCompile>
+    <ClCompile Include="CFiring.cpp">
+      <Filter>Engine\08. Module\AI\State\Firing</Filter>
+    </ClCompile>
+    <ClCompile Include="CM3_Missile.cpp">
+      <Filter>Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van</Filter>
+    </ClCompile>
+    <ClCompile Include="CWoodenStool.cpp">
+      <Filter>Engine\04. Object\Monster\M3_Rocket_Launch_Support_Van</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossStageTileCopy.cpp">
+      <Filter>Engine\04. Object\BackGround\BossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="CBossStageTile.cpp">
+      <Filter>Engine\04. Object\BackGround\BossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="CBackGround.cpp">
+      <Filter>Engine\04. Object\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="CDestroyedState.cpp">
+      <Filter>Engine\08. Module\AI\State\Destroyed</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
