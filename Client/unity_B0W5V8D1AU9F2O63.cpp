@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CSoundMgr.cpp"
+
+
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CState.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CTile.cpp"
-
-
-#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CTimeMgr.cpp"
 

@@ -2,6 +2,9 @@
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\AI.cpp"
 
 
+#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CAppearState.cpp"
+
+
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CBossStageTileCopy.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CBeachBackGround2.cpp"
-
-
-#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CBeachFront.cpp"
 

@@ -36,6 +36,7 @@
 
 #include "CHuge_Hermit.h"
 #include "CDestroyedState.h"
+#include "CAppearState.h"
 
 CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 {
@@ -317,10 +318,11 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		pMon->m_pAI->AddState(new CIdleState);
 		pMon->m_pAI->AddState(new CDeadState);
 		pMon->m_pAI->AddState(new CDestroyedState);
+		pMon->m_pAI->AddState(new CAppearState);
 		//pMon->m_pAI->AddState(new CBubblefire);
 		//pMon->m_pAI->AddState(new CBubblefire); // 공격 상태
 		//pMon->m_pAI->AddState(new CClawing);
-		pMon->m_pAI->SetCurState(MON_STATE::IDLE);
+		pMon->m_pAI->SetCurState(MON_STATE::APPEAR);
 
 		pMon->SetName(L"Huge_Hermit");
 

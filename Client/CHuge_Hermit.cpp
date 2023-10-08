@@ -21,6 +21,10 @@ void CHuge_Hermit::update_animation()
 
 	switch (eCurState)
 	{
+	case MON_STATE::APPEAR:
+			GetAnimator()->PlayL(L"HUGE_HERMIT_IDLE", true);
+		break;
+		
 	case MON_STATE::IDLE:
 			GetAnimator()->PlayL(L"HUGE_HERMIT_IDLE", true);
 		break;

@@ -269,6 +269,9 @@
     <Filter Include="Engine\08. Module\AI\State\Destroyed">
       <UniqueIdentifier>{38a3ede5-034f-44dc-9ce8-e39d61fb4b75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\08. Module\AI\State\Appear">
+      <UniqueIdentifier>{28fc702b-79aa-4374-8274-354487b4c71f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -573,6 +576,9 @@
     <ClInclude Include="CDestroyedState.h">
       <Filter>Engine\08. Module\AI\State\Destroyed</Filter>
     </ClInclude>
+    <ClInclude Include="CAppearState.h">
+      <Filter>Engine\08. Module\AI\State\Appear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -868,6 +874,9 @@
     </ClCompile>
     <ClCompile Include="CDestroyedState.cpp">
       <Filter>Engine\08. Module\AI\State\Destroyed</Filter>
+    </ClCompile>
+    <ClCompile Include="CAppearState.cpp">
+      <Filter>Engine\08. Module\AI\State\Appear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

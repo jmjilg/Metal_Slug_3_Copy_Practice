@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CHuge_Hermit.cpp"
+
+
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CIdleState.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CObject.cpp"
-
-
-#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CCongaHouse.cpp"
 

@@ -87,7 +87,7 @@ CTestAnim::~CTestAnim()
 
 void CTestAnim::update()
 {
-	GetAnimator()->SetTransParentColor(248, 0, 248);
+	GetAnimator()->SetTransParentColor(153, 217, 234);
 	GetAnimator()->update();	
 
 	if(strAnimFile2.empty())

@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CRush.cpp"
+
+
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CScene.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CSound.cpp"
-
-
-#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CSoundMgr.cpp"
 

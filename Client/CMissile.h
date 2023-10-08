@@ -8,11 +8,16 @@ class CMissile :
     public CObject
 {
 protected:
+    CTexture*   pHandGunTex;
+    CTexture*   pWeaponTex;
+
     float       m_fTheta; // 이동 방향
+    float       m_fSpeed; // 총알 이동 속도
 
     Vec2        m_vDir;
     CTexture*   m_pTex;
     bool        IsCollision; // 이미 한번 충돌했으므로 또 충돌했을때 Delete이벤트의 중복 실행 방지 
+    bool        m_bHMG;
 
 
 public:
@@ -24,7 +29,8 @@ public:
         m_vDir = _vDir;
         m_vDir.Normalize();
     }
-
+    void SetSpeed(float _f) { m_fSpeed = _f; }
+    void SetHMG(bool _b) { m_bHMG = _b; }
 public:
     virtual void update();
     virtual void render(HDC _dc);

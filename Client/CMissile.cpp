@@ -14,14 +14,15 @@ CMissile::CMissile()
 	, m_vDir(Vec2(1.f, 0.f))
 	, m_pTex(nullptr)
 	, IsCollision(false)
+	, m_fSpeed(600.f)
 {
 	m_vDir.Normalize();
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(10.f, 10.f));
 
 
-	CTexture* pHandGunTex = CResMgr::GetInst()->LoadTexture(L"BulletSFX", L"texture\\HandGunSFX15x15.bmp"); // 핸드건의 총알만 여기서 따옴
-	CTexture* pWeaponTex = CResMgr::GetInst()->LoadTexture(L"WeaponSFX", L"texture\\WeaponSFX.bmp"); 
+	pHandGunTex = CResMgr::GetInst()->LoadTexture(L"BulletSFX", L"texture\\HandGunSFX15x15.bmp"); // 핸드건의 총알만 여기서 따옴
+	pWeaponTex = CResMgr::GetInst()->LoadTexture(L"WeaponSFX", L"texture\\WeaponSFX.bmp"); 
 
 
 	m_pTex = pHandGunTex;
@@ -33,13 +34,19 @@ CMissile::~CMissile()
 
 void CMissile::update()
 {
+	if (m_bHMG) // 한번만 실행하면 되긴 하는데 좀 아쉽네 이거.. 근데 바꾸기가 귀찮다..
+	{
+		GetCollider()->SetScale(Vec2(30.f, 10.f));
+		m_pTex = pWeaponTex;
+	}
+
 	Vec2 vPos = GetPos();
 
 	//vPos.x += 600.f * cosf(m_fTheta) * fDT;
 	//vPos.y -= 600.f * sinf(m_fTheta) * fDT;
 
-	vPos.x += 600.f * m_vDir.x * fDT;
-	vPos.y += 600.f * m_vDir.y * fDT;  // 위와 결과는 같지만 좀 더 직관적임
+	vPos.x += m_fSpeed * m_vDir.x * fDT;
+	vPos.y += m_fSpeed * m_vDir.y * fDT;  // 위와 결과는 같지만 좀 더 직관적임
 
 	SetPos(vPos);
 
@@ -67,19 +74,34 @@ void CMissile::render(HDC _dc)
 
 
 
-	TransparentBlt(_dc
-		, (int)(vPos.x - 15 / 2.f)
-		, (int)(vPos.y - 10 / 2.f)
-		, 15
-		, 10
-		, m_pTex->GetDC()
-		, 0
-		, 0
-		, 15
-		, 10
-		, RGB(0, 0, 0)
-	);
-
+	if (m_bHMG)
+	{
+		TransparentBlt(_dc
+			, (int)(vPos.x - 15 / 2.f)
+			, (int)(vPos.y - 10 / 2.f)
+			, 30
+			, 5
+			, m_pTex->GetDC()
+			, 4
+			, 20
+			, 30
+			, 5
+			, RGB(0, 248, 0)
+		);
+	}
+	else
+		TransparentBlt(_dc
+			, (int)(vPos.x - 15 / 2.f)
+			, (int)(vPos.y - 10 / 2.f)
+			, 15
+			, 10
+			, m_pTex->GetDC()
+			, 0
+			, 0
+			, 15
+			, 10
+			, RGB(0, 0, 0)
+		);
 
 	component_render(_dc);
 }

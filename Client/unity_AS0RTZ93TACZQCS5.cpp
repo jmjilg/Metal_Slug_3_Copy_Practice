@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CTimeMgr.cpp"
+
+
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CTraceState.cpp"
 
 

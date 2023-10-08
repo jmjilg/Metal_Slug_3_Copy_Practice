@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CEventObject3.cpp"
+
+
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CEventObject4.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CHeavyMachineGun.cpp"
-
-
-#include "C:\Users\giml7\source\repos\Metal_Slug_3_Copy_Practice\Client\CHuge_Hermit.cpp"
 

@@ -12,6 +12,7 @@
 #include "CChowmein_Conga.h"
 #include "CScene.h"
 #include "CSceneMgr.h"
+#include "CCameraBox.h"
 
 
 CEventObject3::CEventObject3()
@@ -46,9 +47,10 @@ void CEventObject3::OnCollisionEnter(CCollider* _pOther)
 	{
 		if (!bIsEnterEvent)
 		{
-			if (GetCameraBox() != nullptr)
+			CCameraBox* pCameraBox = GetCameraBox();
+			if (pCameraBox != nullptr)
 			{
-				GetCameraBox()->SetTracePlayer(false);
+				pCameraBox->SetTracePlayer(false);
 			}
 
 			CMonster* pMonster = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2450, 40));

@@ -98,9 +98,12 @@ private:
     int                 m_iGrenade;
     int                 m_iGrenadeCount;
     int                 m_iLife;
+    int                 m_iBulletCount;
     bool                m_bJump;
     bool                m_bAttacked;                // 플레이어가 몬스터에게 공격을 받았는지 여부
     bool                m_bSetCamera;                // 카메라가 계속 플레이어를 타겟으로 할지 여부
+    bool                m_bMainHMGflag;                // 헤비머신건 메인 플래그
+    bool                m_bSubHMGflag;                // 헤비머신건 서브 플래그
 
     Vec2                m_vMissilePrevDir;
 
@@ -115,6 +118,9 @@ private:
     double			m_dAcc;	// 1초 체크를 위한 누적 시간
     UINT			m_iCallCount; // 함수 호출 횟수 체크
     UINT			m_iFPS; // 초당 호출 횟수
+
+    clock_t         m_lBulletStart; // 헤비머신건을 쏜 시간
+    clock_t         m_lBulletAcc; // 헤비머신건을 쏘고 지난 시간
 
 public:
     virtual void update();
@@ -135,6 +141,7 @@ private:
     void update_gravity();
     void update_jumptime();
     void SetIsJump(bool _bJump) { m_bJump = _bJump; }
+    void SetFrame0(const wstring& _strName1, const wstring& _strName2);
     bool IsJump() { return m_bJump; }
 
     virtual void OnCollisionEnter(CCollider* _pOther);

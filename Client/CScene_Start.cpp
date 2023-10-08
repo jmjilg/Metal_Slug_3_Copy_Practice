@@ -61,6 +61,7 @@
 #include "CWoodenStool.h"
 #include "CBossStageTile.h"
 #include "CBossStageTileCopy.h"
+#include "CSupplies.h"
 
 CScene_Start::CScene_Start()
 	: m_bUseForce(false)
@@ -398,7 +399,7 @@ void CScene_Start::Enter()
 	
 	CObject* pSlugTransport = new CSlugTransport;
 	pSlugTransport->SetName(L"SlugTransport");
-	pSlugTransport->SetPos(Vec2(4600.f, 189.f)); //Vec2(2923.f, 189.f)
+	pSlugTransport->SetPos(Vec2(2923.f, 189.f)); // Vec2(4600.f, 189.f)
 	pSlugTransport->SetScale(Vec2(0.f, 0.f));
 
 	pSlugTransport->SetCameraBox((CCameraBox*)pCameraBox);
@@ -572,6 +573,14 @@ void CScene_Start::Enter()
 	pCaptive->SetScale(Vec2(100.f, 100.f));
 	AddObject(pCaptive, GROUP_TYPE::CAPTIVE);
 
+
+	CObject* pSupplies = new CSupplies;
+	pSupplies->SetName(L"Supplies");
+	pSupplies->SetPos(Vec2(200.f, 139.f));
+	pSupplies->SetScale(Vec2(100.f, 100.f));
+	AddObject(pSupplies, GROUP_TYPE::SUPPLIES);
+
+
 	/*CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);
 	pOtherPlayer->SetPos(Vec2(740.f, 384.f)); 아래로 바뀜 */
 
@@ -649,7 +658,7 @@ void CScene_Start::Enter()
 	pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(2330, 124));
 	AddObject(pMon, GROUP_TYPE::MONSTER);
 	
-	/*pMon = CMonFactory::CreateMonster(MON_TYPE::M3_ROCKET_LAUNCH_SUPPORT_VAN, Vec2(3300.f, 180.f));
+	pMon = CMonFactory::CreateMonster(MON_TYPE::M3_ROCKET_LAUNCH_SUPPORT_VAN, Vec2(3300.f, 180.f));
 	AddObject(pMon, GROUP_TYPE::MONSTER);
 
 	CObject* pSwampObstacle = new CObstacle;
@@ -685,7 +694,7 @@ void CScene_Start::Enter()
 	pWoodenStool2->SetScale(Vec2(0.f, 0.f));
 	AddObject(pWoodenStool2, GROUP_TYPE::WOODENSTOOL);
 
-	pMon->SetRelatedObj(pWoodenStool2);*/
+	pMon->SetRelatedObj(pWoodenStool2);
 
 
 	//pMon = CMonFactory::CreateMonster(MON_TYPE::HUGE_HERMIT, Vec2(4700.f, 134.f));
@@ -729,6 +738,7 @@ void CScene_Start::Enter()
 	// Player 그룹과 Monster 그룹 간의 충돌체크
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::MONSTER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CONGAHOUSE);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::SUPPLIES);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::GROUND);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
@@ -748,9 +758,9 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::SLUGTRANSPORT, GROUP_TYPE::EVENT_OBJECT);
 
 	// Camera Look 지정
-	// CCamera::GetInst()->SetLookAt(vResolution / 2.f);
+	CCamera::GetInst()->SetLookAt(vResolution / 2.f);
 	// CCamera::GetInst()->SetLookAt(Vec2(3014.f, 242.f)); //늪지대 비추기
-	CCamera::GetInst()->SetLookAt(Vec2(5010.f, 292.f)); // 보스 스테이지 비추기
+	//CCamera::GetInst()->SetLookAt(Vec2(5010.f, 292.f)); // 보스 스테이지 비추기
 
 	// Camera 효과 지정
 	CCamera::GetInst()->FadeOut(1.f);

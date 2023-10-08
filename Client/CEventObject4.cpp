@@ -45,7 +45,7 @@ void CEventObject4::update()
 		if (!m_bIsHugeHermitRespawn && m_lEventAcc >= 3000.f)
 		{
 			m_bIsHugeHermitRespawn = true;
-			CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::HUGE_HERMIT, Vec2(4650.f, 134.f));
+			CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::HUGE_HERMIT, Vec2(4650.f, 204.f)); // 몬스터가 플레이어를 처음 쫓아갈때의 위치 Vec2(4650.f, 134.f)
 			CreateObject(pMon, GROUP_TYPE::MONSTER);
 
 
