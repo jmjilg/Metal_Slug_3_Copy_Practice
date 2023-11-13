@@ -219,17 +219,18 @@ void CPlayer::update()
 	
 	else if (KEY_TAP(KEY::J) && !m_bAttacked && m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
 	{
-		m_bSubHMGflag = true;
+		m_bMainHMGflag = true;
+		m_iBulletCount = 0;
 	}
 
-	if (!m_bMainHMGflag)
-	{
-		if (m_bSubHMGflag)
-		{
-			m_bMainHMGflag = true;
-			m_bSubHMGflag = false;
-		}
-	}
+	//if (!m_bMainHMGflag)
+	//{
+	//	if (m_bSubHMGflag)
+	//	{
+	//		m_bMainHMGflag = true;
+	//		m_bSubHMGflag = false;
+	//	}
+	//}
 
 	if (m_bMainHMGflag && !m_bAttacked)  // 헤비머신건일때 공격키를 눌렀을때, 일정간격으로 총알 4발을 발사함
 	{
@@ -338,7 +339,7 @@ void CPlayer::CreateMissile()
 	{
 		vMissilePos.x += 10;
 		vMissilePos.y += 10;
-		if (m_iDir.y != 0)  // 위나 밑을 볼때 총알 오프셋 조정, x가 1 일때 오른쪽, -1 일때 왼쪽, y가 1일때 위쪽, -1일때 아래쪽임. 0일때는 위나 아래 둘다 아닐때
+		if (m_iDir.y != 0)  // 위나 밑을 볼때 총알 오프셋 조정, x가 1 일때 오른쪽, -1 일때 왼쪽, y가 -1일때 위쪽, 1일때 아래쪽임. 0일때는 위나 아래 둘다 아닐때
 			vMissilePos.x -= 10;
 		if (m_stkStateUpper.top() == PLAYER_STATE::NONE)
 			vMissilePos.y += 10;
@@ -347,19 +348,42 @@ void CPlayer::CreateMissile()
 
 	if (m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
 	{ // 위로 쏠때랑 아래로 쏠때, 대각선으로 쏠때는 아직 구현 안했음 
-
-		if(m_iDir.x == 1)
-			vMissilePos.x += 10;
-		else
-			vMissilePos.x -= 30;
-
-		vMissilePos.y += 20;
 		pMissile->SetHMG(true);
 		fSpeed = 450.f;
 	}
 	pMissile->SetPos(vMissilePos);
+
+	// 미사일 나가는 방향 설정
 	pMissile->SetScale(Vec2(25.f, 25.f));
-	pMissile->SetDir(m_iDir);
+	if (m_iDir.x == 1)
+		pMissile->SetDir(MISSILE_DIR::RIGHT);
+	else
+		pMissile->SetDir(MISSILE_DIR::LEFT);
+	if (m_iDir.y >= 1)
+		pMissile->SetDir(MISSILE_DIR::DOWN);
+	else if (m_iDir.y < 0)
+		pMissile->SetDir(MISSILE_DIR::UP);
+
+	switch (pMissile->GetDir())
+	{
+	case MISSILE_DIR::RIGHT:
+		vMissilePos.x += 10;
+		vMissilePos.y += 40;
+		break;
+	case MISSILE_DIR::LEFT:
+		vMissilePos.x -= 30;
+		vMissilePos.y += 20;
+		break;
+	case MISSILE_DIR::DOWN:
+		vMissilePos.x += 10;
+		vMissilePos.y += 20;
+		break;
+	case MISSILE_DIR::UP:
+		vMissilePos.x += 10;
+		vMissilePos.y -= 40;
+		break;
+	}
+
 	pMissile->SetSpeed(fSpeed);
 	
 	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER); // 앞으로 생성될 모든 종류의 오브젝트를 커버할 수 있어야함
