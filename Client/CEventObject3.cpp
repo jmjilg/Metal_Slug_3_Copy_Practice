@@ -20,6 +20,7 @@ CEventObject3::CEventObject3()
 	, m_iMonsterRespawnCount(2)
 	, IsMonsterClear(false)
 {
+	memset(m_bannihilation, false, 4);
 }
 
 CEventObject3::~CEventObject3()
@@ -39,6 +40,36 @@ void CEventObject3::render(HDC _dc)
 
 void CEventObject3::update()
 {
+	if (!bIsEnterEvent)
+		return;
+
+	if (!IsMonsterClear)
+	{
+		if (m_arrMonster1->IsDead())
+			m_bannihilation[0] = true;
+		if (m_arrMonster2->IsDead())
+			m_bannihilation[1] = true;
+		if (m_arrMonster3->IsDead())
+			m_bannihilation[2] = true;
+		if (m_arrMonster4->IsDead())
+			m_bannihilation[3] = true;
+
+		for (int i = 0; i < 4; ++i)
+		{
+			if (!m_bannihilation[i])
+				return;
+		}
+
+		// 생성된 몬스터가 다죽었을 때.
+		IsMonsterClear = !IsMonsterClear;
+	}
+
+	if (GetCameraBox() != nullptr)
+	{
+		GetCameraBox()->SetTracePlayer(true);
+	}
+
+	DeleteObject(this);
 }
 
 void CEventObject3::OnCollisionEnter(CCollider* _pOther)
@@ -53,17 +84,17 @@ void CEventObject3::OnCollisionEnter(CCollider* _pOther)
 				pCameraBox->SetTracePlayer(false);
 			}
 
-			CMonster* pMonster = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2450, 40));
-			CreateObject(pMonster, GROUP_TYPE::MONSTER);
+			m_arrMonster1 = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2450, 40));
+			CreateObject(m_arrMonster1, GROUP_TYPE::MONSTER);
 
-			pMonster = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2550, 40));
-			CreateObject(pMonster, GROUP_TYPE::MONSTER);
+			m_arrMonster2 = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2550, 40));
+			CreateObject(m_arrMonster2, GROUP_TYPE::MONSTER);
 			
-			pMonster = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2600, 50));
-			CreateObject(pMonster, GROUP_TYPE::MONSTER);
+			m_arrMonster3 = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2600, 50));
+			CreateObject(m_arrMonster3, GROUP_TYPE::MONSTER);
 			
-			pMonster = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2570, 40));
-			CreateObject(pMonster, GROUP_TYPE::MONSTER);
+			m_arrMonster4 = CMonFactory::CreateMonster(MON_TYPE::LOCUST, Vec2(2570, 40));
+			CreateObject(m_arrMonster4, GROUP_TYPE::MONSTER);
 
 
 			bIsEnterEvent = true;

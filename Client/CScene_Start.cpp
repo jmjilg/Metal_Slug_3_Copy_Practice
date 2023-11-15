@@ -468,7 +468,7 @@ void CScene_Start::Enter()
 	pSwampEvent->SetCameraBox((CCameraBox*)pCameraBox);
 	AddObject(pSwampEvent, GROUP_TYPE::EVENT_OBJECT);
 	
-	CObject* pSwampEvent2 = new CEventObject3;
+	CObject* pSwampEvent2 = new CEventObject3;  // 거대메뚜기 이벤트
 	pSwampEvent2->SetName(L"Ground"); // 편의상 Ground라고 하겠음
 	pSwampEvent2->SetPos(Vec2(2567.f, 110.f));
 	pSwampEvent2->SetScale(Vec2(100.f, 100.f));
@@ -574,11 +574,11 @@ void CScene_Start::Enter()
 	AddObject(pCaptive, GROUP_TYPE::CAPTIVE);
 
 
-	CObject* pSupplies = new CSupplies;
-	pSupplies->SetName(L"Supplies");
-	pSupplies->SetPos(Vec2(200.f, 139.f));
-	pSupplies->SetScale(Vec2(100.f, 100.f));
-	AddObject(pSupplies, GROUP_TYPE::SUPPLIES);
+	//CObject* pSupplies = new CSupplies;
+	//pSupplies->SetName(L"Supplies");
+	//pSupplies->SetPos(Vec2(200.f, 139.f));
+	//pSupplies->SetScale(Vec2(100.f, 100.f));
+	//AddObject(pSupplies, GROUP_TYPE::SUPPLIES);
 
 
 	/*CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);

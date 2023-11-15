@@ -13,6 +13,9 @@
 #include "CScene.h"
 #include "CSceneMgr.h"
 #include "CCameraBox.h"
+#include "CSound.h"
+#include "CSoundMgr.h"
+#include "CResMgr.h"
 
 CEventObject4::CEventObject4()
 	: m_bIsEnterEvent(false)
@@ -48,6 +51,13 @@ void CEventObject4::update()
 			CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::HUGE_HERMIT, Vec2(4650.f, 204.f)); // 몬스터가 플레이어를 처음 쫓아갈때의 위치 Vec2(4650.f, 134.f)
 			CreateObject(pMon, GROUP_TYPE::MONSTER);
 
+			CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_02"); // 보스 스테이지 브금
+
+			pNewSound->Play(); // 인자로 true를 주면 반복재생
+
+			pNewSound->SetPosition(50.f); // 백분률, 소리 위치 설정
+			pNewSound->PlayToBGM(true); // 인자로 true를 주면 반복재생
+			pNewSound->SetVolume(60.f);
 
 		}
 	}

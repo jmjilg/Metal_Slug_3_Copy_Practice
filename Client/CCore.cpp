@@ -74,14 +74,15 @@ int CCore::Init(HWND _hWnd, POINT _ptResolution)
 	CSoundMgr::GetInst()->init();
 
 	 // Sound 로드 테스트
-	 //CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\Blue_Water_Fangs.wav");
-	 //CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_01");
-	 //
-	 //pNewSound->Play(); // 인자로 true를 주면 반복재생
-	 //
-	 //pNewSound->SetPosition(50.f); // 백분률, 소리 위치 설정
-	 //pNewSound->PlayToBGM(true); // 인자로 true를 주면 반복재생
-	 //pNewSound->SetVolume(60.f);
+	 CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\Blue_Water_Fangs.wav");
+	 CResMgr::GetInst()->LoadSound(L"BGM_02", L"sound\\Steel_Beasts _6Beets.wav");
+	 CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_01");
+	 
+	 pNewSound->Play(); // 인자로 true를 주면 반복재생
+	 
+	 pNewSound->SetPosition(50.f); // 백분률, 소리 위치 설정
+	 pNewSound->PlayToBGM(true); // 인자로 true를 주면 반복재생
+	 pNewSound->SetVolume(60.f);
 
 	return S_OK;
 }

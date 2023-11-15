@@ -31,8 +31,8 @@ void CIdleState::update()
 		GetMonster()->SetPos(vMonPos);
 
 		Vec2 vRenderCamera = vMonPos;
-		vRenderCamera.x += 257.f; // m_fCorrection_Value_X
-		vRenderCamera.y += 25.f; // m_fCorrection_Value_Y
+		vRenderCamera.x += 257.f;//257.f; // m_fCorrection_Value_X
+		vRenderCamera.y += 80.f; //25.f; // m_fCorrection_Value_Y
 		CCamera::GetInst()->SetLookAt(vRenderCamera); // 카메라의 위치가 일정한 속도로 좌측으로 이동함
 	}
 

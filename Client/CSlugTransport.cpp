@@ -25,6 +25,7 @@ CSlugTransport::CSlugTransport()
 	, m_bStop(false)
 	, m_bBossEvent(false)
 	, m_pRayGround(nullptr)
+	, m_bShipFirstMove(false)
 {
 	// Texture 로딩하기
 	m_pTexture = CResMgr::GetInst()->LoadTexture(L"Mission1", L"texture\\Mission1.bmp");
@@ -98,13 +99,7 @@ void CSlugTransport::OnCollisionEnter(CCollider* _pOther)
 
 	if (pOtherObj->GetName() == L"Player")
 	{
-		m_bContact = true; // 플레이어와 접촉하게 되면 배가 움직이기 시작함
-		
-		Vec2 vTemp = pOtherObj->GetPos();
-		vTemp.x += m_fVelocity;
-		pOtherObj->SetPos(vTemp);
-		m_lRespawnStart = clock();
-		m_bRespawn = true;
+		m_lContactStart = clock();
 	}
 
 	if (pOtherObj->GetName() == L"Ground") // 장애물 오브젝트와 부딪혔을 때
@@ -119,13 +114,11 @@ void CSlugTransport::OnCollisionEnter(CCollider* _pOther)
 		m_IBossEventStart = clock();
 	}
 
-
 }
 
 void CSlugTransport::OnCollision(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
-
 
 	if (pOtherObj->GetName() == L"Player" && m_bContact)
 	{
@@ -139,7 +132,8 @@ void CSlugTransport::OnCollision(CCollider* _pOther)
 
 
 		m_lRespawnAcc = clock();
-		
+
+
 		if (m_bRespawnEvent)
 		{
 			if (m_bRespawn && m_iRespawnCount <= 10)
@@ -155,24 +149,48 @@ void CSlugTransport::OnCollision(CCollider* _pOther)
 				}
 			}
 		}
-		else if (m_lRespawnAcc - m_lRespawnStart >= 30000.f) // 플레이어가 배에 탑승하고 30초 지난 후에 플라잉 킬러 몬스터 생성 시작
+		else if (m_lRespawnAcc - m_lRespawnStart >= 5000.f) // 플레이어가 배에 탑승하고 5초 지난 후에 플라잉 킬러 몬스터 생성 시작
 		{
 			m_bRespawnEvent = true;
 		}
-
-		
 	}
 
-	if (m_bBossEvent)
+	else if (pOtherObj->GetName() == L"Player" && !m_bContact)
 	{
-		m_IBossEventAcc = clock() - m_IBossEventStart;
-		if (m_IBossEventAcc >= 3000.f)
-		{
-			DeleteObject(m_pRayGround);
-			DeleteObject(this);
-		}
-	}
 
+		m_lContactAcc = clock();
+
+		if (m_lContactAcc - m_lContactStart >= 1000.f)
+		{
+			m_bShipFirstMove = true;
+		}
+
+		if (m_bShipFirstMove)  // 배 충돌체와 부딪히고 나서 1초 후에 움직이기 시작하려고 이렇게 한거임. 안그러면 점프하는 도중에 배가 출발해서 못탈수도 있음. 이 코드는 원래 CollisionEnter에 있던 부분임
+		{
+			m_iPlayerCollisionCount++;
+
+			if (m_iPlayerCollisionCount == 1)
+			{
+				m_bContact = true; // 플레이어와 접촉하게 되면 배가 움직이기 시작함
+				Vec2 vTemp = pOtherObj->GetPos();
+				vTemp.x += m_fVelocity;
+				pOtherObj->SetPos(vTemp);
+				m_lRespawnStart = clock();
+				m_bRespawn = true;
+			}
+		}
+
+		if (m_bBossEvent)
+		{
+			m_IBossEventAcc = clock() - m_IBossEventStart;
+			if (m_IBossEventAcc >= 3000.f)
+			{
+				DeleteObject(m_pRayGround);
+				DeleteObject(this);
+			}
+		}
+
+	}
 }
 
 void CSlugTransport::OnCollisionExit(CCollider* _pOther)
