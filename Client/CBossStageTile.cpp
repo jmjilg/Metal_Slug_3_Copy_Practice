@@ -33,8 +33,8 @@ void CBossStageTile::start()
 	m_pRayGround->SetName(L"BossStageTileGround");
 
 	Vec2 vTemp = GetPos();
-	m_pRayGround->GetCollider()->GetVecRay().push_back(Vec2(vTemp.x - 16.f, vTemp.y));
-	m_pRayGround->GetCollider()->GetVecRay().push_back(Vec2(vTemp.x + 25.f, vTemp.y));
+	m_pRayGround->GetCollider()->GetVecRay().push_back(Vec2(vTemp.x - 16.f, vTemp.y - 12.f));
+	m_pRayGround->GetCollider()->GetVecRay().push_back(Vec2(vTemp.x + 25.f, vTemp.y - 12.f));
 	CreateObject(m_pRayGround, GROUP_TYPE::GROUND);
 }
 

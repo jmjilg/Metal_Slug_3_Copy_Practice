@@ -76,6 +76,7 @@ int CCore::Init(HWND _hWnd, POINT _ptResolution)
 	 // Sound 로드 테스트
 	 CResMgr::GetInst()->LoadSound(L"BGM_01", L"sound\\Blue_Water_Fangs.wav");
 	 CResMgr::GetInst()->LoadSound(L"BGM_02", L"sound\\Steel_Beasts _6Beets.wav");
+	 CResMgr::GetInst()->LoadSound(L"BGM_03", L"sound\\Stage_Clear.wav");
 	 CSound* pNewSound = CResMgr::GetInst()->FindSound(L"BGM_01");
 	 
 	 pNewSound->Play(); // 인자로 true를 주면 반복재생
