@@ -28,7 +28,7 @@ CPlayer::CPlayer()
 	, m_ePrevStateLower(PLAYER_STATE::IDLE)
 	, m_eBefore_The_Change_Upper(PLAYER_STATE::IDLE)
 	, m_eBefore_The_Change_Lower(PLAYER_STATE::IDLE)
-	, m_eCurWeapon(WEAPON::HAND_GUN)
+	, m_eCurWeapon(WEAPON::HEAVY_MACHIN_GUN)
 	, m_ePrevWeapon(WEAPON::HAND_GUN)
 	, m_iDir(1.f, 0.f)
 	, m_iPrevDir(1)
@@ -351,7 +351,6 @@ void CPlayer::CreateMissile()
 		pMissile->SetHMG(true);
 		fSpeed = 450.f;
 	}
-	pMissile->SetPos(vMissilePos);
 
 	// 미사일 나가는 방향 설정
 	pMissile->SetScale(Vec2(25.f, 25.f));
@@ -368,7 +367,7 @@ void CPlayer::CreateMissile()
 	{
 	case MISSILE_DIR::RIGHT:
 		vMissilePos.x += 10;
-		vMissilePos.y += 40;
+		vMissilePos.y += 20;
 		break;
 	case MISSILE_DIR::LEFT:
 		vMissilePos.x -= 30;
@@ -379,11 +378,12 @@ void CPlayer::CreateMissile()
 		vMissilePos.y += 20;
 		break;
 	case MISSILE_DIR::UP:
-		vMissilePos.x += 10;
+		vMissilePos.x += 8;
 		vMissilePos.y -= 40;
 		break;
 	}
 
+	pMissile->SetPos(vMissilePos);
 	pMissile->SetSpeed(fSpeed);
 	
 	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER); // 앞으로 생성될 모든 종류의 오브젝트를 커버할 수 있어야함
