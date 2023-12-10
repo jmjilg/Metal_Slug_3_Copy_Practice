@@ -41,6 +41,8 @@ enum class PLAYER_STATE
     HEAVY_MACHINE_GUN_SIT_DOWN_WALK,
     HEAVY_MACHINE_GUN_LOOK_UP,
     HEAVY_MACHINE_GUN_LOOK_DOWN,
+    HEAVY_MACHINE_GUN_SCATTERING_UP,
+    HEAVY_MACHINE_GUN_SCATTERING_DOWN,
 
     //
 
@@ -134,7 +136,7 @@ public:
     void SetAttacked(bool _b) { m_bAttacked = _b; }
 
 private:
-    void CreateMissile();
+    void CreateMissile(int _iMissileDir = 0);
     void update_state();
     void update_move();
     void update_animation();
@@ -164,10 +166,13 @@ private:
     void update_LOOK_DOWN(stack<PLAYER_STATE>& _stkState);
     void update_LOOK_UP(stack<PLAYER_STATE>& _stkState);
 
-    void update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState);
     void update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState);
     void update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState);
     void update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState);
+    void update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState);
+
+    void update_HEAVYMACHINE_GUN_SCATTERING_UP(stack<PLAYER_STATE>& _stkState);  // 함수명 리펙토링이 필요해보임
+    void update_HEAVYMACHINE_GUN_SCATTERING_DOWN(stack<PLAYER_STATE>& _stkState);
     
     void update_DEAD(stack<PLAYER_STATE>& _stkState);
     void update_RESPAWN(stack<PLAYER_STATE>& _stkState);

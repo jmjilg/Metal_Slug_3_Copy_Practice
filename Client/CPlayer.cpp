@@ -145,6 +145,10 @@ CPlayer::CPlayer()
 	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_WALK_JUMP_UPPER_PART_RIGHT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_WALK_UPPER_PART_LEFT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_WALK_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_RIGHT.anim");
 
 	m_stkStateLower.push(PLAYER_STATE::IDLE);
 	m_stkStateUpper.push(PLAYER_STATE::IDLE);
@@ -325,7 +329,7 @@ void CPlayer::render(HDC _dc)
 	
 }
 
-void CPlayer::CreateMissile()
+void CPlayer::CreateMissile(int _iMissileDir)
 {
 	// Missile Object
 	CMissile* pMissile = new CMissile;
@@ -362,6 +366,9 @@ void CPlayer::CreateMissile()
 		pMissile->SetDir(MISSILE_DIR::DOWN);
 	else if (m_iDir.y < 0)
 		pMissile->SetDir(MISSILE_DIR::UP);
+
+	if (_iMissileDir != int(MISSILE_DIR::NONE))
+		pMissile->SetDir(_iMissileDir);
 
 	switch (pMissile->GetDir())
 	{
@@ -477,6 +484,14 @@ void CPlayer::UPPERPART_update()
 		
 	case PLAYER_STATE::HAND_GUN_LOOK_UP: 
 		update_HAND_GUN_SHOOT_UP(m_stkStateUpper);
+		break;		
+		
+	case PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_UP: 
+		update_HEAVYMACHINE_GUN_SCATTERING_UP(m_stkStateUpper);
+		break;
+		
+	case PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_DOWN:
+		update_HEAVYMACHINE_GUN_SCATTERING_DOWN(m_stkStateUpper);
 		break;		
 		
 	}
@@ -986,6 +1001,58 @@ void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 
 }
 
+void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_UP(stack<PLAYER_STATE>& _stkState)
+{
+	// 흩뿌리기 애니메이션이 한장 지나갈 때마다 플레이어 방향에 따라서 미사일 한개씩 발사 하는 코드
+	if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 0)
+	{
+		if(m_iDir.x == 1)
+			CreateMissile(int(MISSILE_DIR::DEGREES_337));
+		else if (m_iDir.x == -1)
+			CreateMissile(int(MISSILE_DIR::DEGREES_202));
+	}
+	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 1)
+	{
+		if (m_iDir.x == 1)
+		{
+			CreateMissile(int(MISSILE_DIR::DEGREES_315));
+			CreateMissile(int(MISSILE_DIR::DEGREES_292));
+		}
+		else if (m_iDir.x == -1)
+		{
+			CreateMissile(int(MISSILE_DIR::DEGREES_225));
+			CreateMissile(int(MISSILE_DIR::DEGREES_247));
+		}
+		_stkState.pop();  
+	}
+
+}
+
+void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_DOWN(stack<PLAYER_STATE>& _stkState)
+{
+	if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 0)
+	{
+		if (m_iDir.x == 1)
+			CreateMissile(MISSILE_DIR::DEGREES_292);
+		else if (m_iDir.x == -1)
+			CreateMissile(MISSILE_DIR::DEGREES_247);
+	}
+	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 1)
+	{
+		if (m_iDir.x == 1)
+		{
+			CreateMissile(MISSILE_DIR::DEGREES_315);
+			CreateMissile(MISSILE_DIR::DEGREES_337); 
+		}
+		else if (m_iDir.x == -1)
+		{
+			CreateMissile(MISSILE_DIR::DEGREES_225);
+			CreateMissile(MISSILE_DIR::DEGREES_202); 
+		}
+		_stkState.pop();
+	}
+}
+
 void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 {
 	if (m_bAttacked)
@@ -1028,6 +1095,10 @@ void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 			_stkState.pop();
 			_stkState.push(PLAYER_STATE::IDLE);
 			_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
+		}
+		if (m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
+		{
+			_stkState.push(PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_DOWN);
 		}
 	}
 
@@ -1698,6 +1769,20 @@ void CPlayer::update_animation()
 		}
 		break;
 
+	case PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_UP:
+		if (m_iDir.x == -1)
+			GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_LEFT", true);
+		else
+			GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_RIGHT", true);
+
+		break;
+	case PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_DOWN:
+		if (m_iDir.x == -1)
+			GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_LEFT", true);
+		else
+			GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_RIGHT", true);
+
+		break;
 	}
 
 
