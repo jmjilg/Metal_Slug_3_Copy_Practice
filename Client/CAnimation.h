@@ -22,6 +22,7 @@ private:
 	CTexture*			m_pTex;			// Animation 이 사용하는 텍스쳐
 	vector<tAnimFrm>	m_vecFrm;		// 모든 프레임 정보
 	int					m_iCurFrm;		// 현재 프레임
+	int					m_iPrevFrm;		// 지난 프레임
 	float				m_fAccTime;		// 시간 누적
 
 	bool				m_bFinish;		// 재생 끝에 도달여부
@@ -37,6 +38,7 @@ public:
 	void SetFrame(int _iFrameIdx)
 	{
 		m_bFinish = false;
+		m_iPrevFrm = m_iCurFrm;
 		m_iCurFrm = _iFrameIdx;
 		m_fAccTime = 0.f;
 	}
@@ -45,6 +47,7 @@ public:
 	tAnimFrm& GetFrame(int _iIdx) { return m_vecFrm[_iIdx]; }
 	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
 	int GetCurFrame() { return m_iCurFrm; }
+	int GetPrevFrame() { return m_iPrevFrm; }
 	void SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b) { m_red = _r, m_green = _g, m_blue = _b; }
 
 private:

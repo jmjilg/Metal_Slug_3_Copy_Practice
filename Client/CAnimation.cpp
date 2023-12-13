@@ -15,6 +15,7 @@ CAnimation::CAnimation()
 	: m_pAnimator(nullptr)
 	, m_pTex(nullptr)
 	, m_iCurFrm(0)
+	, m_iPrevFrm(-2) // 처음에 현재 프레임과 다르게 하려고 -2로 세팅함
 	, m_fAccTime(0.f)
 	, m_bFinish(false)
 	, m_bStop(false)
@@ -31,7 +32,16 @@ CAnimation::~CAnimation()
 
 void CAnimation::update()
 {
+	wstring temp = m_strName;
 
+	if (temp == L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_RIGHT")
+	{
+		int a = 1;
+	}
+	if (temp == L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_RIGHT")
+	{
+		int a = 1;
+	}
 	if (m_bStop)
 		return;
 
@@ -42,6 +52,7 @@ void CAnimation::update()
 
 	if (m_vecFrm[m_iCurFrm].fDuration < m_fAccTime )
 	{
+		m_iPrevFrm = m_iCurFrm;
 		++m_iCurFrm;
 
 		if (m_vecFrm.size() <= m_iCurFrm)

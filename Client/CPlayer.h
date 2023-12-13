@@ -101,11 +101,11 @@ private:
     int                 m_iGrenadeCount;
     int                 m_iLife;
     int                 m_iBulletCount;
+    int                 m_iTempFrame;             // m_bFrameLock 과 관련있음
     bool                m_bJump;
     bool                m_bAttacked;                // 플레이어가 몬스터에게 공격을 받았는지 여부
     bool                m_bSetCamera;                // 카메라가 계속 플레이어를 타겟으로 할지 여부
-    bool                m_bMainHMGflag;                // 헤비머신건 메인 플래그
-    bool                m_bSubHMGflag;                // 헤비머신건 서브 플래그
+    bool                m_bFrameLock;               // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
 
     Vec2                m_vMissilePrevDir;
 
@@ -120,9 +120,6 @@ private:
     double			m_dAcc;	// 1초 체크를 위한 누적 시간
     UINT			m_iCallCount; // 함수 호출 횟수 체크
     UINT			m_iFPS; // 초당 호출 횟수
-
-    clock_t         m_lBulletStart; // 헤비머신건을 쏜 시간
-    clock_t         m_lBulletAcc; // 헤비머신건을 쏘고 지난 시간
 
 public:
     virtual void update();
@@ -176,6 +173,8 @@ private:
     
     void update_DEAD(stack<PLAYER_STATE>& _stkState);
     void update_RESPAWN(stack<PLAYER_STATE>& _stkState);
+
+    void OneFrameOneShot(); // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
 private:
     //virtual void OnCollision(CCollider* _pOther);         // 충돌 중인 경우 호출되는 함수
     //virtual void OnCollisionEnter(CCollider* _pOther);     // 충돌 진입 시

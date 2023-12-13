@@ -28,7 +28,7 @@ CPlayer::CPlayer()
 	, m_ePrevStateLower(PLAYER_STATE::IDLE)
 	, m_eBefore_The_Change_Upper(PLAYER_STATE::IDLE)
 	, m_eBefore_The_Change_Lower(PLAYER_STATE::IDLE)
-	, m_eCurWeapon(WEAPON::HEAVY_MACHIN_GUN)
+	, m_eCurWeapon(WEAPON::HAND_GUN)
 	, m_ePrevWeapon(WEAPON::HAND_GUN)
 	, m_iDir(1.f, 0.f)
 	, m_iPrevDir(1)
@@ -46,8 +46,8 @@ CPlayer::CPlayer()
 	, m_bAttacked(false)
 	, m_bSetCamera(false)
 	, m_iBulletCount(0)
-	, m_bMainHMGflag(false)
-	, m_bSubHMGflag(false)
+	, m_bFrameLock(false)
+	, m_iTempFrame(0) 
 {
 	// Texture 로딩하기
 	//m_pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Player.bmp");
@@ -216,49 +216,6 @@ void CPlayer::update()
 		CCamera::GetInst()->SetLookAt(vPos);
 	}
 
-	if (KEY_TAP(KEY::J) && !m_bAttacked && m_eCurWeapon == WEAPON::HAND_GUN)
-	{
-		CreateMissile();
-	}
-	
-	else if (KEY_TAP(KEY::J) && !m_bAttacked && m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
-	{
-		m_bMainHMGflag = true;
-		m_iBulletCount = 0;
-	}
-
-	//if (!m_bMainHMGflag)
-	//{
-	//	if (m_bSubHMGflag)
-	//	{
-	//		m_bMainHMGflag = true;
-	//		m_bSubHMGflag = false;
-	//	}
-	//}
-
-	if (m_bMainHMGflag && !m_bAttacked)  // 헤비머신건일때 공격키를 눌렀을때, 일정간격으로 총알 4발을 발사함
-	{
-		m_lBulletAcc = clock();
-
-		if (m_lBulletAcc - m_lBulletStart > 100.f) // 0.1초
-		{
-			if (m_iBulletCount < 4)
-			{
-				CreateMissile();
-				m_iBulletCount++;
-			}
-			else
-			{
-				m_iBulletCount = 0;
-				m_bMainHMGflag = false;
-			}
-
-			m_lBulletStart = m_lBulletAcc;
-		}
-
-
-	}
-
 	GetAnimator()->update();
 
 	if (m_ePrevStateLower != m_stkStateLower.top())
@@ -266,7 +223,12 @@ void CPlayer::update()
 
 	if (m_ePrevStateUpper != m_stkStateUpper.top())
 		m_eBefore_The_Change_Upper = m_ePrevStateUpper;
+	
+	if (m_iTempFrame != GetAnimator()->GetCurAnimU()->GetCurFrame())
+		m_bFrameLock = false;  // 헤비머신건 어택 애니메이션 프레임당 한발씩 쏘게하기위한 코드
 
+
+	m_iTempFrame = GetAnimator()->GetCurAnimU()->GetCurFrame();
 	m_ePrevStateLower = m_stkStateLower.top();
 	m_ePrevStateUpper = m_stkStateUpper.top();
 	m_iPrevDir = m_iDir.x;
@@ -370,24 +332,27 @@ void CPlayer::CreateMissile(int _iMissileDir)
 	if (_iMissileDir != int(MISSILE_DIR::NONE))
 		pMissile->SetDir(_iMissileDir);
 
-	switch (pMissile->GetDir())
+	if (m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
 	{
-	case MISSILE_DIR::RIGHT:
-		vMissilePos.x += 10;
-		vMissilePos.y += 20;
-		break;
-	case MISSILE_DIR::LEFT:
-		vMissilePos.x -= 30;
-		vMissilePos.y += 20;
-		break;
-	case MISSILE_DIR::DOWN:
-		vMissilePos.x += 10;
-		vMissilePos.y += 20;
-		break;
-	case MISSILE_DIR::UP:
-		vMissilePos.x += 8;
-		vMissilePos.y -= 40;
-		break;
+		switch (pMissile->GetDir())
+		{
+		case MISSILE_DIR::RIGHT:
+			vMissilePos.x += 10;
+			vMissilePos.y += 20;
+			break;
+		case MISSILE_DIR::LEFT:
+			vMissilePos.x -= 30;
+			vMissilePos.y += 20;
+			break;
+		case MISSILE_DIR::DOWN:
+			vMissilePos.x += 10;
+			vMissilePos.y += 20;
+			break;
+		case MISSILE_DIR::UP:
+			vMissilePos.x += 8;
+			vMissilePos.y -= 40;
+			break;
+		}
 	}
 
 	pMissile->SetPos(vMissilePos);
@@ -950,6 +915,8 @@ void CPlayer::update_LOOK_UP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 {
+	OneFrameOneShot();
+
 	if (m_bAttacked)
 	{
 		if ((&_stkState == &m_stkStateUpper))
@@ -969,21 +936,32 @@ void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 	{
 		_stkState.pop();
 		SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+		m_bFrameLock = false;
 		return;
 	}
 
 	if (KEY_HOLD(KEY::W) && KEY_TAP(KEY::J))
 	{
-		_stkState.pop();
-		_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
-		SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
-		return;
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
+			SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+			m_bFrameLock = false;
+			return;
 	}
 
+	if (KEY_HOLD(KEY::W) && m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN) // 들고 있는 총이 헤비머신건일때 흩뿌리기 공격함
+	{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_UP);
+			SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+			m_bFrameLock = false;
+			return;
+	}
 
 	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
 	{
 		SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+		m_bFrameLock = false;
 		_stkState.pop(); // 원래 상태로 돌아간다
 	}
 	else // 애니메이션이 안끝났을 때
@@ -996,13 +974,14 @@ void CPlayer::update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState)
 		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
 			SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+			m_bFrameLock = false;
 		}
 	}
 
 }
 
 void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_UP(stack<PLAYER_STATE>& _stkState)
-{
+{	
 	// 흩뿌리기 애니메이션이 한장 지나갈 때마다 플레이어 방향에 따라서 미사일 한개씩 발사 하는 코드
 	if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 0)
 	{
@@ -1023,7 +1002,11 @@ void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_UP(stack<PLAYER_STATE>& _stkSta
 			CreateMissile(int(MISSILE_DIR::DEGREES_225));
 			CreateMissile(int(MISSILE_DIR::DEGREES_247));
 		}
-		_stkState.pop();  
+	}
+	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 2)
+	{
+		_stkState.pop();
+		_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
 	}
 
 }
@@ -1049,12 +1032,17 @@ void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_DOWN(stack<PLAYER_STATE>& _stkS
 			CreateMissile(MISSILE_DIR::DEGREES_225);
 			CreateMissile(MISSILE_DIR::DEGREES_202); 
 		}
+	}
+	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 2)
+	{
 		_stkState.pop();
 	}
 }
 
 void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 {
+	OneFrameOneShot();
+
 	if (m_bAttacked)
 	{
 		if ((&_stkState == &m_stkStateUpper))
@@ -1080,22 +1068,20 @@ void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 			_stkState.pop();
 			_stkState.pop();
 			_stkState.push(PLAYER_STATE::IDLE);
-			_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
 		}
 		else if (PLAYER_STATE::WALK == m_eBefore_The_Change_Upper)
 		{
 			_stkState.pop();
 			_stkState.pop();
 			_stkState.push(PLAYER_STATE::WALK);
-			_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
 		}
 		else
 		{
 			_stkState.pop();
 			_stkState.pop();
 			_stkState.push(PLAYER_STATE::IDLE);
-			_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
 		}
+
 		if (m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
 		{
 			_stkState.push(PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_DOWN);
@@ -1107,12 +1093,14 @@ void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 	{
 		_stkState.pop();
 		SetFrame0(L"PLAYER_SHOOT_UP_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UP_UPPER_PART");
+		m_bFrameLock = false;
 		return;
 	}
 
 	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
 	{
 		SetFrame0(L"PLAYER_SHOOT_UP_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UP_UPPER_PART");
+		m_bFrameLock = false;
 		_stkState.pop(); // 원래 상태로 돌아간다
 	}
 	else // 애니메이션이 안끝났을 때
@@ -1120,6 +1108,7 @@ void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 		if (KEY_TAP(KEY::J) && KEY_HOLD(KEY::W)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
 			SetFrame0(L"PLAYER_SHOOT_UP_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UP_UPPER_PART");
+			m_bFrameLock = false;
 		}
 	}
 
@@ -1127,6 +1116,8 @@ void CPlayer::update_HAND_GUN_SHOOT_UP(stack<PLAYER_STATE>& _stkState)
 
 void CPlayer::update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	OneFrameOneShot();
+
 	if (m_bAttacked)
 	{
 		if ((&_stkState == &m_stkStateUpper))
@@ -1151,12 +1142,14 @@ void CPlayer::update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState)
 		_stkState.pop();
 		_stkState.push(PLAYER_STATE::IDLE);	
 		SetFrame0(L"PLAYER_HAND_GUN_LOOK_DOWN", L"HEAVY_MACHINE_GUN_PLAYER_HAND_GUN_LOOK_DOWN");
+		m_bFrameLock = false;
 		return;
 	}
 
 	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
 	{
 		SetFrame0(L"PLAYER_HAND_GUN_LOOK_DOWN", L"HEAVY_MACHINE_GUN_PLAYER_HAND_GUN_LOOK_DOWN");
+		m_bFrameLock = false;
 		_stkState.pop(); // 원래 상태로 돌아간다
 	}
 	else // 애니메이션이 안끝났을 때
@@ -1164,12 +1157,14 @@ void CPlayer::update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState)
 		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
 			SetFrame0(L"PLAYER_HAND_GUN_LOOK_DOWN", L"HEAVY_MACHINE_GUN_PLAYER_HAND_GUN_LOOK_DOWN");
+			m_bFrameLock = false;
 		}
 	}
 }
 
 void CPlayer::update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 {
+	OneFrameOneShot();
 
 	if (m_bAttacked)
 	{
@@ -1193,12 +1188,14 @@ void CPlayer::update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 		_stkState.push(PLAYER_STATE::IDLE);
 
 		SetFrame0(L"PLAYER_IDLE_SIT_DOWN_SHOOT", L"HEAVY_MACHINE_GUN_PLAYER_IDLE_SIT_DOWN_SHOOT");
+		m_bFrameLock = false;
 		return;
 	}
 
 	if (GetAnimator()->GetCurAnimL()->IsFinish()) // 애니메이션이 끝났을 때
 	{
 		SetFrame0(L"PLAYER_IDLE_SIT_DOWN_SHOOT", L"HEAVY_MACHINE_GUN_PLAYER_IDLE_SIT_DOWN_SHOOT");
+		m_bFrameLock = false;
 		_stkState.pop(); // 원래 상태로 돌아간다
 	}
 	else // 애니메이션이 안끝났을 때
@@ -1206,6 +1203,7 @@ void CPlayer::update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState)
 		if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
 		{
 			SetFrame0(L"PLAYER_IDLE_SIT_DOWN_SHOOT", L"HEAVY_MACHINE_GUN_PLAYER_IDLE_SIT_DOWN_SHOOT");
+			m_bFrameLock = false;
 		}
 	}
 	GetRigidBody()->SetVelocity(Vec2(0.f, 0.f));
@@ -1250,6 +1248,24 @@ void CPlayer::update_RESPAWN(stack<PLAYER_STATE>& _stkState)
 			GetAnimator()->FindAnimation(L"PLAYER_RESPAWN_RIGHT")->SetFrame(0);
 
 		
+	}
+}
+
+void CPlayer::OneFrameOneShot()
+{
+	if (!m_bAttacked && m_eCurWeapon == WEAPON::HAND_GUN) // 애니메이션 한 프레임당 한발씩만 발사, 기본총은 첫프레임만 발사함
+	{
+		if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 0 && !m_bFrameLock)
+		{
+			CreateMissile();
+			m_bFrameLock = true;
+
+		}
+	}
+	else if (!m_bAttacked && m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN && !m_bFrameLock)
+	{
+		CreateMissile();
+		m_bFrameLock = true;
 	}
 }
 
