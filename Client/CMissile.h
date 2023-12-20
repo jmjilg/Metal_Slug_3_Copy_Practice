@@ -7,7 +7,7 @@ class CPlayer;
 
 enum MISSILE_DIR
 {
-    NONE,
+    NONE = -1,
     RIGHT,           // 1 µµ
     DEGREES_22,     // 22.5
     DEGREES_55,     // 55

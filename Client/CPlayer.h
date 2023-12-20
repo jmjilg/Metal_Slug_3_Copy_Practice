@@ -133,7 +133,7 @@ public:
     void SetAttacked(bool _b) { m_bAttacked = _b; }
 
 private:
-    void CreateMissile(int _iMissileDir = 0);
+    void CreateMissile(int _iMissileDir = -1);
     void update_state();
     void update_move();
     void update_animation();
@@ -174,7 +174,7 @@ private:
     void update_DEAD(stack<PLAYER_STATE>& _stkState);
     void update_RESPAWN(stack<PLAYER_STATE>& _stkState);
 
-    void OneFrameOneShot(); // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
+    void OneFrameOneShot(int _iMissileDir = -1); // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
 private:
     //virtual void OnCollision(CCollider* _pOther);         // 충돌 중인 경우 호출되는 함수
     //virtual void OnCollisionEnter(CCollider* _pOther);     // 충돌 진입 시

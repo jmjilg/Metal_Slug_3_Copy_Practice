@@ -51,12 +51,15 @@ void CMissile::SetDir(MISSILE_DIR _eDir)
 		break;
 	case DEGREES_22:
 		m_fTheta = PI / 8.f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 27, 13, 132, 16, 27, 13);
 		break;
 	case DEGREES_55:
 		m_fTheta = PI / 3.2f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 23, 23, 248, 9, 23, 23);
 		break;
 	case DEGREES_77:
 		m_fTheta = PI / 2.3f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 13, 28, 338, 5, 13, 28);
 		break;
 	case DOWN:
 		m_fTheta = PI / 2.f;
@@ -64,25 +67,31 @@ void CMissile::SetDir(MISSILE_DIR _eDir)
 		break;
 	case DEGREES_112:
 		m_fTheta = PI / 1.6f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 13, 27, 48, 167, 13, 27);
 		break;
 	case DEGREES_135:
 		m_fTheta = PI / 1.33f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 23, 23, 48, 283, 23, 23);
 		break;
 	case DEGREES_157:
 		m_fTheta = PI / 1.14;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 27, 13, 44, 373, 27, 13);
 		break;
 	case LEFT:
-		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 30, 5, 439, 48, 30, 5);
 		m_fTheta = PI / 1.f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 30, 5, 439, 48, 30, 5);
 		break;
 	case DEGREES_202:
 		m_fTheta = 2 * PI / 1.77f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 27, 13, 314, 44, 27, 13);
 		break;
 	case DEGREES_225:
 		m_fTheta = 2 * PI / 1.6f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 23, 23, 202, 41, 23, 23);
 		break;
 	case DEGREES_247:
 		m_fTheta = 2 * PI / 1.45f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 13, 28, 122, 40, 13, 28);
 		break;
 	case UP:
 		m_fTheta = 2 * PI / 1.33f;
@@ -90,12 +99,15 @@ void CMissile::SetDir(MISSILE_DIR _eDir)
 		break;
 	case DEGREES_292:
 		m_fTheta = 2 * PI / 1.23f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 13, 27, 17, 275, 13, 27);
 		break;
 	case DEGREES_315:
 		m_fTheta = 2 * PI / 1.14f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 23, 23, 10, 163, 23, 23);
 		break;
 	case DEGREES_337:
 		m_fTheta = 2 * PI / 1.06f;
+		SetRenderInfo((int)(15 / 2.f), (int)(10 / 2.f), 28, 13, 6, 83, 28, 13);
 		break;
 	}
 }

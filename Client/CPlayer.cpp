@@ -28,7 +28,7 @@ CPlayer::CPlayer()
 	, m_ePrevStateLower(PLAYER_STATE::IDLE)
 	, m_eBefore_The_Change_Upper(PLAYER_STATE::IDLE)
 	, m_eBefore_The_Change_Lower(PLAYER_STATE::IDLE)
-	, m_eCurWeapon(WEAPON::HAND_GUN)
+	, m_eCurWeapon(WEAPON::HEAVY_MACHIN_GUN)
 	, m_ePrevWeapon(WEAPON::HAND_GUN)
 	, m_iDir(1.f, 0.f)
 	, m_iPrevDir(1)
@@ -296,6 +296,7 @@ void CPlayer::CreateMissile(int _iMissileDir)
 	// Missile Object
 	CMissile* pMissile = new CMissile;
 	pMissile->SetName(L"Missile_Player");
+	pMissile->SetDir(MISSILE_DIR::NONE);
 
 	Vec2 vMissilePos = GetPos();	
 	float fSpeed = 600.f;
@@ -330,7 +331,7 @@ void CPlayer::CreateMissile(int _iMissileDir)
 		pMissile->SetDir(MISSILE_DIR::UP);
 
 	if (_iMissileDir != int(MISSILE_DIR::NONE))
-		pMissile->SetDir(_iMissileDir);
+		pMissile->SetDir((MISSILE_DIR)_iMissileDir);
 
 	if (m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
 	{
@@ -985,28 +986,36 @@ void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_UP(stack<PLAYER_STATE>& _stkSta
 	// 흩뿌리기 애니메이션이 한장 지나갈 때마다 플레이어 방향에 따라서 미사일 한개씩 발사 하는 코드
 	if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 0)
 	{
-		if(m_iDir.x == 1)
-			CreateMissile(int(MISSILE_DIR::DEGREES_337));
+		if (m_iDir.x == 1)
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_337));
 		else if (m_iDir.x == -1)
-			CreateMissile(int(MISSILE_DIR::DEGREES_202));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_202));
+
+	//CreateMissile(int(MISSILE_DIR::DEGREES_337));
+	//CreateMissile(int(MISSILE_DIR::DEGREES_202));
 	}
 	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 1)
 	{
 		if (m_iDir.x == 1)
 		{
-			CreateMissile(int(MISSILE_DIR::DEGREES_315));
-			CreateMissile(int(MISSILE_DIR::DEGREES_292));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_315));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_292));
+			//CreateMissile(int(MISSILE_DIR::DEGREES_315));
+			//CreateMissile(int(MISSILE_DIR::DEGREES_292));
 		}
 		else if (m_iDir.x == -1)
 		{
-			CreateMissile(int(MISSILE_DIR::DEGREES_225));
-			CreateMissile(int(MISSILE_DIR::DEGREES_247));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_225));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_247));
+			//CreateMissile(int(MISSILE_DIR::DEGREES_225));
+			//CreateMissile(int(MISSILE_DIR::DEGREES_247));
 		}
 	}
 	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 2)
 	{
 		_stkState.pop();
-		_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
+		//_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
+		SetFrame0(L"NONE", L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP");
 	}
 
 }
@@ -1016,26 +1025,34 @@ void CPlayer::update_HEAVYMACHINE_GUN_SCATTERING_DOWN(stack<PLAYER_STATE>& _stkS
 	if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 0)
 	{
 		if (m_iDir.x == 1)
-			CreateMissile(MISSILE_DIR::DEGREES_292);
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_292));
+			//CreateMissile(MISSILE_DIR::DEGREES_292);
 		else if (m_iDir.x == -1)
-			CreateMissile(MISSILE_DIR::DEGREES_247);
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_247));
+			//CreateMissile(MISSILE_DIR::DEGREES_247);
 	}
 	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 1)
 	{
 		if (m_iDir.x == 1)
 		{
-			CreateMissile(MISSILE_DIR::DEGREES_315);
-			CreateMissile(MISSILE_DIR::DEGREES_337); 
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_315));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_337));
+			//CreateMissile(MISSILE_DIR::DEGREES_315);
+			//CreateMissile(MISSILE_DIR::DEGREES_337); 
 		}
 		else if (m_iDir.x == -1)
 		{
-			CreateMissile(MISSILE_DIR::DEGREES_225);
-			CreateMissile(MISSILE_DIR::DEGREES_202); 
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_225));
+			OneFrameOneShot(int(MISSILE_DIR::DEGREES_202));
+			//CreateMissile(MISSILE_DIR::DEGREES_225);
+			//CreateMissile(MISSILE_DIR::DEGREES_202); 
 		}
 	}
 	else if (GetAnimator()->GetCurAnimU()->GetCurFrame() == 2)
 	{
 		_stkState.pop();
+		//_stkState.push(PLAYER_STATE::HAND_GUN_LOOK_UP);
+		SetFrame0(L"NONE", L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN");
 	}
 }
 
@@ -1251,7 +1268,7 @@ void CPlayer::update_RESPAWN(stack<PLAYER_STATE>& _stkState)
 	}
 }
 
-void CPlayer::OneFrameOneShot()
+void CPlayer::OneFrameOneShot(int _iMissileDir)
 {
 	if (!m_bAttacked && m_eCurWeapon == WEAPON::HAND_GUN) // 애니메이션 한 프레임당 한발씩만 발사, 기본총은 첫프레임만 발사함
 	{
@@ -1264,7 +1281,7 @@ void CPlayer::OneFrameOneShot()
 	}
 	else if (!m_bAttacked && m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN && !m_bFrameLock)
 	{
-		CreateMissile();
+		CreateMissile(_iMissileDir);
 		m_bFrameLock = true;
 	}
 }
