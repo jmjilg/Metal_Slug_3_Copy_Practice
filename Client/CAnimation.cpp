@@ -69,8 +69,8 @@ void CAnimation::update()
 
 void CAnimation::render(HDC _dc)
 {
-	if (m_bStop)
-		return;    //Tool Scene에서 볼땐 주석처리
+	//if (m_bStop)
+	//	return;    //Tool Scene에서 볼땐 주석처리
 
 	if (m_bFinish)
 		return;

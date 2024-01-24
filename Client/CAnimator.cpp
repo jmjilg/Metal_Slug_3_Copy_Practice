@@ -9,7 +9,6 @@ CAnimator::CAnimator()
 	, m_pOwner(nullptr)
 	, m_bRepeatL(false)
 	, m_bRepeatU(false)
-	, m_bStop(false)
 {
 }
 

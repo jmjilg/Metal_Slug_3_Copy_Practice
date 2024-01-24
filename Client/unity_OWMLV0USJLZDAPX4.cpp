@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CSound.cpp"
+
+
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CSoundMgr.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CTexture.cpp"
-
-
-#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CTile.cpp"
 

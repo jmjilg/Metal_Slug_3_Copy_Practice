@@ -22,6 +22,8 @@ CSupplies::CSupplies()
 
 	CreateAnimator();
 	CreateCollider();
+	CreateRigidBody();
+	CreateGravity();
 	GetCollider()->SetScale(Vec2(22.f, 20.f));
 
 	//GetAnimator()->CreateAnimation(L"Ship", m_pTexture, Vec2(569.f, 884.f), Vec2(194.f, 192.f), Vec2(198.f, 0.f), Vec2(-0.f, -0.f), 0.1f, 5);

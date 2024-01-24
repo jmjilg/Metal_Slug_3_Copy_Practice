@@ -48,6 +48,7 @@ public:
 	UINT GetMaxFrame() { return (UINT)m_vecFrm.size(); }
 	int GetCurFrame() { return m_iCurFrm; }
 	int GetPrevFrame() { return m_iPrevFrm; }
+	bool GetStop() { return m_bStop; }
 	void SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b) { m_red = _r, m_green = _g, m_blue = _b; }
 
 private:

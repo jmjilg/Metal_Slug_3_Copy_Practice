@@ -100,12 +100,14 @@ private:
     int                 m_iGrenade;
     int                 m_iGrenadeCount;
     int                 m_iLife;
-    int                 m_iBulletCount;
-    int                 m_iTempFrame;             // m_bFrameLock 과 관련있음
+    int                 m_iHeavyMachineGunCount;
+    int                 m_iTempFrameUpper;             // m_bFrameLock 과 관련있음
+    int                 m_iTempFrameLower;             // m_bFrameLock 과 관련있음
     bool                m_bJump;
     bool                m_bAttacked;                // 플레이어가 몬스터에게 공격을 받았는지 여부
     bool                m_bSetCamera;                // 카메라가 계속 플레이어를 타겟으로 할지 여부
-    bool                m_bFrameLock;               // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
+    bool                m_bFrameLockUpper;               // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
+    bool                m_bFrameLockLower;               // 앉아서 쏠때 쓸 변수
 
     Vec2                m_vMissilePrevDir;
 
@@ -131,14 +133,17 @@ public:
     bool GetbStandLine() { return m_bStandLine; }
     bool GetbAttacked() { return m_bAttacked; }
     void SetAttacked(bool _b) { m_bAttacked = _b; }
+	int GetHeavyMachinGunCount() { return m_iHeavyMachineGunCount; }
+	int GetGrenadeCount() { return m_iGrenadeCount; }
 
 private:
-    void CreateMissile(int _iMissileDir = -1);
+    void CreateMissile(int _iMissileDir = 0);
     void update_state();
     void update_move();
     void update_animation();
     void update_gravity();
     void update_jumptime();
+    void update_UI();
     void SetIsJump(bool _bJump) { m_bJump = _bJump; }
     void SetFrame0(const wstring& _strName1, const wstring& _strName2);
     bool IsJump() { return m_bJump; }
@@ -174,7 +179,7 @@ private:
     void update_DEAD(stack<PLAYER_STATE>& _stkState);
     void update_RESPAWN(stack<PLAYER_STATE>& _stkState);
 
-    void OneFrameOneShot(int _iMissileDir = -1); // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
+    void OneFrameOneShot(int _iMissileDir = 0); // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
 private:
     //virtual void OnCollision(CCollider* _pOther);         // 충돌 중인 경우 호출되는 함수
     //virtual void OnCollisionEnter(CCollider* _pOther);     // 충돌 진입 시

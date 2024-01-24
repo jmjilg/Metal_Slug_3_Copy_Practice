@@ -7,6 +7,8 @@
 #include "CGravity.h"
 #include "CTimeMgr.h"
 #include "CCore.h"
+#include "CSupplies.h"
+
 
 
 CCaptive::CCaptive()
@@ -128,7 +130,14 @@ void CCaptive::update_LOOKING_FOR(CAPTIVE_STATE _eState)
 void CCaptive::update_SUPPLY(CAPTIVE_STATE _eState)
 {
 	if (GetAnimator()->GetCurAnimL()->GetCurFrame() == 10)
+	{
 		m_eCurState = CAPTIVE_STATE::SALUTE;
+		CObject* pSupplies = new CSupplies;
+		pSupplies->SetName(L"Supplies");
+		pSupplies->SetPos(GetPos());
+		pSupplies->SetScale(Vec2(100.f, 100.f));
+		CreateObject(pSupplies, GROUP_TYPE::SUPPLIES);
+	}
 }
 
 void CCaptive::update_SALUTE(CAPTIVE_STATE _eState)

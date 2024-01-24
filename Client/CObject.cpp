@@ -21,6 +21,7 @@ CObject::CObject()
 	, m_pObstacle(nullptr)
 	, m_bColliderRender(true)
 	, m_pCameraBox(nullptr)
+	, m_vDiff(0.f, 0.f)
 {
 }
 

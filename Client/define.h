@@ -70,6 +70,7 @@ enum class GROUP_TYPE
 	TEST_ANIM,
 	EVENT_OBJECT,
 	UI,
+	BULLETUI,
 
 	END = 45,
 
@@ -140,4 +141,36 @@ enum class MON_TYPE
 	M3_ROCKET_LAUNCH_SUPPORT_VAN,
 	M3_ROCKET_LAUNCH_SUPPORT_VAN_MISSILE,
 	HUGE_HERMIT,
+};
+
+enum class FONT
+{
+	NONE = -1,
+	ZERO,
+	ONE,
+	TWO,
+	THREE,
+	FOUR,
+	FIVE,
+	SIX,
+	SEVEN,
+	EIGHT,
+	NINE,
+	A,
+	B,
+	M,
+	O,
+	R,
+	S,
+};
+
+
+enum class Digit
+{
+	NONE = -1,
+	Bullet1,
+	Bullet10,
+	Bullet100,
+	Grenade1,
+	Grenade10,
 };

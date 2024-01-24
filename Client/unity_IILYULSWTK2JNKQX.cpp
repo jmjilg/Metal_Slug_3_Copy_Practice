@@ -23,11 +23,11 @@
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CBubblefire.cpp"
 
 
+#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CBulletUI.cpp"
+
+
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CCamera.cpp"
 
 
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CCameraBox.cpp"
-
-
-#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CCaptive.cpp"
 

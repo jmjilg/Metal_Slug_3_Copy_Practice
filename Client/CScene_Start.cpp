@@ -62,6 +62,7 @@
 #include "CBossStageTile.h"
 #include "CBossStageTileCopy.h"
 #include "CSupplies.h"
+#include "CBulletUI.h"
 
 CScene_Start::CScene_Start()
 	: m_bUseForce(false)
@@ -574,11 +575,11 @@ void CScene_Start::Enter()
 	AddObject(pCaptive, GROUP_TYPE::CAPTIVE);
 
 
-	//CObject* pSupplies = new CSupplies;
-	//pSupplies->SetName(L"Supplies");
-	//pSupplies->SetPos(Vec2(200.f, 139.f));
-	//pSupplies->SetScale(Vec2(100.f, 100.f));
-	//AddObject(pSupplies, GROUP_TYPE::SUPPLIES);
+	CObject* pSupplies = new CSupplies;
+	pSupplies->SetName(L"Supplies");
+	pSupplies->SetPos(Vec2(200.f, 139.f));
+	pSupplies->SetScale(Vec2(100.f, 100.f));
+	AddObject(pSupplies, GROUP_TYPE::SUPPLIES);
 
 
 	/*CObject* pOtherPlayer = new CPlayer(*(CPlayer*)pObj);
@@ -594,7 +595,7 @@ void CScene_Start::Enter()
 	float fObjScale = 50.f;
 
 	Vec2 vResolution = CCore::GetInst()->GetResolution();
-
+	
 
 	CMonster* pMon = CMonFactory::CreateMonster(MON_TYPE::CHOWMEIN_CONGA, Vec2(454, 149));
 	//CreateObject(pMon, GROUP_TYPE::MONSTER);
@@ -727,6 +728,152 @@ void CScene_Start::Enter()
 	pGround->SetPos(Vec2(100.f, 400.f));
 	pGround->SetScale(Vec2(100.f, 10.f));
 	AddObject(pGround, GROUP_TYPE::GROUND);
+
+	// ÃÑ¾Ë¼ö UI ¹èÄ¡
+
+	CPlayer* pPlayer = (CPlayer*)pObj;
+	Vec2 vCameraPos = CCamera::GetInst()->GetLookAt();
+
+	CObject* pBulletUIDigit100 = new CBulletUI(Digit::Bullet100, pPlayer);
+	pBulletUIDigit100->SetName(L"BulletUI");
+	pBulletUIDigit100->SetDiff(Vec2(20.f -500.f, 0.f - 350.f));
+	pBulletUIDigit100->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUIDigit100, GROUP_TYPE::BULLETUI);
+	
+
+	CObject* pBulletUIDigit10 = new CBulletUI(Digit::Bullet10, pPlayer);
+	pBulletUIDigit10->SetName(L"BulletUI");
+	pBulletUIDigit10->SetDiff(Vec2(36.f - 500.f, 0.f - 350.f));
+	pBulletUIDigit10->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUIDigit10, GROUP_TYPE::BULLETUI);
+
+	CObject* pBulletUIDigit1 = new CBulletUI(Digit::Bullet1, pPlayer);
+	pBulletUIDigit1->SetName(L"BulletUI");
+	pBulletUIDigit1->SetDiff(Vec2(52.f - 500.f , 0.f - 350.f));
+	pBulletUIDigit1->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUIDigit1, GROUP_TYPE::BULLETUI);
+
+	CObject* pGrenadeUIDigit10 = new CBulletUI(Digit::Grenade10, pPlayer);
+	pGrenadeUIDigit10->SetName(L"BulletUI");
+	pGrenadeUIDigit10->SetDiff(Vec2(82.f - 500.f, 0.f - 350.f));
+	pGrenadeUIDigit10->SetScale(Vec2(100.f, 10.f));
+	AddObject(pGrenadeUIDigit10, GROUP_TYPE::BULLETUI);
+
+	CObject* pGrenadeUIDigit1 = new CBulletUI(Digit::Grenade1, pPlayer);
+	pGrenadeUIDigit1->SetName(L"BulletUI");
+	pGrenadeUIDigit1->SetDiff(Vec2(98.f - 500.f, 0.f - 350.f));
+	pGrenadeUIDigit1->SetScale(Vec2(100.f, 10.f));
+	AddObject(pGrenadeUIDigit1, GROUP_TYPE::BULLETUI);
+
+	CObject* pBulletUI_B = new CBulletUI(FONT::B, pPlayer);
+	pBulletUI_B->SetName(L"BulletUI");
+	pBulletUI_B->SetDiff(Vec2(98.f - 520.f, 0.f - 365.f));
+	pBulletUI_B->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_B, GROUP_TYPE::BULLETUI);
+	
+	CObject* pBulletUI_O = new CBulletUI(FONT::O, pPlayer);
+	pBulletUI_O->SetName(L"BulletUI");
+	pBulletUI_O->SetDiff(Vec2(98.f - 510.f, 0.f - 365.f));
+	pBulletUI_O->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_O, GROUP_TYPE::BULLETUI);
+
+	CObject* pBulletUI_M = new CBulletUI(FONT::M, pPlayer);
+	pBulletUI_M->SetName(L"BulletUI");
+	pBulletUI_M->SetDiff(Vec2(98.f - 500.f, 0.f - 365.f));
+	pBulletUI_M->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_M, GROUP_TYPE::BULLETUI);
+
+	CObject* pBulletUI_B2 = new CBulletUI(FONT::B, pPlayer);
+	pBulletUI_B2->SetName(L"BulletUI");
+	pBulletUI_B2->SetDiff(Vec2(98.f - 490.f, 0.f - 365.f));
+	pBulletUI_B2->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_B2, GROUP_TYPE::BULLETUI);
+
+	
+	CObject* pBulletUI_A = new CBulletUI(FONT::A, pPlayer);
+	pBulletUI_A->SetName(L"BulletUI");
+	pBulletUI_A->SetDiff(Vec2(98.f - 575.f, 0.f - 365.f));
+	pBulletUI_A->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_A, GROUP_TYPE::BULLETUI);
+	
+	CObject* pBulletUI_R = new CBulletUI(FONT::R, pPlayer);
+	pBulletUI_R->SetName(L"BulletUI");
+	pBulletUI_R->SetDiff(Vec2(98.f - 565.f, 0.f - 365.f));
+	pBulletUI_R->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_R, GROUP_TYPE::BULLETUI);
+
+	CObject* pBulletUI_M2 = new CBulletUI(FONT::M, pPlayer);
+	pBulletUI_M2->SetName(L"BulletUI");
+	pBulletUI_M2->SetDiff(Vec2(98.f - 555.f, 0.f - 365.f));
+	pBulletUI_M2->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_M2, GROUP_TYPE::BULLETUI);
+
+	CObject* pBulletUI_S = new CBulletUI(FONT::S, pPlayer);
+	pBulletUI_S->SetName(L"BulletUI");
+	pBulletUI_S->SetDiff(Vec2(98.f - 545.f, 0.f - 365.f));
+	pBulletUI_S->SetScale(Vec2(100.f, 10.f));
+	AddObject(pBulletUI_S, GROUP_TYPE::BULLETUI);
+	
+	//CObject* pBulletUI_ZERO = new CBulletUI(FONT::ZERO, pPlayer);
+	//pBulletUI_ZERO->SetName(L"BulletUI");
+	//pBulletUI_ZERO->SetPos(Vec2(660.f, 400.f));
+	//pBulletUI_ZERO->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_ZERO, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_ONE = new CBulletUI(FONT::ONE, pPlayer);
+	//pBulletUI_ONE->SetName(L"BulletUI");
+	//pBulletUI_ONE->SetPos(Vec2(670.f, 400.f));
+	//pBulletUI_ONE->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_ONE, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_TWO = new CBulletUI(FONT::TWO, pPlayer);
+	//pBulletUI_TWO->SetName(L"BulletUI");
+	//pBulletUI_TWO->SetPos(Vec2(680.f, 400.f));
+	//pBulletUI_TWO->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_TWO, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_THREE = new CBulletUI(FONT::THREE, pPlayer);
+	//pBulletUI_THREE->SetName(L"BulletUI");
+	//pBulletUI_THREE->SetPos(Vec2(690.f, 400.f));
+	//pBulletUI_THREE->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_THREE, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_FOUR = new CBulletUI(FONT::FOUR, pPlayer);
+	//pBulletUI_FOUR->SetName(L"BulletUI");
+	//pBulletUI_FOUR->SetPos(Vec2(700.f, 400.f));
+	//pBulletUI_FOUR->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_FOUR, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_FIVE = new CBulletUI(FONT::FIVE, pPlayer);
+	//pBulletUI_FIVE->SetName(L"BulletUI");
+	//pBulletUI_FIVE->SetPos(Vec2(7100.f, 400.f));
+	//pBulletUI_FIVE->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_FIVE, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_SIX = new CBulletUI(FONT::SIX, pPlayer);
+	//pBulletUI_SIX->SetName(L"BulletUI");
+	//pBulletUI_SIX->SetPos(Vec2(720.f, 400.f));
+	//pBulletUI_SIX->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_SIX, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_SEVEN = new CBulletUI(FONT::SEVEN, pPlayer);
+	//pBulletUI_SEVEN->SetName(L"BulletUI");
+	//pBulletUI_SEVEN->SetPos(Vec2(730.f, 400.f));
+	//pBulletUI_SEVEN->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_SEVEN, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_EIGHT = new CBulletUI(FONT::EIGHT, pPlayer);
+	//pBulletUI_EIGHT->SetName(L"BulletUI");
+	//pBulletUI_EIGHT->SetPos(Vec2(740.f, 400.f));
+	//pBulletUI_EIGHT->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_EIGHT, GROUP_TYPE::BULLETUI);
+	//
+	//CObject* pBulletUI_NINE = new CBulletUI(FONT::NINE, pPlayer);
+	//pBulletUI_NINE->SetName(L"BulletUI");
+	//pBulletUI_NINE->SetPos(Vec2(750.f, 400.f));
+	//pBulletUI_NINE->SetScale(Vec2(100.f, 10.f));
+	//AddObject(pBulletUI_NINE, GROUP_TYPE::BULLETUI);
+	
 	
 	
 
@@ -742,6 +889,7 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::GROUND);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::SUPPLIES, GROUP_TYPE::GROUND);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::EVENT_OBJECT);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::CONGAHOUSE, GROUP_TYPE::PROJ_PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::BROKENSHIP, GROUP_TYPE::PROJ_PLAYER);

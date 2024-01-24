@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CTile.cpp"
+
+
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CTimeMgr.cpp"
 
 

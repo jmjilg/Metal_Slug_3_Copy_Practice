@@ -179,6 +179,7 @@
     <ClInclude Include="CBrokenShip.h" />
     <ClInclude Include="CBtnUI.h" />
     <ClInclude Include="CBubblefire.h" />
+    <ClInclude Include="CBulletUI.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCameraBox.h" />
     <ClInclude Include="CCaptive.h" />
@@ -284,6 +285,7 @@
     <ClCompile Include="CBrokenShip.cpp" />
     <ClCompile Include="CBtnUI.cpp" />
     <ClCompile Include="CBubblefire.cpp" />
+    <ClCompile Include="CBulletUI.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCameraBox.cpp" />
     <ClCompile Include="CCaptive.cpp" />

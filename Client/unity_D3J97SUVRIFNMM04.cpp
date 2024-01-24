@@ -1,4 +1,7 @@
 
+#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CCaptive.cpp"
+
+
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CChowmein_Conga.cpp"
 
 
@@ -27,7 +30,4 @@
 
 
 #include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CEventObject.cpp"
-
-
-#include "C:\Users\giml7\Desktop\Metal_Slug_3_Copy_Practice_DeskTop\Client\CEventObject2.cpp"
 

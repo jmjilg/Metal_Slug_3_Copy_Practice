@@ -13,7 +13,6 @@ private:
 	CObject*					m_pOwner;		// Animator 소유 오브젝트
 	bool						m_bRepeatL;		// 반복재생 여부
 	bool						m_bRepeatU;		// 반복재생 여부
-	bool						m_bStop;		// 일시정지 여부
 
 public:
 	CObject* GetObj() { return m_pOwner; }

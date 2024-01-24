@@ -98,9 +98,11 @@ public:
 protected:
 	bool		m_bStandLine;  // 이 변수가 true여야 직선 충돌체의 충돌판정을 할 수 있음.
 	bool		m_bColliderRender;	// 충돌체 렌더링 할건지 여부
+	Vec2        m_vDiff;              // UI 렌더링 할때 쓰임. 카메라 화면에서 렌더링하고싶은 경우
 
 public:
 	bool GetbStandLine() { return m_bStandLine; }
+	void SetDiff(Vec2 _v) { m_vDiff = _v; }
 
 };
 

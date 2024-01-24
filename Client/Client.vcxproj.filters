@@ -272,6 +272,9 @@
     <Filter Include="Engine\08. Module\AI\State\Appear">
       <UniqueIdentifier>{28fc702b-79aa-4374-8274-354487b4c71f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\UI\BulletUI">
+      <UniqueIdentifier>{75169616-3ed5-405f-807f-c1e3c7678bce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">
@@ -579,6 +582,9 @@
     <ClInclude Include="CAppearState.h">
       <Filter>Engine\08. Module\AI\State\Appear</Filter>
     </ClInclude>
+    <ClInclude Include="CBulletUI.h">
+      <Filter>Engine\04. Object\UI\BulletUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -877,6 +883,9 @@
     </ClCompile>
     <ClCompile Include="CAppearState.cpp">
       <Filter>Engine\08. Module\AI\State\Appear</Filter>
+    </ClCompile>
+    <ClCompile Include="CBulletUI.cpp">
+      <Filter>Engine\04. Object\UI\BulletUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
