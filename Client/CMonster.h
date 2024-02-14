@@ -7,7 +7,7 @@ struct tMonInfo
     float    fHP;              // 체력
     float    fSpeed;           // 속도
     float    fRecogRange;      // 인지 범위
-    Vec2     fAttRange;        // 공격 범위
+    Vec2     vAttRange;        // 공격 범위
     float    fAtt;             // 공격력
     int      iDir;             // 방향
     clock_t  lAttStart;       // 공격을 시작한 시간
@@ -27,6 +27,7 @@ protected:
     tMonInfo    m_tInfo;
     AI*         m_pAI;
     CObject*    m_pRelatedObj;  // 몬스터와 연관되있는 오브젝트, CM3의 경우에는 WoodenStool이 연관되있음
+    bool        m_bMeleeAttacked; 
 
 public:
     float GetSpeed() { return m_tInfo.fSpeed; }
@@ -40,7 +41,9 @@ public:
     void SetRelatedObj(CObject* pObj) { m_pRelatedObj = pObj; }
     const tMonInfo& GetInfo() { return m_tInfo; }
     AI* GetAI() { return m_pAI; }
-
+    bool GetAttacked() { return m_bMeleeAttacked; }
+    void SetMeleeAttacked(bool _b) { m_bMeleeAttacked = _b; }
+    
 private:
 	void SetMonInfo(const tMonInfo& _info) { m_tInfo = _info; }
 
@@ -51,6 +54,7 @@ public:
 
 public:
     virtual void OnCollisionEnter(CCollider* _pOther);
+    virtual void OnCollision(CCollider* _pOther);
 
 public:
     virtual void update();

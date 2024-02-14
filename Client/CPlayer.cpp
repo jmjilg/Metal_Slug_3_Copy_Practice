@@ -7,6 +7,7 @@
 #include "CKeyMgr.h"
 
 #include "CMissile.h"
+#include "CGrenade.h"
 #include "CHeavyMachineGun.h"
 
 #include "CResMgr.h"
@@ -20,6 +21,8 @@
 #include "CCore.h"
 #include "CKeyMgr.h"
 #include "CCamera.h"
+#include "SelectGDI.h"
+#include "CMonster.h"
 
 CPlayer::CPlayer()
 	: m_eCurStateUpper(PLAYER_STATE::IDLE)
@@ -50,6 +53,8 @@ CPlayer::CPlayer()
 	, m_iTempFrameLower(0)
 	, m_bFrameLockLower(false)
 	, m_iHeavyMachineGunCount(0)  // 실제 수치는 200이어야함
+	, m_vMeleeAttRange(30.f, 20.f)
+	, m_bMeleeAtt(false)
 {
 	// Texture 로딩하기
 	//m_pTex = CResMgr::GetInst()->LoadTexture(L"PlayerTex", L"texture\\Player.bmp");
@@ -151,6 +156,10 @@ CPlayer::CPlayer()
 	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_RIGHT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_LEFT.anim");
 	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_MELEE_ATTACK_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"animation\\HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT.anim");
 
 	m_stkStateLower.push(PLAYER_STATE::IDLE);
 	m_stkStateUpper.push(PLAYER_STATE::IDLE);
@@ -377,6 +386,20 @@ void CPlayer::CreateMissile(int _iMissileDir)
 	CreateObject(pMissile, GROUP_TYPE::PROJ_PLAYER); // 앞으로 생성될 모든 종류의 오브젝트를 커버할 수 있어야함
 }
 
+void CPlayer::CreateGrenade()
+{
+	CGrenade* pGrenade = new CGrenade;
+	pGrenade->SetName(L"Grenade_Player");
+
+	float fSpeed = 200.f;
+
+	pGrenade->SetPos(GetPos());
+	pGrenade->SetSpeed(fSpeed);
+
+	CreateObject(pGrenade, GROUP_TYPE::PROJ_PLAYER); 
+
+}
+
 void CPlayer::LOWERPART_update()
 {
 	switch (m_stkStateLower.top())
@@ -473,6 +496,10 @@ void CPlayer::UPPERPART_update()
 		
 	case PLAYER_STATE::HEAVY_MACHINE_GUN_SCATTERING_DOWN:
 		update_HEAVYMACHINE_GUN_SCATTERING_DOWN(m_stkStateUpper);
+		break;		
+		
+	case PLAYER_STATE::KNIFE_ATTACK:
+		update_KNIFE_ATTACK(m_stkStateUpper);
 		break;		
 		
 	}
@@ -593,7 +620,10 @@ void CPlayer::update_IDLE(stack<PLAYER_STATE>& _stkState)
 
 	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper))
 	{
-		_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
+		if (m_bMeleeAtt)
+			_stkState.push(PLAYER_STATE::KNIFE_ATTACK);
+		else
+			_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
 	}
 
 }
@@ -640,7 +670,10 @@ void CPlayer::update_JUMP(stack<PLAYER_STATE>& _stkState)
 		else if (KEY_HOLD(KEY::D))
 			m_iDir.x = -1;
 
-		_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
+		if (m_bMeleeAtt)
+			_stkState.push(PLAYER_STATE::KNIFE_ATTACK);
+		else
+			_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
 	}
 
 	
@@ -698,7 +731,10 @@ void CPlayer::update_WALK(stack<PLAYER_STATE>& _stkState)
 
 	else if (KEY_TAP(KEY::J) && (&_stkState == &m_stkStateUpper))
 	{
-		_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
+		if (m_bMeleeAtt)
+			_stkState.push(PLAYER_STATE::KNIFE_ATTACK);
+		else
+			_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
 	}
 
 	else if (KEY_TAP(KEY::K))
@@ -755,7 +791,10 @@ void CPlayer::update_WALK_JUMP(stack<PLAYER_STATE>& _stkState)
 		else if (KEY_HOLD(KEY::D))
 			m_iDir.x = 1;
 
-		_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
+		if(m_bMeleeAtt)
+			_stkState.push(PLAYER_STATE::KNIFE_ATTACK);
+		else
+			_stkState.push(PLAYER_STATE::HAND_GUN_SHOOT);
 	}
 
 }
@@ -1284,6 +1323,52 @@ void CPlayer::update_RESPAWN(stack<PLAYER_STATE>& _stkState)
 	}
 }
 
+void CPlayer::update_KNIFE_ATTACK(stack<PLAYER_STATE>& _stkState)
+{
+	if (m_bAttacked)
+	{
+		if ((&_stkState == &m_stkStateUpper))
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::NONE);  // Upper Part 라면 NONE 상태로, LOWER 파트라면 DEAD 상태로
+		}
+		else
+		{
+			_stkState.pop();
+			_stkState.push(PLAYER_STATE::DEAD);
+		}
+		return;
+	}
+
+	if ((m_iPrevDir != m_iDir.x) || KEY_HOLD(KEY::S))
+	{
+		_stkState.pop();
+		SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+		m_bFrameLockUpper = false;
+		return;
+	}
+
+
+	if (GetAnimator()->GetCurAnimU()->IsFinish()) // 애니메이션이 끝났을 때
+	{
+		_stkState.pop(); // 원래 상태로 돌아간다
+		SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+	}
+	else // 애니메이션이 안끝났을 때
+	{
+		if (KEY_HOLD(KEY::A))
+			m_iDir.x = -1;
+		else if (KEY_HOLD(KEY::D))
+			m_iDir.x = 1;
+
+		//if (KEY_TAP(KEY::J)) // 공격 모션 진행중에 또다시 공격 키를 눌렀을 때. 공격 모션을 처음부터 초기화한다.
+		//{
+		//	SetFrame0(L"PLAYER_SHOOT_UPPER_PART", L"HEAVY_MACHINE_GUN_PLAYER_SHOOT_UPPER_PART");
+		//	m_bFrameLockUpper = false;
+		//}
+	}
+}
+
 void CPlayer::OneFrameOneShot(int _iMissileDir)
 {
 	if (!m_bAttacked && m_eCurWeapon == WEAPON::HAND_GUN) // 애니메이션 한 프레임당 한발씩만 발사, 기본총은 첫프레임만 발사함
@@ -1527,10 +1612,9 @@ void CPlayer::update_move()
 		pRigid->SetVelocity(Vec2(0.f, pRigid->GetVelocity().y));
 	}
 
-	if (KEY_AWAY(KEY::D) && GetGravity()->GetGround())
+	if (KEY_TAP(KEY::L))
 	{
-		// 만약 점프중이 아니라면 키를 뗐을때 플레이어 멈춤
-		pRigid->SetVelocity(Vec2(0.f, pRigid->GetVelocity().y));
+		CreateGrenade();
 	}
 
 	//if (KEY_TAP(KEY::A))
@@ -1542,6 +1626,11 @@ void CPlayer::update_move()
 	//{
 	//	pRigid->SetVelocity(Vec2(300.f, pRigid->GetVelocity().y));
 	//}
+	if (KEY_HOLD(KEY::D) && KEY_HOLD(KEY::A) && GetGravity()->GetGround())
+	{
+		// 만약 둘 다 누른 상태면 플레이어 멈춤
+		pRigid->SetVelocity(Vec2(0.f, 0.f));
+	}
 }
 
 void CPlayer::update_animation()
@@ -1843,6 +1932,24 @@ void CPlayer::update_animation()
 			GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_RIGHT", true);
 
 		break;
+
+	case PLAYER_STATE::KNIFE_ATTACK:
+		if (m_eCurWeapon == WEAPON::HAND_GUN)
+		{
+			if (m_iDir.x == -1)
+				GetAnimator()->PlayU(L"PLAYER_MELEE_ATTACK_UPPER_PART_LEFT", false);
+			else
+				GetAnimator()->PlayU(L"PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT", false);
+		}
+
+		else if (m_eCurWeapon == WEAPON::HEAVY_MACHIN_GUN)
+		{
+			if (m_iDir.x == -1)
+				GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_LEFT", false);
+			else
+				GetAnimator()->PlayU(L"HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT", false);
+		}
+		break;
 	}
 
 
@@ -1906,12 +2013,26 @@ void CPlayer::SetFrame0(const wstring& _strName1, const wstring& _strName2)
 			GetAnimator()->FindAnimation(_strName2 + L"_RIGHT")->SetFrame(0);
 	}
 
+	if (-1 == m_iDir.x)
+	{
+		GetAnimator()->FindAnimation(L"PLAYER_MELEE_ATTACK_UPPER_PART_LEFT")->SetFrame(0);
+		GetAnimator()->FindAnimation(L"HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_LEFT")->SetFrame(0);
+	}
+	else
+	{
+		GetAnimator()->FindAnimation(L"PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT")->SetFrame(0);
+		GetAnimator()->FindAnimation(L"HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT")->SetFrame(0);
+	}
+
+
 }
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
-	if (L"Ground" == _pOther->GetObj()->GetName())
+	wstring ObjName = pOtherObj->GetName();
+
+	if (ObjName == L"Ground")
 	{
 		Vec2 vPos = GetPos();
 		if (vPos.y < pOtherObj->GetPos().y)
@@ -1919,9 +2040,23 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 			m_eCurStateLower = PLAYER_STATE::IDLE;
 		}
 	}
-	if (pOtherObj->GetName() == L"Supplies")
+	if (ObjName == L"Supplies")
 	{
 		m_eCurWeapon = WEAPON::HEAVY_MACHIN_GUN;
 		m_iHeavyMachineGunCount = 200;
+	}
+	if (ObjName == L"Chowmein_Conga" || ObjName == L"Locust" || ObjName == L"Flying_Killer" || ObjName == L"M3_Rocket_Launch_Support_Van" || ObjName == L"M3_Rocket_Launch_Support_Van_Missile" || ObjName == L"Huge_Hermit")
+	{ 
+		m_bMeleeAtt = true;		
+	}
+
+}
+
+void CPlayer::OnCollisionExit(CCollider* _pOther)
+{
+	CObject* pOtherObj = _pOther->GetObj();
+	if (pOtherObj->GetName() == L"Chowmein_Conga" || L"Locust" || L"Flying_Killer" || L"M3_Rocket_Launch_Support_Van" || L"M3_Rocket_Launch_Support_Van_Missile" || L"Huge_Hermit")
+	{	
+			m_bMeleeAtt = false;
 	}
 }

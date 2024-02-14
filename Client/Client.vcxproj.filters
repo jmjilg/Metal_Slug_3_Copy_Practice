@@ -275,6 +275,9 @@
     <Filter Include="Engine\04. Object\UI\BulletUI">
       <UniqueIdentifier>{75169616-3ed5-405f-807f-c1e3c7678bce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\Grenade">
+      <UniqueIdentifier>{915d4f8e-d36a-436d-9335-870a057cf0a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCore.h">

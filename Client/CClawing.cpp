@@ -41,8 +41,8 @@ void CClawing::update()
 	{
 		float fDistanceX = (abs(vPlayerPos.x - vMonPos.x) / 2);
 		float fDistanceY = (abs(vPlayerPos.y - vMonPos.y) / 2);
-		float fAttRangeX = GetMonster()->GetInfo().fAttRange.x / 2;
-		float fAttRangeY = GetMonster()->GetInfo().fAttRange.y / 2;
+		float fAttRangeX = GetMonster()->GetInfo().vAttRange.x / 2;
+		float fAttRangeY = GetMonster()->GetInfo().vAttRange.y / 2;
 		
 		if (fDistanceX < fAttRangeX && fDistanceY < fAttRangeY)
 			pPlayer->SetAttacked(true);

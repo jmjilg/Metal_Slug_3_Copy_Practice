@@ -27,7 +27,7 @@ private:
 
 	bool				m_bFinish;		// 재생 끝에 도달여부
 	bool				m_bStop;		// 일시정지 여부
-
+	
 	COLORREF			m_red;
 	COLORREF			m_green;
 	COLORREF			m_blue;
@@ -50,7 +50,7 @@ public:
 	int GetPrevFrame() { return m_iPrevFrm; }
 	bool GetStop() { return m_bStop; }
 	void SetTransParentColor(COLORREF _r, COLORREF _g, COLORREF _b) { m_red = _r, m_green = _g, m_blue = _b; }
-
+	
 private:
 	void SetName(const wstring& _strName) { m_strName = _strName; }
 

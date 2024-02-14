@@ -6,6 +6,7 @@
 #include "CCollider.h"
 #include "CTimeMgr.h"
 #include "CAnimator.h"
+#include "CAnimation.h"
 #include "CIdleState.h"
 #include "AI.h"
 #include "CState.h"
@@ -13,6 +14,7 @@
 #include "CResMgr.h"
 #include "SelectGDI.h"
 #include "time.h"
+#include "CKeyMgr.h"
 
 CMonster::CMonster()
 	: m_tInfo{}
@@ -29,6 +31,18 @@ CMonster::~CMonster()
 
 void CMonster::update()
 {	
+	// DEAD 체크
+	if (m_tInfo.fHP < 0 && !(m_pAI->GetCurState()->GetType() == MON_STATE::DEAD))
+	{
+		m_pAI->GetOwner()->GetCollider()->SetDead(true);
+		if (nullptr != GetObstacle())
+		{
+			DeleteObject(GetObstacle());
+		}
+		ChangeAIState(m_pAI, MON_STATE::DEAD);
+	}
+
+
 	m_tInfo.lAttAcc = clock() - m_tInfo.lAttStart; // 공격을 한 시점으로부터 얼마나 지났나
 
 	if(nullptr != m_pAI)
@@ -62,10 +76,10 @@ void CMonster::render(HDC _dc)
 
 
 		Rectangle(_dc
-			, (int)(vRenderPos.x - m_tInfo.fAttRange.x / 2.f)
-			, (int)(vRenderPos.y - m_tInfo.fAttRange.y / 2.f)
-			, (int)(vRenderPos.x + m_tInfo.fAttRange.x / 2.f)
-			, (int)(vRenderPos.y + m_tInfo.fAttRange.y / 2.f));
+			, (int)(vRenderPos.x - m_tInfo.vAttRange.x / 2.f)
+			, (int)(vRenderPos.y - m_tInfo.vAttRange.y / 2.f)
+			, (int)(vRenderPos.x + m_tInfo.vAttRange.x / 2.f)
+			, (int)(vRenderPos.y + m_tInfo.vAttRange.y / 2.f));
 	}
 
 }
@@ -98,5 +112,37 @@ void CMonster::OnCollisionEnter(CCollider* _pOther)
 			ChangeAIState(m_pAI, MON_STATE::DEAD);
 		}
 	}
-
+	else if (pOtherObj->GetName() == L"Grenade_Player")
+	{
+		m_tInfo.fHP -= 4;
+		if (m_tInfo.fHP < 0 && !(m_pAI->GetCurState()->GetType() == MON_STATE::DEAD))
+		{
+			m_pAI->GetOwner()->GetCollider()->SetDead(true);
+			if (nullptr != GetObstacle())
+			{
+				DeleteObject(GetObstacle());
+			}
+			ChangeAIState(m_pAI, MON_STATE::DEAD);
+		}
+	}
+	
 }
+
+void CMonster::OnCollision(CCollider* _pOther)
+{
+	CObject* pOtherObj = _pOther->GetObj();
+
+	if (pOtherObj->GetName() == L"Player")
+	{
+		wstring wstrAnime = pOtherObj->GetAnimator()->GetCurAnimU()->GetName();
+		if (wstrAnime == L"HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_LEFT"
+			|| wstrAnime == L"HEAVY_MACHINE_GUN_PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT"
+			|| wstrAnime == L"PLAYER_MELEE_ATTACK_UPPER_PART_LEFT"
+			|| wstrAnime == L"PLAYER_MELEE_ATTACK_UPPER_PART_RIGHT")
+		{			
+			if (KEY_TAP(KEY::J))
+				m_tInfo.fHP -= 3;
+		}
+	}
+}
+

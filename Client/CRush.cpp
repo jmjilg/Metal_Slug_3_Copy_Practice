@@ -32,8 +32,8 @@ void CRush::update()
 
 	float fDistanceX = (abs(vPlayerPos.x - vMonPos.x) / 2);
 	float fDistanceY = (abs(vPlayerPos.y - vMonPos.y) / 2);
-	float fAttRangeX = GetMonster()->GetInfo().fAttRange.x / 2;
-	float fAttRangeY = GetMonster()->GetInfo().fAttRange.y / 2;
+	float fAttRangeX = GetMonster()->GetInfo().vAttRange.x / 2;
+	float fAttRangeY = GetMonster()->GetInfo().vAttRange.y / 2;
 
 
 	if (fDistanceX < fAttRangeX && fDistanceY < fAttRangeY) // 플레이어가 몬스터의 공격 범위 안에 있을때

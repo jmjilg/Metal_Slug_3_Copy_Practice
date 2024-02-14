@@ -64,5 +64,17 @@ void CBrokenShip::OnCollisionEnter(CCollider* _pOther)
 			DeleteObject(this);
 		}
 	}
+	else if (pOtherObj->GetName() == L"Grenade_Player")
+	{
+		m_iHP -= 3;
+		if (m_iHP < 0)
+		{
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->SetBrokenShip(false);
+			DeleteObject(GetObstacle());
+			DeleteObject(this);
+		}
+	}
+
 
 }

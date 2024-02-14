@@ -52,7 +52,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		tMonInfo info = {};
 		info.eMonType = MON_TYPE::CHOWMEIN_CONGA;
 		info.fAtt = 10.f;
-		info.fAttRange = Vec2(70.f, 30.f);
+		info.vAttRange = Vec2(70.f, 30.f);
 		info.fRecogRange = 250.f;
 		info.fHP = 3.f;
 		info.fSpeed = 50.f;
@@ -112,7 +112,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		tMonInfo info = {};
 		info.eMonType = MON_TYPE::LOCUST;
 		info.fAtt = 10.f;
-		info.fAttRange = Vec2(10.f, 10.f);
+		info.vAttRange = Vec2(10.f, 10.f);
 		info.fRecogRange = 250.f;
 		info.fHP = 3.f;
 		info.fSpeed = 100.f;
@@ -167,7 +167,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		tMonInfo info = {};
 		info.eMonType = MON_TYPE::FLYING_KILLER;
 		info.fAtt = 10.f;
-		info.fAttRange = Vec2(25.f, 25.f);
+		info.vAttRange = Vec2(25.f, 25.f);
 		info.fRecogRange = 250.f;
 		info.fHP = 1.f;
 		info.fSpeed = 100.f;
@@ -213,7 +213,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		tMonInfo info = {};
 		info.eMonType = MON_TYPE::M3_ROCKET_LAUNCH_SUPPORT_VAN;
 		info.fAtt = 0.f;
-		info.fAttRange = Vec2(0.f, 0.f);
+		info.vAttRange = Vec2(0.f, 0.f);
 		info.fRecogRange = 250.f;
 		info.fHP = 20.f;
 		info.fSpeed = 100.f;
@@ -255,7 +255,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		tMonInfo info = {};
 		info.eMonType = MON_TYPE::M3_ROCKET_LAUNCH_SUPPORT_VAN_MISSILE;
 		info.fAtt = 0.f;
-		info.fAttRange = Vec2(10.f, 10.f);
+		info.vAttRange = Vec2(10.f, 10.f);
 		info.fRecogRange = 0.f;
 		info.fHP = 1.f;
 		info.fSpeed = 100.f;
@@ -293,7 +293,7 @@ CMonster* CMonFactory::CreateMonster(MON_TYPE _eType, Vec2 _vPos)
 		tMonInfo info = {};
 		info.eMonType = MON_TYPE::HUGE_HERMIT;
 		info.fAtt = 10.f;
-		info.fAttRange = Vec2(70.f, 30.f);
+		info.vAttRange = Vec2(70.f, 30.f);
 		info.fRecogRange = 250.f;
 		info.fHP = 30.f;
 		info.fSpeed = 30.f;

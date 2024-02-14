@@ -72,6 +72,23 @@ void CCongaHouse::OnCollisionEnter(CCollider* _pOther)
 			
 		}
 	}
+	else if (pOtherObj->GetName() == L"Grenade_Player")
+	{
+		m_iHP -= 3;		
+		if (m_iHP < 0)
+		{
+			CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+			pCurScene->SetCongaHouse(false);
+			//CRayGround* pRayGround = new CRayGround;
+			//pRayGround->GetCollider()->SetIsRay(true);
+			//pRayGround->GetCollider()->GetVecRay().push_back(Vec2(2240, 93));
+			//pRayGround->GetCollider()->GetVecRay().push_back(Vec2(2240, 500));
+			//CreateObject(pRayGround, GROUP_TYPE::GROUND);
+			DeleteObject(GetObstacle());
+			DeleteObject(this);
+			
+		}
+	}
 
 }
 

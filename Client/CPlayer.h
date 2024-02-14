@@ -58,8 +58,8 @@ enum class PLAYER_STATE
 
     //
 
+    KNIFE_ATTACK,
     KNIFE_IDLE,
-    KNIFE_WALK,
     KNIFE_WALK_JUMP,
     KNIFE_JUMP,
     KNIFE_SHOOT,
@@ -108,8 +108,9 @@ private:
     bool                m_bSetCamera;                // 카메라가 계속 플레이어를 타겟으로 할지 여부
     bool                m_bFrameLockUpper;               // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
     bool                m_bFrameLockLower;               // 앉아서 쏠때 쓸 변수
-
+    bool                m_bMeleeAtt;                    // 공격키를 눌렀을때 근접공격을 할건지의 여부
     Vec2                m_vMissilePrevDir;
+    
 
   //  bool m_btemp = false; // 디버깅용 임시 변수
 
@@ -122,6 +123,7 @@ private:
     double			m_dAcc;	// 1초 체크를 위한 누적 시간
     UINT			m_iCallCount; // 함수 호출 횟수 체크
     UINT			m_iFPS; // 초당 호출 횟수
+    Vec2            m_vMeleeAttRange;
 
 public:
     virtual void update();
@@ -138,6 +140,7 @@ public:
 
 private:
     void CreateMissile(int _iMissileDir = 0);
+    void CreateGrenade();
     void update_state();
     void update_move();
     void update_animation();
@@ -179,11 +182,13 @@ private:
     void update_DEAD(stack<PLAYER_STATE>& _stkState);
     void update_RESPAWN(stack<PLAYER_STATE>& _stkState);
 
+    void update_KNIFE_ATTACK(stack<PLAYER_STATE>& _stkState);
+
     void OneFrameOneShot(int _iMissileDir = 0); // 한 프레임당 한발씩만 미사일을 발사하도록 하는 변수 (기본총은 첫 프레임만 미사일 발사)
 private:
     //virtual void OnCollision(CCollider* _pOther);         // 충돌 중인 경우 호출되는 함수
     //virtual void OnCollisionEnter(CCollider* _pOther);     // 충돌 진입 시
-    //virtual void OnCollisionExit(CCollider* _pOther);     // 충돌 해제 시
+    virtual void OnCollisionExit(CCollider* _pOther);     // 충돌 해제 시
 
 public:
     CPlayer();

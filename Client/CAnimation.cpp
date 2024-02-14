@@ -34,14 +34,6 @@ void CAnimation::update()
 {
 	wstring temp = m_strName;
 
-	if (temp == L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_DOWN_RIGHT")
-	{
-		int a = 1;
-	}
-	if (temp == L"HEAVY_MACHINE_GUN_PLAYER_SCATTERING_UP_RIGHT")
-	{
-		int a = 1;
-	}
 	if (m_bStop)
 		return;
 
@@ -63,14 +55,15 @@ void CAnimation::update()
 			return;
 		}
 
+
 		m_fAccTime = m_fAccTime - m_vecFrm[m_iCurFrm].fDuration;
 	}
 }
 
 void CAnimation::render(HDC _dc)
 {
-	//if (m_bStop)
-	//	return;    //Tool Scene에서 볼땐 주석처리
+	if (m_bStop)
+		return;    //Tool Scene에서 볼땐 주석처리
 
 	if (m_bFinish)
 		return;
