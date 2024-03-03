@@ -46,15 +46,7 @@ enum class PLAYER_STATE
 
     //
 
-    GRENADE_IDLE,
-    GRENADE_WALK,
-    GRENADE_WALK_JUMP,
-    GRENADE_JUMP,
-    GRENADE_SHOOT,
-    GRENADE_SIT_DOWN,
-    GRENADE_SIT_DOWN_WALK,
-    GRENADE_LOOK_UP,
-    GRENADE_LOOK_DOWN,
+    GRENADE_THROW,
 
     //
 
@@ -175,6 +167,8 @@ private:
     void update_HAND_GUN_SHOOT_DOWN(stack<PLAYER_STATE>& _stkState);
     void update_HAND_GUN_SHOOT_SIT_DOWN(stack<PLAYER_STATE>& _stkState);
     void update_HAND_GUN_SHOOT(stack<PLAYER_STATE>& _stkState);
+
+    void update_GRENADE_THROW(stack<PLAYER_STATE>& _stkState);
 
     void update_HEAVYMACHINE_GUN_SCATTERING_UP(stack<PLAYER_STATE>& _stkState);  // 함수명 리펙토링이 필요해보임
     void update_HEAVYMACHINE_GUN_SCATTERING_DOWN(stack<PLAYER_STATE>& _stkState);

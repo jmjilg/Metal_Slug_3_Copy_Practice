@@ -261,10 +261,10 @@ void CScene_Start::Enter()
 
 
 	CObject* pCameraBox = new CCameraBox;
-	pCameraBox->SetName(L"Ground"); // 직선 충돌체를 사용하므로 일단은 땅으로 간주함
+	pCameraBox->SetName(L"CameraBox"); // 직선 충돌체를 사용하므로 일단은 땅으로 간주함
 	pCameraBox->SetPos(Vec2(40.f, 165.f));
 	pCameraBox->SetScale(Vec2(200.f, 200.f));
-	AddObject(pCameraBox, GROUP_TYPE::GROUND);
+	AddObject(pCameraBox, GROUP_TYPE::CAMERABOX);
 
 	// 배경 추가
 	//CObject* pBackGround = new CBackGround;
@@ -886,6 +886,7 @@ void CScene_Start::Enter()
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::MONSTER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CONGAHOUSE);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::SUPPLIES);
+	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::CAMERABOX);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::PROJ_PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::GROUND, GROUP_TYPE::PROJ_PLAYER);
 	CCollisionMgr::GetInst()->CheckGroup(GROUP_TYPE::MONSTER, GROUP_TYPE::GROUND);

@@ -38,7 +38,7 @@ protected:
 
     Vec2        m_vDir;
     CTexture*   m_pTex;
-    bool        IsCollision; // 이미 한번 충돌했으므로 또 충돌했을때 Delete이벤트의 중복 실행 방지 
+    bool        IsCollision; // 충돌했는지 여부
     bool        m_bHMG;
 
     MISSILE_DIR m_eDir; // 미사일 방향을 enum화 한거

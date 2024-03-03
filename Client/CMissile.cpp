@@ -114,6 +114,12 @@ void CMissile::SetDir(MISSILE_DIR _eDir)
 
 void CMissile::update()
 {
+	if (IsCollision)
+	{
+		DeleteObject(this);
+		return;
+	}
+
 	if (m_bHMG) // 한번만 실행하면 되긴 하는데 좀 아쉽네 이거.. 근데 바꾸기가 귀찮다..
 	{
 		GetCollider()->SetScale(Vec2(30.f, 10.f));
@@ -190,23 +196,12 @@ void CMissile::render(HDC _dc)
 void CMissile::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
+	wstring ObjName = pOtherObj->GetName();
 
-	if (!IsCollision)
+	if (ObjName == L"Chowmein_Conga" || ObjName == L"Locust" || ObjName == L"Flying_Killer" || ObjName == L"M3_Rocket_Launch_Support_Van" || ObjName == L"M3_Rocket_Launch_Support_Van_Missile" || ObjName == L"Huge_Hermit" || ObjName == L"CongaHouse" || ObjName == L"BrokenShip")
 	{
-		if (pOtherObj->GetName() == L"Chowmein_Conga" || pOtherObj->GetName() == L"Locust" || pOtherObj->GetName() == L"Flying_Killer" || pOtherObj->GetName() == L"M3_Rocket_Launch_Support_Van" || pOtherObj->GetName() == L"M3_Rocket_Launch_Support_Van_Missile" || pOtherObj->GetName() == L"Huge_Hermit")
-		{
-			DeleteObject(this);
-		}
-		else if (pOtherObj->GetName() == L"CongaHouse")
-		{
-			DeleteObject(this);
-		}
-		else if (pOtherObj->GetName() == L"BrokenShip")
-		{
-			DeleteObject(this);
-		}
-
-		IsCollision = !IsCollision;
+		IsCollision = true;
 	}
+
 
 }

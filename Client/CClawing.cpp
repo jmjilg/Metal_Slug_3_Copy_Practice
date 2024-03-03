@@ -22,7 +22,6 @@ CClawing::~CClawing()
 
 void CClawing::update()
 {
-
 	CPlayer* pPlayer = (CPlayer*)CSceneMgr::GetInst()->GetCurScene()->GetPlayer();
 	Vec2 vPlayerPos = pPlayer->GetPos();
 	Vec2 vMonPos = GetMonster()->GetPos();

@@ -13,7 +13,7 @@
 
 
 CGrenade::CGrenade()
-	: m_fTheta(PI / 180.f)
+	: m_iDir(0)
 	, m_pTex(nullptr)
 	, IsCollision(false)
 	, m_fSpeed(200.f)
@@ -40,12 +40,18 @@ CGrenade::~CGrenade()
 
 void CGrenade::update()
 {
+	if (IsCollision)
+	{
+		DeleteObject(this);
+		return;
+	}
+
 	update_animation();
 
 	Vec2 vPos = GetPos();
 
-	vPos.x += m_fSpeed * cosf(m_fTheta) * fDT;
-	vPos.y += m_fSpeed * sinf(m_fTheta) * fDT;
+	vPos.x += m_fSpeed * m_iDir * fDT;
+	//vPos.y += m_fSpeed * sinf(m_fTheta) * fDT;
 
 	//vPos.x += m_fSpeed * m_vDir.x * fDT;
 	//vPos.y += m_fSpeed * m_vDir.y * fDT;  // 위와 결과는 같지만 좀 더 직관적임
@@ -80,44 +86,44 @@ void CGrenade::OnCollisionEnter(CCollider* _pOther)
 {
 	CObject* pOtherObj = _pOther->GetObj();
 
-	if (!IsCollision)
-	{
-		if (pOtherObj->GetName() == L"Chowmein_Conga" || pOtherObj->GetName() == L"Locust" || pOtherObj->GetName() == L"Flying_Killer" || pOtherObj->GetName() == L"M3_Rocket_Launch_Support_Van" || pOtherObj->GetName() == L"M3_Rocket_Launch_Support_Van_Missile" || pOtherObj->GetName() == L"Huge_Hermit")
+	wstring ObjName = pOtherObj->GetName();
+
+
+		if (ObjName == L"Chowmein_Conga" || ObjName == L"Locust" || ObjName == L"Flying_Killer" || ObjName == L"M3_Rocket_Launch_Support_Van" || ObjName == L"M3_Rocket_Launch_Support_Van_Missile" || ObjName == L"Huge_Hermit" || ObjName == L"CongaHouse" || ObjName == L"BrokenShip")
 		{
-			DeleteObject(this);
+			IsCollision = true;
 		}
-		else if (pOtherObj->GetName() == L"CongaHouse")
-		{
-			DeleteObject(this);
-		}
-		else if (pOtherObj->GetName() == L"BrokenShip")
-		{
-			DeleteObject(this);
-		}
+
 		
-		else if (pOtherObj->GetName() == L"Ground")
+		else if (ObjName == L"Ground")
 		{
 			m_iBounceCount++;
 			if (m_iBounceCount >= 2)
-				DeleteObject(this);
+				IsCollision = true;
 
 			if (GetRigidBody())
 			{
-				GetRigidBody()->SetVelocity(Vec2(GetRigidBody()->GetVelocity().x, -350.f));
+				SetSpeed(120.f);
+				GetRigidBody()->SetVelocity(Vec2(GetRigidBody()->GetVelocity().x, -200.f));
 			}
 		}
+}
 
-		IsCollision = !IsCollision;
-	}
+void CGrenade::OnCollision(CCollider* _pOther)
+{
+}
+
+void CGrenade::OnCollisionExit(CCollider* _pOther)
+{
+
 }
 
 void CGrenade::update_animation()
 {
 	GetAnimator()->SetTransParentColor(0, 248, 0);
 
-	//case PLAYER_STATE::IDLE:
-	//	if (m_iDir.x == -1)
-			GetAnimator()->PlayL(L"Grenade_Right", true);
-	//	else
-	//		GetAnimator()->PlayL(L"PLAYER_IDLE_LOWER_PART_RIGHT", true);
+	if (m_iDir == -1)
+		GetAnimator()->PlayL(L"Grenade_Left", true);
+	else
+		GetAnimator()->PlayL(L"Grenade_Right", true);
 }
